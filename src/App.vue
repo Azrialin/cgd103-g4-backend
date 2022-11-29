@@ -1,6 +1,8 @@
 <template>
+  <Aside></Aside>
   <nav>
     <router-link to="/">Home</router-link> |
+    <router-link to="/news">最新消息管理</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
   <router-view/>
@@ -29,3 +31,16 @@ nav {
   }
 }
 </style>
+
+<script>
+// @ is an alias to /src
+import Aside from '@/components/Aside.vue'
+
+
+export default {
+  name: 'App',
+  components: {
+    Aside
+  }
+}
+</script>
