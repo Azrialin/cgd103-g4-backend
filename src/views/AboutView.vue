@@ -1,44 +1,20 @@
 <template>
-  <div class="about">
-            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-        Link with href
-      </a>
-      <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-        Button with data-bs-target
-      </button>
-
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <div>
-            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-          </div>
-          <div class="dropdown mt-3">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-              Dropdown button
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-  </div>
-  
+    <Space wrap>
+        <Circle :percent="80">
+            <span class="demo-Circle-inner" style="font-size:24px">80%</span>
+        </Circle>
+        <Circle :percent="100" stroke-color="#5cb85c">
+            <Icon type="ios-checkmark" size="60" style="color:#5cb85c"></Icon>
+        </Circle>
+        <Circle :percent="35" stroke-color="#ff5500">
+            <span class="demo-Circle-inner">
+                <Icon type="ios-close" size="50" style="color:#ff5500"></Icon>
+            </span>
+        </Circle>
+    </Space>
 </template>
 <script>
-//   import Offcanvas from 'bootstrap/js/dist/offcanvas.js'
-// export default {
-//   mounted() {
-//     const offcanvasElementList = document.querySelectorAll('.offcanvas')
-//     const offcanvasList = [...offcanvasElementList].map(offcanvasEl => new Offcanvas(offcanvasEl))
-
-//   },
-// }
+    export default {
+        
+    }
 </script>
-
