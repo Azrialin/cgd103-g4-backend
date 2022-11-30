@@ -1,0 +1,9 @@
+// Aside
+.container{
+    display: flex;
+}
+.main{
+    position: relative;
+    width: calc(100% - 300px);
+    left: 300px;
+}
