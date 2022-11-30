@@ -1,20 +1,21 @@
 <template>
   <div class="nav-aside">
-    <ul>
         <div class="nav-aside-logo">
             <img src="../assets/logo_WHITE.png" alt="logo">
         </div>
         <hr>
-        <li><a href="#">帳號管理</a></li>
-        <li><a href="#">最新消息管理</a></li>
-        <li><a href="#">行程方案管理</a></li>
-        <li><a href="#">行程訂單管理</a></li>
-        <li><a href="#">開團管理</a></li>
-        <li><a href="#">商品管理</a></li>
-        <li><a href="#">商品訂單管理</a></li>
-        <li><a href="#">意見表管理</a></li>
-        <li><a href="#">Q&A 管理</a></li>
-    </ul>
+        <nav>
+          <!-- <router-link to="/">初始歡迎頁</router-link> -->
+          <router-link to="/">帳號管理</router-link>
+          <router-link to="/news">最新消息管理</router-link>
+          <router-link to="/">行程方案管理</router-link>
+          <router-link to="/">行程訂單管理</router-link>
+          <router-link to="/">開團管理</router-link>
+          <router-link to="/">商品管理</router-link>
+          <router-link to="/">商品訂單管理</router-link>
+          <router-link to="/">意見表管理</router-link>
+          <router-link to="/">Q&A 管理</router-link>
+        </nav>
   </div>
 </template>
 
@@ -40,18 +41,18 @@ export default {
     margin: 10px 60px;
     width: 150px;
   }
-  ul{
-    text-align: start;
-    li{
-      margin: 30px 75px;
-      color: #fff;
-      font-size: nth($font-size, 6)+ px;
-      /* 如何消除marker? */
-      a{
-        direction: none;
-        color: #fff;
-      }
-    }
-  }
 }
+  nav{
+    text-align: start;
+  }
+
+  nav a{
+    display: block;
+    margin: 30px 75px;
+    font-size: nth($font-size, 6)+ px;
+    direction: none;
+    color: #fff;
+  }
+
+
 </style>
