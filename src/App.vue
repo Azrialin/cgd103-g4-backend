@@ -9,6 +9,7 @@
 @import "../src/assets/Css/Reset.css";
 @import "../src/assets/Scss/base/common.scss";
 @import "../src/assets/Scss/base/font.scss";
+@import "../src/assets/Scss/components/btn.scss";
 
 #app {
   -webkit-font-smoothing: antialiased;
