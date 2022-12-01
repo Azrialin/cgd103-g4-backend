@@ -1,5 +1,6 @@
 <template>
-    <div class="backstage-news">
+    <!-- style="display:none" -->
+    <div class="backstage-news" >
         <div class="backstage-name">
             <div><h2>最新消息管理</h2></div>
             <div class="backstage-account">
@@ -31,9 +32,79 @@
             </div>
         </div>
     </div>
+
+    <!-- 彈窗 -->
+    <div class="popup " style="display:none" >
+        <div class="popup-head">
+            <span>公告編號</span>
+            <span>A110000</span>
+        </div>
+        <div class="popup-content">
+            <div class="popup-data">
+                <label for="">狀態
+                    <select name="" id="">
+                        <option value="draft">草稿</option>
+                        <option value="on">上架</option>
+                        <option value="off">下架</option>
+                    </select>
+                </label>
+                <label for="">分類
+                    <select name="" id="">
+                        <option value="important">重要</option>
+                        <option value="action">活動</option>
+                        <option value="other">其他</option>
+                    </select>
+                </label>
+                <span class="date">發布時間</span>
+                <span class="date">20221120</span>
+            </div>
+            <div class="input-title">
+                <label for="">標題(必填)：
+                    <Input placeholder="請輸入標題" clearable style="width: 500px" />
+                </label>
+            </div>
+            <div class="input-des">
+                <label for="">內文(必填)：
+                    <Input clearable type="textarea" :rows="6" placeholder="請輸入內容" style="width: 500px"/>
+                </label>
+            </div>
+            <div class="input-pic">
+                <label class="test" for="">插入圖片：
+                    <input type="file">
+                </label>
+            </div>
+            <div class="input-pic-des">
+                <label for="">圖片敘述：
+                    <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                </label>
+            </div>
+            <div class="popup-btn">
+                <button>取消</button>
+                <button>確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增成功 -->
+    <div class="popup-box add" style="display:none">
+        <p class="popup-box-close">X</p>
+        <p class="check-des">新增資料成功</p>
+        <button>確認</button>
+    </div>
+
+
+    <!-- 修改成功 -->
+    <div class="popup-box fix" style="display:none">
+        <p class="popup-box-close">X</p>
+        <p class="check-des">修改資料成功</p>
+        <button>確認</button>
+    </div>
+
+
 </template>
 <!-- https://run.iviewui.com/4CEEQf1j -->
 <script>
+
     export default {
         data () {
             return {
@@ -142,12 +213,82 @@
                     }
                 ]
             }
-        }
+        },
+
     }
 </script>
 
 <style scoped lang="scss">
+/* -------------------彈窗 ------------------------*/
+.popup{
+    position: absolute;
+    top: 20px;
+    left: 200px;
+    margin: auto;
+    z-index: 10;
 
+    width: 60%;
+    height: 70Vh;
+    background-color: #4F6573;
+}
+
+/* 上方區塊顏色 */
+.popup-head{
+    background-color: #2D3740;
+    height: 80px;
+    color: #ccc;
+}
+
+.popup-data{
+    margin: 30px 0;
+}
+.input-title,
+.input-des,
+.input-pic,
+.input-pic-des{
+    margin-bottom: 15px;
+}
+.popup-btn{
+    margin: 30px 0;
+}
+
+
+/* 彈窗字顏色 */
+.popup label{
+    color: #fff;
+}
+.date{
+    color: #ccc;
+}
+/* -------------------彈窗結束----------------- */
+
+/* -------------------新增修改box ------------------------*/
+.popup-box{
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    width: 400px;
+    height: 230px;
+    border: 1px solid #A3AFBF;
+    border-radius: 10px;
+    background-color: #e3e7ed;
+}   
+
+.popup-box-close{
+    text-align: end;
+    margin-top: 10px;
+    padding-right: 20px;
+}
+
+.check-des{
+    margin-top: 70px;
+}
+
+.popup-box button{
+    margin-top: 30px;
+}
+
+/* -------------------新增修改結束 ------------------------*/
 
 /* 後台header */
 .backstage-name{
