@@ -18,14 +18,19 @@
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
                     <TabPane label="上架" >
-                        <Table border :columns="columns" :data="dataOn" >
+                        <Table stripe border :columns="columns" :data="dataOn" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
                                 <span v-else>{{ row.news_no }}</span>
                             </template>
-                            <!-- 日期 -->
+                            <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
+                                <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_time }}</span>
+                            </template>
+                            <!-- 最後編輯 -->
+                            <template #news_last_edit="{ row, index }">
                                 <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
                                 <span v-else>{{ row.news_time }}</span>
                             </template>
@@ -61,14 +66,19 @@
                         </Table>
                     </TabPane>
                     <TabPane label="草稿" >
-                        <Table border :columns="columns" :data="dataDraft" >
+                        <Table stripe border :columns="columns" :data="dataDraft" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
                                 <span v-else>{{ row.news_no }}</span>
                             </template>
-                            <!-- 日期 -->
+                            <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
+                                <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_time }}</span>
+                            </template>
+                            <!-- 最後編輯 -->
+                            <template #news_last_edit="{ row, index }">
                                 <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
                                 <span v-else>{{ row.news_time }}</span>
                             </template>
@@ -104,14 +114,19 @@
                         </Table>
                     </TabPane>
                     <TabPane label="下架" >
-                        <Table border :columns="columns" :data="dataOff" >
+                        <Table stripe border :columns="columns" :data="dataOff" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
                                 <span v-else>{{ row.news_no }}</span>
                             </template>
-                            <!-- 日期 -->
+                            <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
+                                <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_time }}</span>
+                            </template>
+                            <!-- 最後編輯 -->
+                            <template #news_last_edit="{ row, index }">
                                 <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
                                 <span v-else>{{ row.news_time }}</span>
                             </template>
@@ -258,33 +273,51 @@
                 columns: [
             {
                 title: '公告標題',
-                slot: 'news_no'
+                slot: 'news_no',
+                width: 100,
+                align: 'center'
             },
             {
                 title: '上架日期',
-                slot: 'news_time'
+                slot: 'news_time',
+                width: 110,
+                align: 'center'
+            },
+            {
+                title: '最後修改',
+                slot: 'news_last_edit',
+                width: 110,
+                align: 'center'
             },
             {
                 title: '分類',
-                slot: 'news_class'
+                slot: 'news_class',
+                width: 70,
+                align: 'center'
             },
             {
                 title: '標題',
-                slot: 'news_title'
+                slot: 'news_title',
+                align: 'center'
             },
             {
                 title: '狀態',
-                slot: 'news_status'
+                slot: 'news_status',
+                width: 70,
+                align: 'center'
             },
             {
                 title: '操作',
-                slot: 'action'
+                slot: 'action',
+                width: 180,
+                align: 'center'
             }
                 ],
                 dataOn: [
                     {
                         news_no: 'A1100000',
                         news_time: '2022/11/22',
+                        news_last_edit:'',
                         news_class: '重要',
                         news_title: '「高千穗峽谷」划船體驗報名優惠',
                         news_status:'上架',
@@ -292,6 +325,7 @@
                     {
                         news_no: 'A1100001',
                         news_time: '2022/11/23',
+                        news_last_edit:'',
                         news_class: '重要',
                         news_title: '高千穗-夜神樂',
                         news_status:'上架',
@@ -299,6 +333,7 @@
                     {
                         news_no: 'A1100002',
                         news_time: '2022/11/24',
+                        news_last_edit:'',
                         news_class: '重要',
                         news_title: '列車停駛',
                         news_status:'上架',
@@ -306,6 +341,7 @@
                     {
                         news_no: 'A1100003',
                         news_time: '2022/11/25',
+                        news_last_edit:'',
                         news_class: '重要',
                         news_title: '「鹿兒島沙浴」體驗活動報名',
                         news_status:'上架',
@@ -313,6 +349,7 @@
                     {
                         news_no: 'A1100004',
                         news_time: '2022/11/26',
+                        news_last_edit:'',
                         news_class: '重要',
                         news_title: '商城新品上市!!',
                         news_status:'上架',
@@ -322,6 +359,7 @@
                     {
                         news_no: 'A1100005',
                         news_time: '2022/11/23',
+                        news_last_edit:'',
                         news_class: '其他',
                         news_title: '高千穗-夜神樂',
                         news_status:'草稿',
@@ -329,6 +367,7 @@
                     {
                         news_no: 'A1100006',
                         news_time: '2022/11/24',
+                        news_last_edit:'',
                         news_class: '活動',
                         news_title: '列車停駛',
                         news_status:'草稿',
@@ -338,6 +377,7 @@
                     {
                         news_no: 'A1100007',
                         news_time: '2022/11/25',
+                        news_last_edit:'',
                         news_class: '其他',
                         news_title: '「鹿兒島沙浴」體驗活動報名',
                         news_status:'下架',
@@ -345,6 +385,7 @@
                     {
                         news_no: 'A1100008',
                         news_time: '2022/11/26',
+                        news_last_edit:'',
                         news_class: '活動',
                         news_title: '商城新品上市!!',
                         news_status:'下架',
@@ -508,7 +549,7 @@
     margin-right: 60px;
 }
 /* 管理介面 */
-.news-manage{
+.news-manager{
     height: 45vh;
     margin: 30px 20px;
 }
