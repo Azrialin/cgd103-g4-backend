@@ -2,46 +2,178 @@
     <!-- style="display:none" -->
     <div class="backstage-news" >
         <div class="backstage-name">
-            <div><h2>最新消息管理</h2></div>
+            <div>
+                <h2 class="font-36">最新消息管理</h2>
+            </div>
             <div class="backstage-account">
-                <span>管理員名稱</span>
-                <span>登出</span>
+                <span class="font-18">管理員名稱</span>
+                <span class="font-18">登出</span>
             </div>
         </div>
         <div class="backstage-content">
-            <div class="backstage-path">最新消息管理 / 消息列表</div>
+            <div class="backstage-path font-16">最新消息管理 / 消息列表</div>
             <div class="btn-add">
-                <button>新增消息</button>
+                <button class="font-20">新增消息</button>
             </div>
-            <div class="news-manage">
-                <Tabs type="card" :animated="false">
+            <div class="news-manager">
+                <Tabs  type="card" :animated="false">
                     <TabPane label="上架" >
-                        <Table border :columns="columns" :data="dataOn" ></Table>
+                        <Table border :columns="columns" :data="dataOn" >
+                            <!-- 公告編號 -->
+                            <template #news_no="{ row, index }">
+                                <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_no }}</span>
+                            </template>
+                            <!-- 日期 -->
+                            <template #news_time="{ row, index }">
+                                <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_time }}</span>
+                            </template>
+                            <!-- 分類 -->
+                            <template #news_class="{ row, index }">
+                                <Input type="text" v-model="editnews_class" v-if="editIndex === index" />
+                                <span v-else>{{ (row.news_class) }}</span>
+                            </template>
+                            <!-- 標題 -->
+                            <template #news_title="{ row, index }">
+                                <Input type="text" v-model="editnews_title" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_title }}</span>
+                            </template>
+                            <!-- 狀態 -->
+                            <template #news_status="{ row, index }">
+                                <Input type="text" v-model="editnews_status" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_status }}</span>
+                            </template>
+                            <!-- 按鈕 -->
+                            <template #action>
+                                <!-- <div v-if="editIndex === index">
+                                    <Button @click="handleSave(index)">保存</Button>
+                                    <Button @click="editIndex = -1">取消</Button>
+                                </div> -->
+                                <!-- <div v-else>
+                                    <Button @click="handleEdit(row, index)">操作</Button>
+                                </div> -->
+                                <div class="btn-box">
+                                    <Button >編輯</Button>
+                                    <Button >刪除</Button>
+                                </div>
+                            </template>
+                        </Table>
                     </TabPane>
                     <TabPane label="草稿" >
-                        <Table border :columns="columns" :data="dataDraft" ></Table>
+                        <Table border :columns="columns" :data="dataDraft" >
+                            <!-- 公告編號 -->
+                            <template #news_no="{ row, index }">
+                                <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_no }}</span>
+                            </template>
+                            <!-- 日期 -->
+                            <template #news_time="{ row, index }">
+                                <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_time }}</span>
+                            </template>
+                            <!-- 分類 -->
+                            <template #news_class="{ row, index }">
+                                <Input type="text" v-model="editnews_class" v-if="editIndex === index" />
+                                <span v-else>{{ (row.news_class) }}</span>
+                            </template>
+                            <!-- 標題 -->
+                            <template #news_title="{ row, index }">
+                                <Input type="text" v-model="editnews_title" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_title }}</span>
+                            </template>
+                            <!-- 狀態 -->
+                            <template #news_status="{ row, index }">
+                                <Input type="text" v-model="editnews_status" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_status }}</span>
+                            </template>
+                            <!-- 按鈕 -->
+                            <template #action>
+                                <!-- <div v-if="editIndex === index">
+                                    <Button @click="handleSave(index)">保存</Button>
+                                    <Button @click="editIndex = -1">取消</Button>
+                                </div> -->
+                                <!-- <div v-else>
+                                    <Button @click="handleEdit(row, index)">操作</Button>
+                                </div> -->
+                                <div class="btn-box">
+                                    <Button >編輯</Button>
+                                    <Button >刪除</Button>
+                                </div>
+                            </template>
+                        </Table>
                     </TabPane>
                     <TabPane label="下架" >
-                        <Table border :columns="columns" :data="dataOff" ></Table>
+                        <Table border :columns="columns" :data="dataOff" >
+                            <!-- 公告編號 -->
+                            <template #news_no="{ row, index }">
+                                <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_no }}</span>
+                            </template>
+                            <!-- 日期 -->
+                            <template #news_time="{ row, index }">
+                                <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_time }}</span>
+                            </template>
+                            <!-- 分類 -->
+                            <template #news_class="{ row, index }">
+                                <Input type="text" v-model="editnews_class" v-if="editIndex === index" />
+                                <span v-else>{{ (row.news_class) }}</span>
+                            </template>
+                            <!-- 標題 -->
+                            <template #news_title="{ row, index }">
+                                <Input type="text" v-model="editnews_title" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_title }}</span>
+                            </template>
+                            <!-- 狀態 -->
+                            <template #news_status="{ row, index }">
+                                <Input type="text" v-model="editnews_status" v-if="editIndex === index" />
+                                <span v-else>{{ row.news_status }}</span>
+                            </template>
+                            <!-- 按鈕 -->
+                            <template #action>
+                                <!-- <div v-if="editIndex === index">
+                                    <Button @click="handleSave(index)">保存</Button>
+                                    <Button @click="editIndex = -1">取消</Button>
+                                </div> -->
+                                <!-- <div v-else>
+                                    <Button @click="handleEdit(row, index)">操作</Button>
+                                </div> -->
+                                <div class="btn-box">
+                                    <Button >編輯</Button>
+                                    <Button >刪除</Button>
+                                </div>
+                            </template>
+                        </Table>
                     </TabPane>
                 </Tabs>
             </div>
             <div class="btn-bottom">
-                <button>上一頁</button>
-                <button>下一頁</button>
+                <button class="font-18">上一頁</button>
+                <button class="font-18">下一頁</button>
             </div>
         </div>
     </div>
 
     <!-- 彈窗 -->
     <div class="popup " style="display:none" >
-        <div class="popup-head">
-            <span>公告編號</span>
-            <span>A110000</span>
+        <div class="popup-head font-20">
+            <div class="news-no">
+                <span>公告編號</span>
+                <span>A110000</span>
+            </div>
+            <div class="on-date">
+                <span class="date">發布時間</span>
+                <span class="date">20221120</span>
+            </div>
+            <div class="last-edit-date">
+                <span class="date">最後更新</span>
+                <span class="date">20221120</span>
+            </div>
         </div>
-        <div class="popup-content">
+        <div class="popup-content font-18">
             <div class="popup-data">
-                <label for="">狀態
+                <label for="">狀態(必填)
                     <select name="" id="">
                         <option value="draft">草稿</option>
                         <option value="on">上架</option>
@@ -55,18 +187,34 @@
                         <option value="other">其他</option>
                     </select>
                 </label>
-                <span class="date">發布時間</span>
-                <span class="date">20221120</span>
+
             </div>
-            <div class="input-title">
-                <label for="">標題(必填)：
-                    <Input placeholder="請輸入標題" clearable style="width: 500px" />
-                </label>
-            </div>
-            <div class="input-des">
-                <label for="">內文(必填)：
-                    <Input clearable type="textarea" :rows="6" placeholder="請輸入內容" style="width: 500px"/>
-                </label>
+            <div class="input-txt">
+                <div class="input-title">
+                    <label for="">標題：
+                        <Input placeholder="請輸入標題" clearable style="width: 500px" />
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">引文：
+                        <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">內文：
+                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">內文：
+                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">結尾：
+                        <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                    </label>
+                </div>
             </div>
             <div class="input-pic">
                 <label class="test" for="">插入圖片：
@@ -86,53 +234,52 @@
     </div>
 
     <!-- 新增成功 -->
-    <div class="popup-box add" style="display:none">
+    <div class="popup-box add font-18" style="display:none">
         <p class="popup-box-close">X</p>
         <p class="check-des">新增資料成功</p>
-        <button>確認</button>
+        <button >確認</button>
     </div>
 
 
     <!-- 修改成功 -->
-    <div class="popup-box fix" style="display:none">
+    <div class="popup-box fix font-18" style="display:none">
         <p class="popup-box-close">X</p>
         <p class="check-des">修改資料成功</p>
-        <button>確認</button>
+        <button >確認</button>
     </div>
 
 
 </template>
 <!-- https://run.iviewui.com/4CEEQf1j -->
 <script>
-
     export default {
         data () {
             return {
                 columns: [
-                    {
-                        title: '公告編號',
-                        key: 'news_no'
-                    },
-                    {
-                        title: '上架日期',
-                        key: 'news_time'
-                    },
-                    {
-                        title: '分類',
-                        key: 'news_class'
-                    },
-                    {
-                        title: '標題',
-                        key: 'news_title'
-                    },
-                    {
-                        title: '狀態',
-                        key: 'news_status'
-                    },
-                    {
-                        title: '修改/刪除',
-                        key: 'news_action'
-                    }
+            {
+                title: '公告標題',
+                slot: 'news_no'
+            },
+            {
+                title: '上架日期',
+                slot: 'news_time'
+            },
+            {
+                title: '分類',
+                slot: 'news_class'
+            },
+            {
+                title: '標題',
+                slot: 'news_title'
+            },
+            {
+                title: '狀態',
+                slot: 'news_status'
+            },
+            {
+                title: '操作',
+                slot: 'action'
+            }
                 ],
                 dataOn: [
                     {
@@ -141,7 +288,6 @@
                         news_class: '重要',
                         news_title: '「高千穗峽谷」划船體驗報名優惠',
                         news_status:'上架',
-                        news_action:'新增 刪除'
                     },
                     {
                         news_no: 'A1100001',
@@ -149,7 +295,6 @@
                         news_class: '重要',
                         news_title: '高千穗-夜神樂',
                         news_status:'上架',
-                        news_action:'新增 刪除'
                     },
                     {
                         news_no: 'A1100002',
@@ -157,7 +302,6 @@
                         news_class: '重要',
                         news_title: '列車停駛',
                         news_status:'上架',
-                        news_action:'新增 刪除'
                     },
                     {
                         news_no: 'A1100003',
@@ -165,7 +309,6 @@
                         news_class: '重要',
                         news_title: '「鹿兒島沙浴」體驗活動報名',
                         news_status:'上架',
-                        news_action:'新增 刪除'
                     },
                     {
                         news_no: 'A1100004',
@@ -173,7 +316,6 @@
                         news_class: '重要',
                         news_title: '商城新品上市!!',
                         news_status:'上架',
-                        news_action:'新增 刪除'
                     }
                 ],
                 dataDraft: [
@@ -183,7 +325,6 @@
                         news_class: '其他',
                         news_title: '高千穗-夜神樂',
                         news_status:'草稿',
-                        news_action:'新增 刪除'
                     },
                     {
                         news_no: 'A1100006',
@@ -191,7 +332,6 @@
                         news_class: '活動',
                         news_title: '列車停駛',
                         news_status:'草稿',
-                        news_action:'新增 刪除'
                     }
                 ],
                 dataOff: [
@@ -201,7 +341,6 @@
                         news_class: '其他',
                         news_title: '「鹿兒島沙浴」體驗活動報名',
                         news_status:'下架',
-                        news_action:'新增 刪除'
                     },
                     {
                         news_no: 'A1100008',
@@ -209,11 +348,34 @@
                         news_class: '活動',
                         news_title: '商城新品上市!!',
                         news_status:'下架',
-                        news_action:'新增 刪除'
                     }
-                ]
+                ],
+                editIndex: -1,  // 当前聚焦的输入框的行数
+                editnews_no: '',  // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
+                editnews_time: '',  // 第二列输入框
+                editnews_class: '',  // 第三列输入框
+                editnews_title: '',  // 第四列输入框
+                editnews_status: '',
+                }
+            },
+            methods: {
+            handleEdit (row, index) {
+                this.editnews_no = row.news_no;
+                this.editnews_time = row.news_time;
+                this.editnews_title = row.news_title;
+                this.editnews_class = row.news_class;
+                this.editnews_status = row.news_status;
+                this.editIndex = index;
+            },
+            handleSave (index) {
+                this.data[index].news_no = this.editnews_no;
+                this.data[index].news_time = this.editnews_time;
+                this.data[index].news_class = this.editnews_class;
+                this.data[index].news_title = this.editnews_title;
+                this.data[index].news_status = this.editnews_status;
+                this.editIndex = -1;
             }
-        },
+        }
 
     }
 </script>
@@ -222,13 +384,12 @@
 /* -------------------彈窗 ------------------------*/
 .popup{
     position: absolute;
-    top: 20px;
-    left: 200px;
+    top: 5px;
+    left: 150px;
     margin: auto;
     z-index: 10;
 
-    width: 60%;
-    height: 70Vh;
+    width: 70%;
     background-color: #4F6573;
 }
 
@@ -237,21 +398,41 @@
     background-color: #2D3740;
     height: 80px;
     color: #ccc;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .popup-data{
     margin: 30px 0;
+    display: flex;
+    justify-content: space-around;
 }
-.input-title,
+.input-title{
+    margin-bottom: 40px;
+    padding-left: 85px;
+}
 .input-des,
 .input-pic,
 .input-pic-des{
     margin-bottom: 15px;
+    padding-left: 85px;
+
+}
+.input-txt{
+    margin-bottom: 40px;
 }
 .popup-btn{
-    margin: 30px 0;
+    margin: 90px 0 50px 0 ;
+    display: flex;
+    justify-content: center;
+
 }
 
+.popup-btn button{
+    margin: 0 100px;
+}
 
 /* 彈窗字顏色 */
 .popup label{
@@ -260,6 +441,8 @@
 .date{
     color: #ccc;
 }
+
+
 /* -------------------彈窗結束----------------- */
 
 /* -------------------新增修改box ------------------------*/
@@ -269,9 +452,10 @@
     left: 400px;
     width: 400px;
     height: 230px;
-    border: 1px solid #A3AFBF;
+    border: 1px solid #6c9255;
     border-radius: 10px;
-    background-color: #e3e7ed;
+    background-color: #ffffff;
+    text-align: center;
 }   
 
 .popup-box-close{
@@ -294,20 +478,20 @@
 .backstage-name{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: #4F6573;
     color: #fff;
     text-align: start;
-    height: 8vh;
-    line-height: 3.5rem;
+    height: 80px;
 }
 .backstage-name h2{
-    margin-left: 10px;
+    margin-left: 40px;
 }
 /* 帳號狀態 */
 .backstage-account span{
     display: inline-block;
     cursor: pointer;
-    margin: 0 10px;
+    margin: 0 20px;
 }
 
 /* 消息管理 */
@@ -315,13 +499,13 @@
 .backstage-path{
     text-align: start;
     color: #888888;
-    margin: 20px 0 0 10px;
+    margin: 40px 0 0 40px;
 }
 
 /* 新增按鈕 */
 .btn-add{
     text-align: end;
-    margin-right: 20px;
+    margin-right: 60px;
 }
 /* 管理介面 */
 .news-manage{
@@ -332,10 +516,11 @@
 /* 上下頁 */
 .btn-bottom{
     text-align: end;
-    margin-right: 20px;
+    margin:100px 60px 0 0 ;
+    margin-right: 60px;
 }
 
 .btn-bottom button{
-    margin-left: 10px;
+    margin-left: 80px;
 }
 </style>
