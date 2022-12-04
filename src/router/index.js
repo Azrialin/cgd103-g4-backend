@@ -8,9 +8,29 @@ const routes = [
 	component: HomeView
 },
 {
+	path: '/Administrator',
+	name: 'Administrator',
+	component: () => import('../views/AdministratorView.vue')
+},
+{
 	path: '/news',
 	name: 'news',
 	component: () => import('../views/NewsView.vue')
+},
+{
+	path: '/travelcase',
+	name: 'travelcase',
+	component: () => import('../views/TravelcaseView.vue')
+},
+{
+	path: '/travelmanage',
+	name: 'travelmanage',
+	component: () => import('../views/TravelmanageView.vue')
+},
+{
+	path: '/travelopen',
+	name: 'travelopen',
+	component: () => import('../views/TravelopenView.vue')
 },
 {
 	path: '/QA',
