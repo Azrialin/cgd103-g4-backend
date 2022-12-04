@@ -8,8 +8,8 @@
 			<!-- <router-link to="/">初始歡迎頁</router-link> -->
 			<router-link to="/">帳號管理</router-link>
 			<router-link to="/news">最新消息管理</router-link>
-			<router-link to="/">行程方案管理</router-link>
-			<router-link to="/">行程訂單管理</router-link>
+			<router-link to="/travelcase">行程方案管理</router-link>
+			<router-link to="/travelmanage">行程訂單管理</router-link>
 			<router-link to="/">開團管理</router-link>
 			<router-link to="/">商品管理</router-link>
 			<router-link to="/">商品訂單管理</router-link>

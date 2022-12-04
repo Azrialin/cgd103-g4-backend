@@ -13,6 +13,16 @@ const routes = [
 	component: () => import('../views/NewsView.vue')
 },
 {
+	path: '/travelcase',
+	name: 'travelcase',
+	component: () => import('../views/TravelcaseView.vue')
+},
+{
+	path: '/travelmanage',
+	name: 'travelmanage',
+	component: () => import('../views/TravelmanageView.vue')
+},
+{
 	path: '/QA',
 	name: 'QA',
 	component: () => import('../views/QAView.vue')
