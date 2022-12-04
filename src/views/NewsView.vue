@@ -1,9 +1,20 @@
 <template>
-    <!-- style="display:none" -->
+<!---------------------use case------------------------
+<div>
+🔹 新增消息 
+    "新增消息"，"取消"toggle 新增表格彈窗    ✔
+🔹 編輯消息
+🔹 刪除消息
+🔹 上下頁
+🔹 各狀態資料筆數顯示於下方
+🔹 排序filter
+</div>
+------------------------------------------------------->
+
     <div class="backstage-news" >
         <div class="backstage-name">
             <div>
-                <h2 class="font-36">最新消息管理</h2>
+                <h2 class="font-36" >最新消息管理</h2>
             </div>
             <div class="backstage-account">
                 <span class="font-18">管理員名稱</span>
@@ -13,7 +24,7 @@
         <div class="backstage-content">
             <div class="backstage-path font-16">最新消息管理 / 消息列表</div>
             <div class="btn-add">
-                <button class="font-20">新增消息</button>
+                <button class="font-20" @click="newToggle">新增消息</button>
             </div>
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
@@ -169,9 +180,87 @@
             </div>
         </div>
     </div>
+    <!-- style="display:none" -->
+    <!--一張全新表單 -->
+    <div class="popup " v-show="seenNew" >
+        <div class="popup-head font-20">
+            <div class="news-no">
+                <span>公告編號</span>
+                <span></span>
+            </div>
+            <div class="on-date">
+                <span class="date">發布時間</span>
+                <span class="date"></span>
+            </div>
+            <div class="last-edit-date">
+                <span class="date">最後更新</span>
+                <span class="date"></span>
+            </div>
+        </div>
+        <div class="popup-content font-18">
+            <div class="popup-data">
+                <label for="">狀態(必填)
+                    <select name="" id="">
+                        <option value="draft">草稿</option>
+                        <option value="on">上架</option>
+                        <option value="off">下架</option>
+                    </select>
+                </label>
+                <label for="">分類
+                    <select name="" id="">
+                        <option value="important">重要</option>
+                        <option value="action">活動</option>
+                        <option value="other">其他</option>
+                    </select>
+                </label>
 
-    <!-- 彈窗 -->
-    <div class="popup " style="display:none" >
+            </div>
+            <div class="input-txt">
+                <div class="input-title">
+                    <label for="">標題：
+                        <Input placeholder="請輸入標題" clearable style="width: 500px" />
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">引文：
+                        <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">內文：
+                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">內文：
+                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">結尾：
+                        <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                    </label>
+                </div>
+            </div>
+            <div class="input-pic">
+                <label class="test" for="">插入圖片：
+                    <input type="file">
+                </label>
+            </div>
+            <div class="input-pic-des">
+                <label for="">圖片敘述：
+                    <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                </label>
+            </div>
+            <div class="popup-btn">
+                <button @click="newToggle">取消</button>
+                <button>確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!--串聯資料用表單 -->
+    <div class="popup used" style="display:none" >
         <div class="popup-head font-20">
             <div class="news-no">
                 <span>公告編號</span>
@@ -263,13 +352,13 @@
         <button >確認</button>
     </div>
 
-
 </template>
 <!-- https://run.iviewui.com/4CEEQf1j -->
 <script>
     export default {
         data () {
             return {
+                seenNew:false,
                 columns: [
             {
                 title: '公告標題',
@@ -400,6 +489,9 @@
                 }
             },
             methods: {
+            newToggle(){
+                this.seenNew = !this.seenNew
+            },
             handleEdit (row, index) {
                 this.editnews_no = row.news_no;
                 this.editnews_time = row.news_time;
