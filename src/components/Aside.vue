@@ -25,7 +25,7 @@
 				<li><router-link to="/travelmanage">
 					<span class="material-symbols-outlined">content_paste_search</span> 行程訂單管理
 				</router-link></li>
-				<li><router-link to="/">
+				<li><router-link to="/travelopen">
 					<span class="material-symbols-outlined">pending_actions</span> 開團管理
 				</router-link></li>
 				<li><router-link to="/">
