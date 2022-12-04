@@ -12,7 +12,7 @@
 						<span class="material-symbols-outlined">manage_accounts</span> 帳號管理
 					</a>
 					<ul class="child-list" :class="toggle?'show':''">
-						<li><router-link to="/">管理者帳號</router-link></li>
+						<li><router-link to="/administrator">管理者帳號</router-link></li>
 						<li><router-link to="/">會員帳號</router-link></li>
 					</ul>
 				</li>
