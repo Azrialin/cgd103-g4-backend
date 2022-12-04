@@ -71,7 +71,7 @@
                                 </div> -->
                                 <div class="btn-box">
                                     <Button >編輯</Button>
-                                    <Button >刪除</Button>
+                                    <!-- <Button >刪除</Button> -->
                                 </div>
                             </template>
                         </Table>
@@ -166,8 +166,9 @@
                                     <Button @click="handleEdit(row, index)">操作</Button>
                                 </div> -->
                                 <div class="btn-box">
-                                    <Button >編輯</Button>
-                                    <Button >刪除</Button>
+                                    <Button >查看</Button>
+                                    <!-- <Button >編輯</Button> -->
+                                    <!-- <Button >刪除</Button> -->
                                 </div>
                             </template>
                         </Table>
