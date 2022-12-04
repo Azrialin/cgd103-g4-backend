@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import QA from "@/assets/js/QA.js"
 export default {
 	name: 'Aside',
 	props: {
@@ -62,7 +63,7 @@ export default {
 	},
 	methods: {
 		Change:function(e){
-			e.target.classList.toggle('at');
+			e.target.classList.toggle('show');
 		}
 	},
 }
@@ -71,111 +72,123 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "../assets/Css/Reset.css";
-@import "../assets/Scss/base/font.scss";
-@import "../assets/Scss/components/btn.scss";
+@import "../assets/Scss/pages/aside.scss"
 
-$trs: 0.3s;
-.nav-aside{
-	position: fixed;
-	width: 300px;
-	height: 100vh;
-	background-color: $clr_blue_L0;
-	.nav-aside-logo{
-		padding: 25px 50px 20px;
-		text-align: start;
-		img{
-			width: 150px;
-		}
-	}
-	nav{
-		height: calc(100vh - 110px);
-		overflow-y: scroll;
-		&::-webkit-scrollbar-track{
-			background-color: $clr_blue_L3;
-		}
-		&::-webkit-scrollbar{
-			width: 6px;
-		}
-		&::-webkit-scrollbar-thumb{
-			background-color: $clr_blue_L2;
-			border-radius: 4px;
-		}
-		.parent-list{
-			height: fit-content;
-			padding: 35px 50px;
-			>li{
-				padding: 15px 0;
-				a{
-					@include font(20px);
-					display: block;
-					color: #fff;
-					transition: $trs;
-					&:hover{
-						color: $clr_blue_L3;
-						transition: $trs;
-						.plus-minus span{
-							background-color: $clr_blue_L3;
-							transition: $trs;
-						}
-					}
-					span{
-						color: inherit;
-						vertical-align: top;
-					}
-					.plus-minus{
-						display: inline-block;
-						position: relative;
-						vertical-align: bottom;
-						width: 13px;
-						height: 13px;
-						span{
-							position: absolute;
-							width: 13px;
-							height: 1.4px;
-							background-color: #fff;
-							transition: $trs;
-							&:first-child{
-								transform: rotate(0deg);
-							}
-							&:last-child{
-								transform: rotate(90deg);
-							}
-						}
-					}
-				}
-				a.at{
-					.plus-minus span{
-						&:first-child{
-							transform: rotate(180deg);
-							transition: $trs;
-						}
-						&:last-child{
-							transform: rotate(-180deg);
-							transition: $trs;
-						}
-					}
-				}
-				.child-list{
-					display: none
-				}
-				a.at+.child-list{
-					display: block;
-					>li{
-						padding: 15px 32px 0;
-						a{
-							@include font(18px);
-							color: $clr_blue_L3;
-							position: relative;
-							&:hover::before{
-								content: '>';
-								position: absolute;
-								left: -20px;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
+// $trs: 0.3s;
+// .nav-aside{
+// 	position: fixed;
+// 	width: 300px;
+// 	height: 100vh;
+// 	background-color: $clr_blue_L0;
+// 	.nav-aside-logo{
+// 		padding: 25px 50px 20px;
+// 		text-align: start;
+// 		img{
+// 			width: 150px;
+// 		}
+// 	}
+// 	nav{
+// 		height: calc(100vh - 110px);
+// 		overflow-y: scroll;
+// 		&::-webkit-scrollbar-track{
+// 			background-color: $clr_blue_L3;
+// 		}
+// 		&::-webkit-scrollbar{
+// 			width: 6px;
+// 		}
+// 		&::-webkit-scrollbar-thumb{
+// 			background-color: $clr_blue_L2;
+// 			border-radius: 4px;
+// 		}
+// 		.parent-list{
+// 			position: relative;
+// 			height: fit-content;
+// 			padding: 35px;
+// 			>li{
+// 				>a{
+// 					@include font(20px);
+// 					padding: 10px 15px;
+// 					margin: 5px 0;
+// 					display: block;
+// 					color: #fff;
+// 					transition: $trs;
+// 					&:hover{
+// 						color: $clr_blue_L3;
+// 						transition: $trs;
+// 						.plus-minus span{
+// 							background-color: $clr_blue_L3;
+// 							transition: $trs;
+// 						}
+// 					}
+// 					span{
+// 						color: inherit;
+// 						vertical-align: top;
+// 					}
+// 					.plus-minus{
+// 						display: inline-block;
+// 						position: relative;
+// 						vertical-align: bottom;
+// 						width: 13px;
+// 						height: 13px;
+// 						span{
+// 							position: absolute;
+// 							width: 13px;
+// 							height: 1.4px;
+// 							background-color: #fff;
+// 							transition: $trs;
+// 							&:first-child{
+// 								transform: rotate(0deg);
+// 							}
+// 							&:last-child{
+// 								transform: rotate(90deg);
+// 							}
+// 						}
+// 					}
+// 				}
+// 				.child-list{
+// 					display: none
+// 				}
+// 			}
+// 			>li.on{
+// 				>a{
+// 					background: $clr_blue_L2;
+// 				}
+// 				a.show{
+// 					.plus-minus span{
+// 						&:first-child{
+// 							transform: rotate(180deg);
+// 							transition: $trs;
+// 						}
+// 						&:last-child{
+// 							transform: rotate(-180deg);
+// 							transition: $trs;
+// 						}
+// 					}
+// 				}
+// 				a.show+.child-list{
+// 					display: block;
+// 					li{
+// 						padding: 10px 46px 0;
+// 						text-align: start;
+// 						a{
+// 							@include font(18px);
+// 							color: $clr_blue_L3;
+// 							position: relative;
+// 							&:hover{
+// 								color: #fff;
+// 							}
+// 						}
+// 					}
+// 					li.on a{
+// 						&::before{
+// 							content: '>';
+// 							position: absolute;
+// 							left: -20px;
+// 						}
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// }
 </style>

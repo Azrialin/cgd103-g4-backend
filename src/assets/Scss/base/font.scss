@@ -24,19 +24,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Serif+TC:wght@200;300;400;500;600;700;900&display=swap');
 
 %font-style{
-	$Serif: false;
-	@if $Serif{ font-family: 'Noto Serif TC', '微軟正黑體'; }
-	@else{		font-family: 'Noto Sans', '微軟正黑體'; 	}
-	font-weight: 700;
+	font-family: 'Noto Sans', '微軟正黑體';
 	line-height: 1.2em;
-	letter-spacing: 0.15em;
+	letter-spacing: 0.05em;
 	text-align: justify;
 }
 
-$font-size: 48, 36, 32, 28, 24, 20, 18, 16, 14;
-@each $size in $font-size{
+$font-size-B: 48, 36, 32, 28, 24;
+@each $size in $font-size-B{
 	.font-#{$size}{
 		@extend %font-style;
+		font-weight: 600;
+		font-size: $size + px;
+	}
+}
+
+$font-size-L: 20, 18, 16, 14;
+@each $size in $font-size-L{
+	.font-#{$size}{
+		@extend %font-style;
+		font-weight: 400;
 		font-size: $size + px;
 	}
 }
@@ -45,7 +52,7 @@ $font-size: 48, 36, 32, 28, 24, 20, 18, 16, 14;
 $font-lh: 15, 24;
 @each $lh in $font-lh{
 	.font-16-#{$lh}em{
-		font: 500 16px / #{$lh/10} + em 'Noto Serif TC';
+		font: 400 16px / #{$lh/10} + em 'Noto Sans';
 		letter-spacing: 0.15em;
 		text-align: justify;
 	}

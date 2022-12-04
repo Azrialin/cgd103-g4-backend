@@ -108,8 +108,8 @@ $desk: back;
 // 按鈕樣式:後台
 %btn-backStyle{
     // min-width: 80px;
-    @include btnPadding(5, 15);
-    @include btnFont(500, 16){
+    @include btnPadding(4, 10);
+    @include btnFont(500, 14){
         font-family: 'Noto Sans';
     }
 }
@@ -138,7 +138,7 @@ $btn-type:
 @mixin btn-vary_1st($main, $hover, $active, $focus){
     background: $main;
     color: $clr_fff;
-    @include border(0, transparent, 8px);
+    @include border(0, transparent, 6px);
     &:hover{
         background: $hover;
         transition: $trs;
@@ -163,7 +163,7 @@ $btn-type:
 @mixin btn-vary_2nd($main, $active, $focus){
     background: $clr_fff;
     color: $main;
-    @include border(1px, $main, 8px);
+    @include border(1px, $main, 6px);
     &:hover{
         background: $main;
         color: $clr_fff;
@@ -230,7 +230,7 @@ $btn-type:
 @mixin btn-plain_1st($btn-clr){
     background: $btn-clr;
     color: $clr_fff;
-    @include border(0, transparent, 8px);
+    @include border(0, transparent, 6px);
     &:hover{
         background: lighten($btn-clr, 10);
         transition: $trs;
@@ -256,7 +256,7 @@ $btn-type:
 @mixin btn-plain_2nd ($btn-clr){
     background: $clr_fff;
     color: $btn-clr;
-    @include border(1px, $btn-clr, 8px);
+    @include border(1px, $btn-clr, 6px);
     &:hover{
         background: $btn-clr;
         color: $clr_fff;
