@@ -12,9 +12,9 @@
         </div>
         <div class="backstage-content">
             <div class="backstage-path font-16">行程訂單管理 / 行程訂單列表</div>
-            <div class="btn-add">
+            <!-- <div class="btn-add">
                 <button class="font-20">新增方案</button>
-            </div>
+            </div> -->
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
                     <TabPane label="會員訂單查詢" >

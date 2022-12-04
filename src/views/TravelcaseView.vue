@@ -13,7 +13,9 @@
         <div class="backstage-content">
             <div class="backstage-path font-16">行程方案管理 / 行程方案列表</div>
             <div class="btn-add">
-                <button class="font-20">新增方案</button>
+                <button class="font-20">
+                    <router-link class="addc" to="/traveladd">新增方案</router-link>
+                </button>
             </div>
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
@@ -305,7 +307,6 @@
     left: 150px;
     margin: auto;
     z-index: 10;
-
     width: 70%;
     background-color: #4F6573;
 }
@@ -315,7 +316,6 @@
     background-color: #2D3740;
     height: 80px;
     color: #ccc;
-
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -423,6 +423,12 @@
 .btn-add{
     text-align: end;
     margin-right: 60px;
+    .font-20{
+        .addc{
+            text-decoration: none;
+            color: #2D3740;
+        }
+    }
 }
 /* 管理介面 */
 .news-manager{

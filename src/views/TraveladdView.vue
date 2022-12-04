@@ -15,51 +15,71 @@
         <div class="container">
             <div class="content">
                 <div class="type opencode">
-                    <p class="nname">開團編號 :</p>
-                    <p class="succe">A0001</p>
+                    <p class="nncode font-20">方案編號 A110000</p>
                 </div>
                 <div class="type travelcode">
-                    <p class="nname">行程方案 :</p>
+                    <p class="nname">狀態 :</p>
                     <div class="choose">
                         <select class="choosein" v-model="selected">
                             <option value="" disabled>-請選擇-</option>
-                            <option>方案A</option>
-                            <option>方案B</option>
-                            <option>方案C</option>
-                            <option>方案D</option>
+                            <option>上架</option>
+                            <option>草稿</option>
+                            <option>下架</option>
                         </select>
                     </div>
                 </div>
                 
                 <div class="type travelcode">
-                    <p class="nname">出發日期 :</p>
-                    <Space size="large" wrap>
-                        <DatePicker type="date" placeholder="Select date" style="width: 300px" />
-                    </Space>
+                    <p class="nname">前台位置 :</p>
+                    <div class="choose">
+                        <select class="choosein" v-model="selected">
+                            <option value="" disabled>-請選擇-</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="type travelcode">
-                    <p class="nname">開放報名日期 :</p>
-                    <Space size="large" wrap>
-                        <DatePicker type="date" placeholder="Select date" style="width: 300px" />
-                    </Space>
-                </div>
-                
-                <div class="type travelcode">
-                    <p class="nname">截止日期 :</p>
-                    <Space size="large" wrap>
-                        <DatePicker type="date" placeholder="Select date" style="width: 300px" />
-                    </Space>
-                </div>
-                
-                <div class="type travelcode">
-                    <p class="nname">人數上限 :</p>
+                    <p class="nname">推薦特產 :</p>
                     <Input class="succe" type="text" v-model="value" style="width: 300px" />
                 </div>
-                
+                <div class="title2 font-18">方案列表區圖文設定 :</div>
                 <div class="type travelcode">
-                    <p class="nname">價格 / 人 :</p>
+                    <p class="nname">標題(必填) :</p>
                     <Input class="succe" type="text" v-model="value" style="width: 300px" />
+                </div>
+                <div class="type travelcode">
+                    <p class="nname">副標題(必填) :</p>
+                    <Input class="succe" type="text" v-model="value" style="width: 300px" />
+                </div>
+                <div class="type travelcode">
+                    <p class="nname">介紹頁內文(必填) :</p>
+                    <Form :model="formItem">
+                        <FormItem label="Text">
+                            <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
+                        </FormItem>
+                    </Form>
+                </div>
+                <div class="type travelcode">
+                    <p class="nname">詳情頁內文(必填) :</p>
+                    <Form :model="formItem2">
+                        <FormItem label="Text">
+                            <Input v-model="formItem2.textarea2" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
+                        </FormItem>
+                    </Form>
+                </div>
+                <div class="type travelcode">
+                    <p class="nname">價格 :</p>
+                    <Input class="succe" type="text" v-model="value" style="width: 300px" />
+                </div>
+                <div class="type travelcode">
+                    <p class="nname">插入圖片 :</p>
+                    <Upload class="succe" action="//jsonplaceholder.typicode.com/posts/">
+                        <Button icon="ios-cloud-upload-outline">Upload files</Button>
+                    </Upload>
                 </div>
                 <div class="delcan">
                     <div class="shure">取消</div>
@@ -75,6 +95,12 @@
             return {
                 selected:"",
                 value:"",
+                formItem: {
+                    textarea: '',
+                },
+                formItem2: {
+                    textarea2: '',
+                },
             }
         }
     }
@@ -136,26 +162,33 @@
                 color: $back_color_main;
             }
         }
+        .title2{
+            color: #fff;
+            padding: 50px;
+        }
         .type{
             display: flex;
             color: #fff;
+            .nncode{
+                width: 100%;
+                background-color: #2D3740;
+                text-align: left;
+                padding: 30px 30px;
+            }
             .nname{
                 font-size: 16px;
                 width: 50%;
                 padding: 30px 0px;
             }
             .choose{
-                font-size: 16px;
                 height: 40px;
                 display: flex;
                 margin: auto auto auto 0px;
                 .choosein{
                     width: 300px;
-                    font-size: 16px;
                 }
             }
             .succe{
-                font-size: 16px;
                 display: flex;
                 align-items: center;
             }
