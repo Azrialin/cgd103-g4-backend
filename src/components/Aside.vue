@@ -19,10 +19,10 @@
 				<li><router-link to="/news">
 					<span class="material-symbols-outlined">format_list_bulleted</span> 最新消息管理
 				</router-link></li>
-				<li><router-link to="/">
+				<li><router-link to="/travelcase">
 					<span class="material-symbols-outlined">edit_calendar</span> 行程方案管理
 				</router-link></li>
-				<li><router-link to="/">
+				<li><router-link to="/travelmanage">
 					<span class="material-symbols-outlined">content_paste_search</span> 行程訂單管理
 				</router-link></li>
 				<li><router-link to="/">
