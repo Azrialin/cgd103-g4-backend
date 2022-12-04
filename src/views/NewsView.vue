@@ -1,13 +1,28 @@
 <template>
-<!---------------------use case------------------------
+<!---------------------use case(簡易隨寫)-----------------------
 <div>
+📢 按鈕先套套件 success error，有時間再回頭依照mockup設計
 🔹 新增消息 
     "新增消息"，"取消"toggle 新增表格彈窗    ✔
-🔹 編輯消息
-🔹 刪除消息
+    按下確認鍵的資料修改(若選擇上架，需要檢查欄位是否都填妥)
+🔹 編輯消息(上架)
+    彈窗  ✔
+    已有的資料綁定
+    按下確認鍵的資料修改(不可有空職欄位)
+🔹 編輯消息(草稿)
+    彈窗  ✔
+    已有的資料綁定
+    按下確認鍵的資料修改
+🔹 查看消息(下架)
+    彈窗 ✔
+    已有的資料綁定
+🔹 刪除消息(草稿)
 🔹 上下頁、顯示資料數設定(目前上架資料全開會看不到上下頁，所以註解掉一半)
 🔹 各狀態資料筆數顯示於下方
 🔹 排序filter
+    上架日期 ✔
+    最後修改 ✔
+    分類 還沒搞懂怎麼，待研究
 </div>
 ------------------------------------------------------->
 
@@ -51,9 +66,9 @@
                                 <span v-else>{{ (row.news_type) }}</span>
                             </template>
                             <!-- 標題 -->
-                            <template #news_title="{ row, index }">
+                            <template #news_title="{ row, index }" >
                                 <Input type="text"  v-if="editIndex === index" />
-                                <span v-else>{{ row.news_title }}</span>
+                                <span v-else >{{ row.news_title }}</span>
                             </template>
                             <!-- 狀態 -->
                             <template #news_status="{ row, index }">
@@ -62,16 +77,8 @@
                             </template>
                             <!-- 按鈕 -->
                             <template #action>
-                                <!-- <div v-if="editIndex === index">
-                                    <Button @click="handleSave(index)">保存</Button>
-                                    <Button @click="editIndex = -1">取消</Button>
-                                </div> -->
-                                <!-- <div v-else>
-                                    <Button @click="handleEdit(row, index)">操作</Button>
-                                </div> -->
                                 <div class="btn-box">
-                                    <Button >編輯</Button>
-                                    <!-- <Button >刪除</Button> -->
+                                    <Button type="success" @click="editOnData">編輯</Button>
                                 </div>
                             </template>
                         </Table>
@@ -110,16 +117,11 @@
                             </template>
                             <!-- 按鈕 -->
                             <template #action>
-                                <!-- <div v-if="editIndex === index">
-                                    <Button @click="handleSave(index)">保存</Button>
-                                    <Button @click="editIndex = -1">取消</Button>
-                                </div> -->
-                                <!-- <div v-else>
-                                    <Button @click="handleEdit(row, index)">操作</Button>
-                                </div> -->
                                 <div class="btn-box">
-                                    <Button >編輯</Button>
-                                    <Button >刪除</Button>
+                                    <Space :size="size">
+                                        <Button size="default" type="success" @click="editDraftData">編輯</Button>
+                                        <Button type="error">刪除</Button>
+                                    </Space>
                                 </div>
                             </template>
                         </Table>
@@ -158,17 +160,8 @@
                             </template>
                             <!-- 按鈕 -->
                             <template #action>
-                                <!-- <div v-if="editIndex === index">
-                                    <Button @click="handleSave(index)">保存</Button>
-                                    <Button @click="editIndex = -1">取消</Button>
-                                </div> -->
-                                <!-- <div v-else>
-                                    <Button @click="handleEdit(row, index)">操作</Button>
-                                </div> -->
                                 <div class="btn-box">
-                                    <Button >查看</Button>
-                                    <!-- <Button >編輯</Button> -->
-                                    <!-- <Button >刪除</Button> -->
+                                    <Button type="success" @click="checkOffData">查看</Button>
                                 </div>
                             </template>
                         </Table>
@@ -260,8 +253,8 @@
         </div>
     </div>
 
-    <!--串聯資料用表單 -->
-    <div class="popup used" style="display:none" >
+    <!--串聯資料用表單(上架)可繼續上架、下架，無草稿-->
+    <div class="popup on" v-show="seeOnData">
         <div class="popup-head font-20">
             <div class="news-no">
                 <span>公告編號</span>
@@ -278,9 +271,8 @@
         </div>
         <div class="popup-content font-18">
             <div class="popup-data">
-                <label for="">狀態(必填)
+                <label for="">狀態
                     <select name="" id="">
-                        <option value="draft">草稿</option>
                         <option value="on">上架</option>
                         <option value="off">下架</option>
                     </select>
@@ -292,7 +284,6 @@
                         <option value="other">其他</option>
                     </select>
                 </label>
-
             </div>
             <div class="input-txt">
                 <div class="input-title">
@@ -332,10 +323,160 @@
                 </label>
             </div>
             <div class="popup-btn">
-                <button>取消</button>
+                <button @click="editOnData">取消</button>
                 <button>確認</button>
             </div>
         </div>
+    </div>
+
+    <!--串聯資料用表單(草稿)可上架無下架 -->
+    <div class="popup used" v-show="seeDraftData">
+        <div class="popup-head font-20">
+            <div class="news-no">
+                <span>公告編號</span>
+                <span>A110000</span>
+            </div>
+            <div class="on-date">
+                <span class="date">發布時間</span>
+                <span class="date"></span>
+            </div>
+            <div class="last-edit-date">
+                <span class="date">最後更新</span>
+                <span class="date">20221120</span>
+            </div>
+        </div>
+        <div class="popup-content font-18">
+            <div class="popup-data">
+                <label for="">狀態(必填)
+                    <select name="" id="">
+                        <option value="draft">草稿</option>
+                        <option value="on">上架</option>
+                    </select>
+                </label>
+                <label for="">分類
+                    <select name="" id="">
+                        <option value="important">重要</option>
+                        <option value="action">活動</option>
+                        <option value="other">其他</option>
+                    </select>
+                </label>
+            </div>
+            <div class="input-txt">
+                <div class="input-title">
+                    <label for="">標題：
+                        <Input placeholder="請輸入標題" clearable style="width: 500px" />
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">引文：
+                        <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">內文：
+                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">內文：
+                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                    </label>
+                </div>
+                <div class="input-des">
+                    <label for="">結尾：
+                        <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                    </label>
+                </div>
+            </div>
+            <div class="input-pic">
+                <label class="test" for="">插入圖片：
+                    <input type="file">
+                </label>
+            </div>
+            <div class="input-pic-des">
+                <label for="">圖片敘述：
+                    <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                </label>
+            </div>
+            <div class="popup-btn">
+                <button @click="editDraftData">取消</button>
+                <button>確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!--串聯資料用表單(下架)查看(不可更改內容)，所以無取消鍵，確認僅為回到畫面 -->
+    <div class="popup used" v-show="seeOffData">
+            <div class="popup-head font-20">
+                <div class="news-no">
+                    <span>公告編號</span>
+                    <span>A110000</span>
+                </div>
+                <div class="on-date">
+                    <span class="date">發布時間</span>
+                    <span class="date">20221120</span>
+                </div>
+                <div class="last-edit-date">
+                    <span class="date">最後更新</span>
+                    <span class="date">20221120</span>
+                </div>
+            </div>
+            <div class="popup-content font-18">
+                <div class="popup-data">
+                    <label for="">狀態
+                        <select disabled name="" id="">
+                            <option value="off">下架</option>
+                        </select>
+                    </label>
+                    <label for="">分類
+                        <select name="" id="" disabled>
+                            <option value="important">重要</option>
+                            <option value="action">活動</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="input-txt">
+                    <div class="input-title">
+                        <label for="">標題：
+                            <Input disabled placeholder="請輸入標題" clearable style="width: 500px" />
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">引文：
+                            <Input disabled clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">內文：
+                            <Input disabled clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">內文：
+                            <Input disabled clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">結尾：
+                            <Input disabled clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-pic">
+                    <label class="test" for="">插入圖片：
+                        <input disabled type="file">
+                    </label>
+                </div>
+                <div class="input-pic-des">
+                    <label for="">圖片敘述：
+                        <Input disabled placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                    </label>
+                </div>
+                <div class="popup-btn">
+                    <button @click="checkOffData">確認</button>
+                </div>
+            </div>
     </div>
 
     <!-- 新增成功 -->
@@ -359,7 +500,11 @@
     export default {
         data () {
             return {
-                seenNew:false,
+                seenNew:false, //新表格彈窗，綁新表單v-show、按鈕@click="newToggle"
+                seeOnData:false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
+                seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
+                seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
+                size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
                 columns: [
             {
                 title: '公告編號',
@@ -371,19 +516,45 @@
                 title: '上架日期',
                 slot: 'news_time',
                 width: 110,
-                align: 'center'
+                align: 'center',
+                "sortable": true // 排序
             },
             {
                 title: '最後修改',
                 slot: 'news_last_edit',
                 width: 110,
-                align: 'center'
+                align: 'center',
+                "sortable": true
             },
             {
                 title: '分類',
                 slot: 'news_type',
-                width: 70,
-                align: 'center'
+                width: 80,
+                align: 'center',
+                filters: [
+                            {
+                                label: '重要',
+                                value: 1
+                            },
+                            {
+                                label: '活動',
+                                value: 2
+                            },
+                            {
+                                label: '其他',
+                                value: 3
+                            }
+                        ],
+                        filterMultiple: false, //https://www.iviewui.com/view-ui-plus/component/form/table#Brief_Introduction
+                        filterMethod (value,row) {  // 還沒搞懂怎麼秀
+                            if (value === 1) {
+                                return row.label='重要';
+                            } else if (value === 2) {
+                                return row.label='活動' ;
+                            }else if (value === 3) {
+                                return row.label='其他' ;
+                            }
+                        }
             },
             {
                 title: '標題',
@@ -651,11 +822,19 @@
                 }
             },
             methods: {
-            newToggle(){
+            newToggle(){ //新表單
                 this.seenNew = !this.seenNew
+            },
+            editOnData(){ //上架編輯表單彈窗
+                this.seeOnData = !this.seeOnData
+            },
+            editDraftData(){ //草稿編輯表單彈窗
+                this.seeDraftData = !this.seeDraftData
+            },
+            checkOffData(){ //下架資料彈窗
+                this.seeOffData = !this.seeOffData
             }
         }
-
     }
 </script>
 
