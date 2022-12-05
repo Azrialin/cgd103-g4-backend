@@ -17,12 +17,12 @@
     彈窗 ✔
     已有的資料綁定
 🔹 刪除消息(草稿)
-🔹 上下頁、顯示資料數設定(目前上架資料全開會看不到上下頁，所以註解掉一半)
+🔹 上下頁、顯示資料數設定  (目前用卷軸
 🔹 各狀態資料筆數顯示於下方
 🔹 排序filter
     上架日期 ✔
     最後修改 ✔
-    分類 還沒搞懂怎麼，待研究
+    分類 ✔
 </div>
 ------------------------------------------------------->
 
@@ -44,7 +44,7 @@
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
                     <TabPane label="上架" >
-                        <Table stripe border :columns="columns" :data="dataOn" >
+                        <Table height="280" stripe border :columns="columns" :data="dataOn" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-if="editIndex === index" />
@@ -84,7 +84,7 @@
                         </Table>
                     </TabPane>
                     <TabPane label="草稿" >
-                        <Table stripe border :columns="columns" :data="dataDraft" >
+                        <Table height="280" stripe border :columns="columns" :data="dataDraft" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -127,7 +127,7 @@
                         </Table>
                     </TabPane>
                     <TabPane label="下架" >
-                        <Table stripe border :columns="columns" :data="dataOff" >
+                        <Table height="280" stripe border :columns="columns" :data="dataOff" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -546,13 +546,13 @@
                             }
                         ],
                         filterMultiple: false, //https://www.iviewui.com/view-ui-plus/component/form/table#Brief_Introduction
-                        filterMethod (value,row) {  // 還沒搞懂怎麼秀
+                        filterMethod (value,row) { 
                             if (value === 1) {
-                                return row.label='重要';
+                                return row.news_type==='重要';
                             } else if (value === 2) {
-                                return row.label='活動' ;
+                                return row.news_type==='活動' ;
                             }else if (value === 3) {
-                                return row.label='其他' ;
+                                return row.news_type==='其他' ;
                             }
                         }
             },
@@ -645,76 +645,76 @@
                         news_img_des:'屋台人情味',
                         news_status:'上架',
                     },
-                    // {
-                    //     news_no: '',
-                    //     news_time: '20220501',
-                    //     news_last_edit:'20220501',
-                    //     news_type: '活動',
-                    //     news_title: '「高千穗峽谷」划船體驗報名優惠',
-                    //     news_text_start:'被日本政府列入「名勝」、「天然記念物」的高千穗峽谷，知名活動...',
-                    //     news_text_middle:'徜徉大自然，峽谷一線天的感受，宛如置身電影情節。',
-                    //     news_text_trans:'徐徐的涼風，清澈的流水，還有對的人。',
-                    //     news_text_end:'一起來享受這美好的體驗吧。',
-                    //     news_img:'6.jpg',
-                    //     news_img_des:'划船體驗',
-                    //     news_status:'上架',
-                    // },
-                    // {
-                    //     news_no: '',
-                    //     news_time: '20220401',
-                    //     news_last_edit:'20220401',
-                    //     news_type: '其他',
-                    //     news_title: '商城新品上市-福岡名產 努努雞!!',
-                    //     news_text_start:'受大家喜愛的博多名產-努努雞，在JS線上商城上架囉! 線上輕鬆點選...',
-                    //     news_text_middle:'商品詳情與內容請建商城分頁',
-                    //     news_text_trans:'活動期間，享有免運優惠',
-                    //     news_text_end:'趕快來購買吧!',
-                    //     news_img:'7.jpg',
-                    //     news_img_des:'人氣伴手禮-努努雞',
-                    //     news_status:'上架',
-                    // },
-                    // {
-                    //     news_no: '',
-                    //     news_time: '20220301',
-                    //     news_last_edit:'20220301',
-                    //     news_type: '其他',
-                    //     news_title: '行程車票票根優惠!',
-                    //     news_text_start:'JS旗下集團餐廳"唐寶寶"，唐戶河豚饗宴...',
-                    //     news_text_middle:'唐戶市場為日本河豚最大的產地，而現在也正是季節。',
-                    //     news_text_trans:'JS邀請您一起來享受吃起來沒什麼味道的河豚。',
-                    //     news_text_end:'餐廳合作優惠6折起~',
-                    //     news_img:'8.jpg',
-                    //     news_img_des:'河豚三味',
-                    //     news_status:'上架',
-                    // },
-                    // {
-                    //     news_no: '',
-                    //     news_time: '20220201',
-                    //     news_last_edit:'20220201',
-                    //     news_type: '活動',
-                    //     news_title: '訂購夏季行程，豪斯登堡門票優惠',
-                    //     news_text_start:'如何以最划算的價格，體驗九州行程?...',
-                    //     news_text_middle:'即日起訂購夏季行程，活動為期半年。',
-                    //     news_text_trans:'即可免費兌換豪斯登堡門票乙張。',
-                    //     news_text_end:'贈送門票有限，儘請從速。',
-                    //     news_img:'9.jpg',
-                    //     news_img_des:'2日優惠JS-PASS',
-                    //     news_status:'上架',
-                    // },
-                    // {
-                    //     news_no: '',
-                    //     news_time: '20220101',
-                    //     news_last_edit:'20220101',
-                    //     news_type: '重要',
-                    //     news_title: '列車停駛',
-                    //     news_text_start:'阿蘇火山爆發，九州各地能見度低，塵埃影響...',
-                    //     news_text_middle:'昨日深夜，九州居民想起了50年前的恐懼。',
-                    //     news_text_trans:'阿蘇火山噴發，宛如龐貝惡夢。',
-                    //     news_text_end:'老闆叫員工擦玻璃。JS列車停駛10日',
-                    //     news_img:'10.jpg',
-                    //     news_img_des:'阿蘇火山爆發',
-                    //     news_status:'上架',
-                    // },
+                    {
+                        news_no: '',
+                        news_time: '20220501',
+                        news_last_edit:'20220501',
+                        news_type: '活動',
+                        news_title: '「高千穗峽谷」划船體驗報名優惠',
+                        news_text_start:'被日本政府列入「名勝」、「天然記念物」的高千穗峽谷，知名活動...',
+                        news_text_middle:'徜徉大自然，峽谷一線天的感受，宛如置身電影情節。',
+                        news_text_trans:'徐徐的涼風，清澈的流水，還有對的人。',
+                        news_text_end:'一起來享受這美好的體驗吧。',
+                        news_img:'6.jpg',
+                        news_img_des:'划船體驗',
+                        news_status:'上架',
+                    },
+                    {
+                        news_no: '',
+                        news_time: '20220401',
+                        news_last_edit:'20220401',
+                        news_type: '其他',
+                        news_title: '商城新品上市-福岡名產 努努雞!!',
+                        news_text_start:'受大家喜愛的博多名產-努努雞，在JS線上商城上架囉! 線上輕鬆點選...',
+                        news_text_middle:'商品詳情與內容請建商城分頁',
+                        news_text_trans:'活動期間，享有免運優惠',
+                        news_text_end:'趕快來購買吧!',
+                        news_img:'7.jpg',
+                        news_img_des:'人氣伴手禮-努努雞',
+                        news_status:'上架',
+                    },
+                    {
+                        news_no: '',
+                        news_time: '20220301',
+                        news_last_edit:'20220301',
+                        news_type: '其他',
+                        news_title: '行程車票票根優惠!',
+                        news_text_start:'JS旗下集團餐廳"唐寶寶"，唐戶河豚饗宴...',
+                        news_text_middle:'唐戶市場為日本河豚最大的產地，而現在也正是季節。',
+                        news_text_trans:'JS邀請您一起來享受吃起來沒什麼味道的河豚。',
+                        news_text_end:'餐廳合作優惠6折起~',
+                        news_img:'8.jpg',
+                        news_img_des:'河豚三味',
+                        news_status:'上架',
+                    },
+                    {
+                        news_no: '',
+                        news_time: '20220201',
+                        news_last_edit:'20220201',
+                        news_type: '活動',
+                        news_title: '訂購夏季行程，豪斯登堡門票優惠',
+                        news_text_start:'如何以最划算的價格，體驗九州行程?...',
+                        news_text_middle:'即日起訂購夏季行程，活動為期半年。',
+                        news_text_trans:'即可免費兌換豪斯登堡門票乙張。',
+                        news_text_end:'贈送門票有限，儘請從速。',
+                        news_img:'9.jpg',
+                        news_img_des:'2日優惠JS-PASS',
+                        news_status:'上架',
+                    },
+                    {
+                        news_no: '',
+                        news_time: '20220101',
+                        news_last_edit:'20220101',
+                        news_type: '重要',
+                        news_title: '列車停駛',
+                        news_text_start:'阿蘇火山爆發，九州各地能見度低，塵埃影響...',
+                        news_text_middle:'昨日深夜，九州居民想起了50年前的恐懼。',
+                        news_text_trans:'阿蘇火山噴發，宛如龐貝惡夢。',
+                        news_text_end:'老闆叫員工擦玻璃。JS列車停駛10日',
+                        news_img:'10.jpg',
+                        news_img_des:'阿蘇火山爆發',
+                        news_status:'上架',
+                    },
                 ],
                 dataDraft: [
                     {
@@ -796,7 +796,7 @@
                         news_type: '重要',
                         news_title: '行程更改公告',
                         news_text_start:'因最近政治因素，配合政府政策，軍艦島....',
-                        news_text_middle:'近期戰爭因素導致國際情勢惡化，為了避免資加恐懼與不安氣氛，政府宣布容易引起不安情緒的景點關閉。',
+                        news_text_middle:'近期戰爭因素導致國際情勢惡化，為了避免增加恐懼與不安氣氛，政府宣布容易引起不安情緒的景點關閉。',
                         news_text_trans:'直到戰爭結束。',
                         news_text_end:'行程將會配合政策，更改到可愛的貓島，讓大家看可愛的貓咪。',
                         news_img:'15.jpg',
