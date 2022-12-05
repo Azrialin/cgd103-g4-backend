@@ -1,7 +1,7 @@
 @import "../base/font.scss";
 @import "../components/btn.scss";
 
-$trs: 0.3s;
+$trs: 0.5s;
 
 .nav-aside{
 	position: fixed;
@@ -63,7 +63,7 @@ $trs: 0.3s;
 							width: 13px;
 							height: 1.4px;
 							background-color: #fff;
-							transition: $trs;
+							transition: 0.5s;
 							&:first-child{
 								transform: rotate(0deg);
 							}
@@ -73,27 +73,12 @@ $trs: 0.3s;
 						}
 					}
 				}
-                >a.on{
-                    background: $clr_blue_L2;
-                }
-                a.show{
-					.plus-minus span{
-						&:first-child{
-							transform: rotate(180deg);
-							transition: $trs;
-						}
-						&:last-child{
-							transform: rotate(-180deg);
-							transition: $trs;
-						}
-					}
-				}
-                .child-list{
+				.child-list{
 					display: none
 				}
-                a.show+.child-list{
-					display: block;
-					li{
+				&:first-child.on{
+					.child-list{
+						display: block;
 						padding: 10px 46px 0;
 						text-align: start;
 						a{
@@ -104,15 +89,33 @@ $trs: 0.3s;
 								color: #fff;
 							}
 						}
-                        a.on{
-                            &::before{
-                                content: '>';
-                                position: absolute;
-                                left: -20px;
-                            }
-                        }
+						a.show{
+							&::before{
+								content: '>';
+								position: absolute;
+								left: -20px;
+							}
+						}
+						li+li{
+							margin-top: 10px;
+						}
 					}
 				}
+			}
+			>li.on{
+				>a{
+                    background: $clr_blue_L2;
+					.plus-minus span{
+						&:first-child{
+							transform: rotate(180deg);
+							transition: 0.5s;
+						}
+						&:last-child{
+							transform: rotate(-180deg);
+							transition: 0.5s;
+						}
+					}
+                }
 			}
 		}
 	}
