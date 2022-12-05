@@ -1,53 +1,35 @@
 <template>
 	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 	<div class="nav-aside">
-		<div class="nav-aside-logo">
+		<h1 class="nav-aside-logo" style="font-size:0;">JET SPEED
 			<img src="../assets/logo_WHITE.png" alt="logo">
-		</div>
+		</h1>
 		<hr>
 		<nav>
 			<ul class="parent-list">
-				<li>
-					<a href="javascript:void(0);" @click="Change">
+				<li id="001"
+					:key="id"
+					:class="{on: id == activeItem.id}"
+					@click.stop="tabChange"
+				>
+					<a href="javascript:void(0);">
 						<span class="material-symbols-outlined">manage_accounts</span> 帳號管理
 						<div class="plus-minus"><span></span><span></span></div>
 					</a>
 					<ul class="child-list">
-						<li><router-link to="/administrator">管理者帳號</router-link></li>
-						<li><router-link to="/">會員帳號</router-link></li>
+						<li><router-link to="/administrator" @click="listOpen">管理者帳號</router-link></li>
+						<li><router-link to="/" @click="listOpen">會員帳號</router-link></li>
 					</ul>
 				</li>
-				<li><router-link to="/news">
-					<span class="material-symbols-outlined">format_list_bulleted</span>
-					最新消息管理</router-link>
-				</li>
-				<li><router-link to="/travelcase">
-					<span class="material-symbols-outlined">edit_calendar</span>
-					行程方案管理</router-link>
-				</li>
-				<li><router-link to="/travelmanage">
-					<span class="material-symbols-outlined">content_paste_search</span>
-					行程訂單管理</router-link>
-				</li>
-				<li><router-link to="/travelopen">
-					<span class="material-symbols-outlined">pending_actions</span>
-					開團管理</router-link>
-				</li>
-				<li><router-link to="/">
-					<span class="material-symbols-outlined">card_travel</span>
-					商品管理</router-link>
-				</li>
-				<li><router-link to="/">
-					<span class="material-symbols-outlined">content_paste_search</span>
-					商品訂單管理</router-link>
-				</li>
-				<li><router-link to="/">
-					<span class="material-symbols-outlined">mark_chat_read</span>
-					意見表管理</router-link>
-				</li>
-				<li><router-link to="/QA">
-					<span class="material-symbols-outlined">quiz</span>
-					Q&A 管理</router-link>
+				<li v-for="item in items"
+					:key="item.id"
+					:class="{on: item.id == activeItem.id}"
+					@click.stop="tabChange(item)"
+				>
+					<router-link :to ="{path:item.source}">
+						<span class="material-symbols-outlined">{{item.icon}}</span>
+						{{item.name}}
+					</router-link>
 				</li>
 			</ul>
 		</nav>
@@ -59,11 +41,71 @@ import QA from "@/assets/js/QA.js"
 export default {
 	name: 'Aside',
 	props: {
-
 	},
+	data(){
+        return{
+			activeItem: '',
+            items:[
+				{
+					id: '002',
+					name: '最新消息管理',
+					source: '/news',
+					icon: 'format_list_bulleted',
+				},
+				{
+					id: '003',
+					name: '行程方案管理',
+					source: '/travelcase',
+					icon: 'edit_calendar',
+				},
+				{
+					id: '004',
+					name: '行程訂單管理',
+					source: '/travelmanage',
+					icon: 'content_paste_search',
+				},
+				{
+					id: '005',
+					name: '開團管理',
+					source: '/travelopen',
+					icon: 'pending_actions',
+				},
+				{
+					id: '006',
+					name: '商品管理',
+					source: '/',
+					icon: 'card_travel',
+				},
+				{
+					id: '007',
+					name: '商品訂單管理',
+					source: '/',
+					icon: 'content_paste_search',
+				},
+				{
+					id: '008',
+					name: '意見表管理',
+					source: '/',
+					icon: 'mark_chat_read',
+				},
+				{
+					id: '009',
+					name: 'Q&A 管理',
+					source: '/QA',
+					icon: 'quiz',
+				},
+			],
+        }
+    },
 	methods: {
-		Change:function(e){
-			e.target.classList.toggle('show');
+		listOpen(tab){
+			this.classList.toggle('show');
+			this.activeItem = tab;
+		},
+		tabChange(tab){
+			this.activeItem = tab;
+			// console.log( this.activeItem);
+			// console.log( this.activeList);
 		}
 	},
 }
@@ -72,123 +114,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "../assets/Css/Reset.css";
-@import "../assets/Scss/pages/aside.scss"
-
-// $trs: 0.3s;
-// .nav-aside{
-// 	position: fixed;
-// 	width: 300px;
-// 	height: 100vh;
-// 	background-color: $clr_blue_L0;
-// 	.nav-aside-logo{
-// 		padding: 25px 50px 20px;
-// 		text-align: start;
-// 		img{
-// 			width: 150px;
-// 		}
-// 	}
-// 	nav{
-// 		height: calc(100vh - 110px);
-// 		overflow-y: scroll;
-// 		&::-webkit-scrollbar-track{
-// 			background-color: $clr_blue_L3;
-// 		}
-// 		&::-webkit-scrollbar{
-// 			width: 6px;
-// 		}
-// 		&::-webkit-scrollbar-thumb{
-// 			background-color: $clr_blue_L2;
-// 			border-radius: 4px;
-// 		}
-// 		.parent-list{
-// 			position: relative;
-// 			height: fit-content;
-// 			padding: 35px;
-// 			>li{
-// 				>a{
-// 					@include font(20px);
-// 					padding: 10px 15px;
-// 					margin: 5px 0;
-// 					display: block;
-// 					color: #fff;
-// 					transition: $trs;
-// 					&:hover{
-// 						color: $clr_blue_L3;
-// 						transition: $trs;
-// 						.plus-minus span{
-// 							background-color: $clr_blue_L3;
-// 							transition: $trs;
-// 						}
-// 					}
-// 					span{
-// 						color: inherit;
-// 						vertical-align: top;
-// 					}
-// 					.plus-minus{
-// 						display: inline-block;
-// 						position: relative;
-// 						vertical-align: bottom;
-// 						width: 13px;
-// 						height: 13px;
-// 						span{
-// 							position: absolute;
-// 							width: 13px;
-// 							height: 1.4px;
-// 							background-color: #fff;
-// 							transition: $trs;
-// 							&:first-child{
-// 								transform: rotate(0deg);
-// 							}
-// 							&:last-child{
-// 								transform: rotate(90deg);
-// 							}
-// 						}
-// 					}
-// 				}
-// 				.child-list{
-// 					display: none
-// 				}
-// 			}
-// 			>li.on{
-// 				>a{
-// 					background: $clr_blue_L2;
-// 				}
-// 				a.show{
-// 					.plus-minus span{
-// 						&:first-child{
-// 							transform: rotate(180deg);
-// 							transition: $trs;
-// 						}
-// 						&:last-child{
-// 							transform: rotate(-180deg);
-// 							transition: $trs;
-// 						}
-// 					}
-// 				}
-// 				a.show+.child-list{
-// 					display: block;
-// 					li{
-// 						padding: 10px 46px 0;
-// 						text-align: start;
-// 						a{
-// 							@include font(18px);
-// 							color: $clr_blue_L3;
-// 							position: relative;
-// 							&:hover{
-// 								color: #fff;
-// 							}
-// 						}
-// 					}
-// 					li.on a{
-// 						&::before{
-// 							content: '>';
-// 							position: absolute;
-// 							left: -20px;
-// 						}
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// }
+@import "../assets/Scss/pages/aside.scss";
 </style>
