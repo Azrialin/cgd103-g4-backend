@@ -49,7 +49,7 @@
             </Table>
         </div>
     </div>
-    <Page :total="40" size="small" />
+    <!-- <Page :total="40" size="small" /> -->
 
     <!-- style="display:none" -->
     <!--一張全新表單 -->
@@ -64,12 +64,12 @@
                 </div>
                 <div class="input-info">
                     <label for="">員工帳號：
-                        <Input type="text" placeholder="英數10個字" clearable  style="width: 200px"/>
+                        <Input type="text" placeholder="英數大小寫10個字元以上" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">員工密碼：
-                        <Input type="password" placeholder="英數8個字" clearable  style="width: 200px"/>
+                        <Input type="password" placeholder="英數大小寫8個字元以上" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
