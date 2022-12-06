@@ -77,9 +77,9 @@
                                 <span v-else>{{ row.news_status }}</span>
                             </template>
                             <!-- 按鈕 -->
-                            <template #action>
+                            <template #action="{ row }">
                                 <div class="btn-box">
-                                    <button class="btn-success"  @click="editOnData">編輯</button>
+                                    <button class="btn-success"  @click="editOnData(row.news_no)">編輯</button>
                                 </div>
                             </template>
                         </Table>
@@ -117,11 +117,11 @@
                                 <span v-else>{{ row.news_status }}</span>
                             </template>
                             <!-- 按鈕 -->
-                            <template #action="{  index }">
+                            <template #action="{ row  }">
                                 <div class="btn-box">
                                     <Space :size="size">
-                                        <button class="btn-success"   @click="editDraftData">編輯</button>
-                                        <button class="btn-danger"  @click="remove(index)">刪除</button>
+                                        <button class="btn-success"   @click="editDraftData(row.news_no)">編輯</button>
+                                        <button class="btn-danger"  @click="remove(row)">刪除</button>
                                     </Space>
                                 </div>
                             </template>
@@ -160,9 +160,9 @@
                                 <span v-else>{{ row.news_status }}</span>
                             </template>
                             <!-- 按鈕 -->
-                            <template #action>
+                            <template #action="{ row }">
                                 <div class="btn-box">
-                                    <button class="btn-success"  @click="checkOffData">查看</button>
+                                    <button class="btn-success"  @click="checkOffData(row.news_no)">查看</button>
                                 </div>
                             </template>
                         </Table>
@@ -261,15 +261,15 @@
         <div class="popup-head font-20">
             <div class="news-no">
                 <span>公告編號</span>
-                <span >{{dataOn[0].news_no}}</span>
+                <span >{{activeData.news_no}}</span>
             </div>
             <div class="on-date">
                 <span class="date">發布時間</span>
-                <span class="date">{{dataOn[0].news_time}}</span>
+                <span class="date">{{activeData.news_time}}</span>
             </div>
             <div class="last-edit-date">
                 <span class="date">最後更新</span>
-                <span class="date">{{dataOn[0].news_last_edit}}</span>
+                <span class="date">{{activeData.news_last_edit}}</span>
             </div>
         </div>
         <div class="popup-content font-18">
@@ -291,27 +291,27 @@
             <div class="input-txt">
                 <div class="input-title">
                     <label for="">標題：
-                        <Input v-model="dataOn[0].news_title" clearable style="width: 500px" />
+                        <Input v-model="activeData.news_title" clearable style="width: 500px" />
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">引文：
-                        <Input v-model="dataOn[0].news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                        <Input v-model="activeData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">內文：
-                        <Input v-model="dataOn[0].news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                        <Input v-model="activeData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">內文：
-                        <Input v-model="dataOn[0].news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                        <Input v-model="activeData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">結尾：
-                        <Input v-model="dataOn[0].news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                        <Input v-model="activeData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                     </label>
                 </div>
             </div>
@@ -322,7 +322,7 @@
             </div>
             <div class="input-pic-des">
                 <label for="">圖片敘述：
-                    <Input v-model="dataOn[0].news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                    <Input v-model="activeData.news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                 </label>
             </div>
             <div class="popup-btn">
@@ -338,15 +338,15 @@
             <div class="popup-head font-20">
                 <div class="news-no">
                     <span>公告編號</span>
-                    <span>{{dataDraft[0].news_no}}</span>
+                    <span>{{activeDraftData.news_no}}</span>
                 </div>
                 <div class="on-date">
                     <span class="date">發布時間</span>
-                    <span class="date">{{dataDraft[0].news_time}}</span>
+                    <span class="date">{{activeDraftData.news_time}}</span>
                 </div>
                 <div class="last-edit-date">
                     <span class="date">最後更新</span>
-                    <span class="date">{{dataDraft[0].news_last_edit}}</span>
+                    <span class="date">{{activeDraftData.news_last_edit}}</span>
                 </div>
             </div>
             <div class="popup-content font-18">
@@ -368,27 +368,27 @@
                 <div class="input-txt">
                     <div class="input-title">
                         <label for="">標題：
-                            <Input v-model="dataDraft[0].news_title" placeholder="請輸入標題" clearable style="width: 500px" />
+                            <Input v-model="activeDraftData.news_title" placeholder="請輸入標題" clearable style="width: 500px" />
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">引文：
-                            <Input v-model="dataDraft[0].news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input v-model="dataDraft[0].news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input v-model="dataDraft[0].news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">結尾：
-                            <Input v-model="dataDraft[0].news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                         </label>
                     </div>
                 </div>
@@ -399,7 +399,7 @@
                 </div>
                 <div class="input-pic-des">
                     <label for="">圖片敘述：
-                        <Input v-model="dataDraft[0].news_img_des"  placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                        <Input v-model="activeDraftData.news_img_des"  placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                     </label>
                 </div>
                 <div class="popup-btn">
@@ -415,15 +415,15 @@
             <div class="popup-head font-20">
                 <div class="news-no">
                     <span>公告編號</span>
-                    <span >{{dataOff[0].news_no}}</span>
+                    <span >{{activeOffData.news_no}}</span>
                 </div>
                 <div class="on-date">
                     <span class="date">發布時間</span>
-                    <span class="date">{{dataOff[0].news_time}}</span>
+                    <span class="date">{{activeOffData.news_time}}</span>
                 </div>
                 <div class="last-edit-date">
                     <span class="date">最後更新</span>
-                    <span class="date">{{dataOff[0].news_last_edit}}</span>
+                    <span class="date">{{activeOffData.news_last_edit}}</span>
                 </div>
             </div>
             <div class="popup-content font-18">
@@ -444,27 +444,27 @@
                 <div class="input-txt">
                     <div class="input-title">
                         <label for="">標題：
-                            <Input disabled v-model="dataOff[0].news_title" clearable style="width: 500px" />
+                            <Input disabled v-model="activeOffData.news_title" clearable style="width: 500px" />
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">引文：
-                            <Input disabled v-model="dataOff[0].news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input disabled v-model="dataOff[0].news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input disabled v-model="dataOff[0].news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">結尾：
-                            <Input disabled v-model="dataOff[0].news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                         </label>
                     </div>
                 </div>
@@ -475,7 +475,7 @@
                 </div>
                 <div class="input-pic-des">
                     <label for="">圖片敘述：
-                        <Input disabled v-model="dataOff[0].news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                        <Input disabled v-model="activeOffData.news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                     </label>
                 </div>
                 <div class="popup-btn">
@@ -511,7 +511,6 @@
                 seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
                 seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
                 seeCheck:false, //確認彈窗、v-show="seeCheck" 按鈕@click="okToggle"
-                size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
                 // 以下for全新表單(好像可以把它變成陣列)
                 input_new_no: '',
                 input_new_time: '',
@@ -596,9 +595,9 @@
                 ],
                 dataOn: [
                     {
-                        news_no: '',
-                        news_time: '20221201',
-                        news_last_edit:'20221201',
+                        news_no: '2022001',
+                        news_time: '2022/12/01',
+                        news_last_edit:'2022/12/01',
                         news_type: '重要',
                         news_title: '「JS 春季行程方案」報名開始',
                         news_text_start:'我們已經開始接受 2022 年 11 月至 2022 年 12 月發車的「JS 春季行程方案」...',
@@ -610,9 +609,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20221131',
-                        news_last_edit:'20221131',
+                        news_no: '2022002',
+                        news_time: '2022/11/31',
+                        news_last_edit:'2022/11/31',
                         news_type: '重要',
                         news_title: '列車停駛',
                         news_text_start:'因九州地區受台風3號 (台灣名稱 : 桃花颱風)影響，JS列車決定停駛...',
@@ -624,9 +623,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20221115',
-                        news_last_edit:'20221115',
+                        news_no: '2022003',
+                        news_time: '2022/11/15',
+                        news_last_edit:'2022/11/15',
                         news_type: '活動',
                         news_title: '高千穗-夜神樂',
                         news_text_start:'高千穗知名祭典活動-夜神樂 ，將於今年的11月...',
@@ -638,9 +637,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20220801',
-                        news_last_edit:'20220801',
+                        news_no: '2022004',
+                        news_time: '2022/08/01',
+                        news_last_edit:'2022/08/01',
                         news_type: '其他',
                         news_title: '新商品上市-油封鬼頭刀',
                         news_text_start:'受大家喜愛名產-油封鬼頭刀，在JS線上商城上架囉! 線上輕鬆點選...',
@@ -652,9 +651,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20220601',
-                        news_last_edit:'20220601',
+                        news_no: '2022005',
+                        news_time: '2022/06/01',
+                        news_last_edit:'2022/06/01',
                         news_type: '活動',
                         news_title: '行程車票票根優惠!',
                         news_text_start:'深夜食堂，天神屋台老闆們的款待...',
@@ -666,9 +665,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20220501',
-                        news_last_edit:'20220501',
+                        news_no: '2022006',
+                        news_time: '2022/05/01',
+                        news_last_edit:'2022/05/01',
                         news_type: '活動',
                         news_title: '「高千穗峽谷」划船體驗報名優惠',
                         news_text_start:'被日本政府列入「名勝」、「天然記念物」的高千穗峽谷，知名活動...',
@@ -680,9 +679,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20220401',
-                        news_last_edit:'20220401',
+                        news_no: '2022007',
+                        news_time: '2022/04/01',
+                        news_last_edit:'2022/04/01',
                         news_type: '其他',
                         news_title: '商城新品上市-福岡名產 努努雞!!',
                         news_text_start:'受大家喜愛的博多名產-努努雞，在JS線上商城上架囉! 線上輕鬆點選...',
@@ -694,9 +693,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20220301',
-                        news_last_edit:'20220301',
+                        news_no: '2022008',
+                        news_time: '2022/03/01',
+                        news_last_edit:'2022/03/01',
                         news_type: '其他',
                         news_title: '行程車票票根優惠!',
                         news_text_start:'JS旗下集團餐廳"唐寶寶"，唐戶河豚饗宴...',
@@ -708,9 +707,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20220201',
-                        news_last_edit:'20220201',
+                        news_no: '2022009',
+                        news_time: '2022/02/01',
+                        news_last_edit:'2022/02/01',
                         news_type: '活動',
                         news_title: '訂購夏季行程，豪斯登堡門票優惠',
                         news_text_start:'如何以最划算的價格，體驗九州行程?...',
@@ -722,9 +721,9 @@
                         news_status:'上架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20220101',
-                        news_last_edit:'20220101',
+                        news_no: '2022010',
+                        news_time: '2022/01/01',
+                        news_last_edit:'2022/01/01',
                         news_type: '重要',
                         news_title: '列車停駛',
                         news_text_start:'阿蘇火山爆發，九州各地能見度低，塵埃影響...',
@@ -738,9 +737,9 @@
                 ],
                 dataDraft: [
                     {
-                        news_no: '',
+                        news_no: '2022011',
                         news_time: '',
-                        news_last_edit:'20221204',
+                        news_last_edit:'2022/12/04',
                         news_type: '活動',
                         news_title: '支援熊本城，協助賑災',
                         news_text_start:'因受地震影響，知名古蹟熊本城倒塌，請支持購買娃娃協助熊本城重現風華...',
@@ -752,9 +751,9 @@
                         news_status:'草稿',
                     },
                     {
-                        news_no: '',
+                        news_no: '2022012',
                         news_time: '',
-                        news_last_edit:'20221204',
+                        news_last_edit:'2022/12/04',
                         news_type: '其他',
                         news_title: '呼子烏賊來囉!!',
                         news_text_start:'佐賀知名地產，呼子季節來到!...',
@@ -766,9 +765,9 @@
                         news_status:'草稿',
                     },
                     {
-                        news_no: '',
+                        news_no: '2022013',
                         news_time: '',
-                        news_last_edit:'20221204',
+                        news_last_edit:'2022/12/04',
                         news_type: '重要',
                         news_title: 'JS夏季行程預告',
                         news_text_start:'標題還沒想好',
@@ -782,9 +781,9 @@
                 ],
                 dataOff: [
                     {
-                        news_no: '',
-                        news_time: '20211201',
-                        news_last_edit:'20220403',
+                        news_no: '2022014',
+                        news_time: '2021/12/01',
+                        news_last_edit:'2022/04/03',
                         news_type: '其他',
                         news_title: 'JS合作優惠!',
                         news_text_start:'乘著JS，大啖九州美食!憑車票票根...',
@@ -796,9 +795,9 @@
                         news_status:'下架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20211101',
-                        news_last_edit:'20220403',
+                        news_no: '2022015',
+                        news_time: '2021/11/01',
+                        news_last_edit:'2022/04/03',
                         news_type: '活動',
                         news_title: '國境之南，蒸氣料理體驗',
                         news_text_start:'火山著名的南九州，有著特色的蒸氣料理方式....',
@@ -810,9 +809,9 @@
                         news_status:'下架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20211010',
-                        news_last_edit:'20211211',
+                        news_no: '2022016',
+                        news_time: '2021/10/10',
+                        news_last_edit:'2021/12/11',
                         news_type: '重要',
                         news_title: '行程更改公告',
                         news_text_start:'因最近政治因素，配合政府政策，軍艦島....',
@@ -824,9 +823,9 @@
                         news_status:'下架',
                     },
                     {
-                        news_no: '',
-                        news_time: '20210905',
-                        news_last_edit:'20211105',
+                        news_no: '2022017',
+                        news_time: '2021/09/05',
+                        news_last_edit:'2021/11/05',
                         news_type: '活動',
                         news_title: '探訪篤姬，體驗時代工藝',
                         news_text_start:'日劇-篤姬深受民受喜愛，相信對裡面的工藝器具大家也都不陌生...',
@@ -839,26 +838,42 @@
                     }
                 ],
                 editIndex: -1,  // 当前聚焦的输入框的行数
+                activeIndex:null,
                 }
+
             },
             methods: {
             newToggle(){ //新表單
                 this.seenNew = !this.seenNew
             },
-            editOnData(){ //上架編輯表單彈窗
-                this.seeOnData = !this.seeOnData
+            editOnData(no){ //上架編輯表單彈窗
+                this.seeOnData = !this.seeOnData;
+                this.activeIndex = no;
             },
-            editDraftData(){ //草稿編輯表單彈窗
+            editDraftData(no){ //草稿編輯表單彈窗
                 this.seeDraftData = !this.seeDraftData
+                this.activeIndex = no;
             },
-            checkOffData(){ //下架資料彈窗
+            checkOffData(no){ //下架資料彈窗
                 this.seeOffData = !this.seeOffData
+                this.activeIndex = no;
             },
             remove (index) { //草稿 -刪除資料(目前僅畫面上顯示刪除)
             this.dataDraft.splice(index, 1);
             },
             okToggle () { //確認彈窗
                 this.seeCheck = !this.seeCheck
+            }
+        },
+        computed:{
+            activeData() {
+                return this.dataOn.find(v=> v.news_no === this.activeIndex) ?? {}
+            },
+            activeDraftData(){
+                return this.dataDraft.find(v=> v.news_no === this.activeIndex) ?? {}
+            },
+            activeOffData(){
+                return this.dataOff.find(v=> v.news_no === this.activeIndex) ?? {}
             }
         }
     }
