@@ -1,24 +1,24 @@
 @import "../base/font.scss";
 @import "../components/btn.scss";
 .QA{
-    header{
-        width: 100%;
-        padding: 20px 40px;
-        background: $clr_blue_L2;
-        color: #fff;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        span{
-            &:last-child{
-                cursor: pointer;
-                margin-left: 20px;
-                &:hover{
-                    color: $clr_blue_L3;
-                }
-            }
-        }
-    }
+    // header{
+    //     width: 100%;
+    //     padding: 20px 40px;
+    //     background: $clr_blue_L2;
+    //     color: #fff;
+    //     display: flex;
+    //     justify-content: space-between;
+    //     align-items: center;
+    //     span{
+    //         &:last-child{
+    //             cursor: pointer;
+    //             margin-left: 20px;
+    //             &:hover{
+    //                 color: $clr_blue_L3;
+    //             }
+    //         }
+    //     }
+    // }
     main{
         display: flex;
         flex-direction: column;

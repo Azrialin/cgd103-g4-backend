@@ -4,6 +4,21 @@
 		<div class="main"><router-view/></div>
 	</div>
 </template>
+<!-- <template>
+	<div class="container">
+		<Aside/>
+		<section class="main">
+			<header>
+				<h1 class="font-32">Q&A 管理</h1>
+				<div>
+					<span class="font-18">管理員名稱</span>
+					<span class="font-18">登出</span>
+				</div>
+			</header>
+			<router-view/>
+		</section>
+	</div>
+</template> -->
 
 <style lang="scss">
 @import "../src/assets/Css/Reset.css";
