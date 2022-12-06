@@ -1,5 +1,5 @@
 <template>
-	<div class="QA">
+    	<div class="QA">
 		<header>
 			<h1 class="font-32">Q&A 管理</h1>
 			<div>
@@ -54,11 +54,57 @@
                             </div>
                         </template>
                         <!-- 刪除 -->
-                        <template #delate>
+                        <!-- <template #delate="{index }">
                             <div class="btn-box">
                                 <span class="material-symbols-outlined" style="font-size:26px" @click="remove(index)">delete</span>
                             </div>
+                        </template> -->
+
+                        <!-- <template #delate>
+                            <Modal v-model="modal1" width="360" style="background: #fff;">
+                                <template #header>
+                                    <p style="color:#f60;text-align:center">
+                                        <Icon type="ios-information-circle"></Icon>
+                                        <span>Delete confirmation</span>
+                                    </p>
+                                </template>
+                                <div style="text-align:center">
+                                    <p>After this task is deleted, the downstream 10 tasks will not be implemented.</p>
+                                    <p>Will you delete it?</p>
+                                </div>
+                                <template #footer>
+                                    <Button type="error" size="large" long :loading="modal_loading" @click="del">Delete</Button>
+                                </template>
+                            </Modal>
+                            <Button @click="modal1 = true">Custom header and footer</Button>
+                        </template> -->
+
+                        <!-- <template #delate>
+                            <Button @click="modal1 = true">20px from the top</Button>
+                            <Modal 
+                                title="Title"
+                                v-model="modal1"
+                                :styles="{top: '20px'}">
+                                <p>Content of dialog</p>
+                                <p>Content of dialog</p>
+                                <p>Content of dialog</p>
+                            </Modal>
+                        </template> -->
+
+                        <!-- 刪除 -->
+                        <template #delate>
+                            <div class="modal-mask" :style="modalStyle">
+                                <div class="modal-container" @click="toggleModal">
+                                <div class="modal-body">Hello!</div>
+                                </div>
+                            </div>
+                            <!-- <button @click="isShow = true">Click Me</button> -->
+                            <div class="btn-box">
+                                <span class="material-symbols-outlined" style="font-size:26px" @click="isShow = true">delete</span>
+                                <!-- <span class="material-symbols-outlined" style="font-size:26px" @click="remove(index)">delete</span> -->
+                            </div>
                         </template>
+                        
                     </Table>
                 </TabPane>
 
@@ -67,180 +113,19 @@
             <Page :total="40" size="small" show-elevator show-sizer />
 		</main>
 	</div>
-</template>
 
+</template>
 <script>
 import { resolveComponent } from 'vue'
-// export default {
-// 	name: 'QAView',
-// 	components: {
 
-// 	},
-// 	data () {
-//             return {
-//                 columns: [
-// 					{
-// 						type: 'selection',
-//                         width: 60,
-//                         align: 'center'
-//                     },
-//                     {
-//                         title: '編號',
-//                         key: 'no',
-// 						width: 90,
-// 		                align: 'center'
-//                     },
-//                     {
-//                         title: '類別',
-//                         key: 'type',
-// 						width: 150,
-// 		                align: 'center'
-//                     },
-//                     {
-//                         title: '問題',
-//                         key: 'Q',
-// 		                align: 'center'
-//                     },
-//                     {
-//                         title: '回答',
-//                         key: 'A',
-// 		                align: 'center'
-//                     },
-//                     {
-//                         title: '狀態',
-//                         key: 'state',
-// 						width: 80,
-// 		                align: 'center'
-//                     },
-//                     {
-//                         title: '修改',
-//                         key: 'edit',
-//                         width: 100,
-//                         align: 'center',
-//                         render: (h, params) => {
-//                             return h('div', [
-//                                 h(resolveComponent('Button'), {
-//                                     props: {
-//                                         type: 'primary',
-//                                         size: 'small'
-//                                     },
-//                                     style: {
-//                                         marginRight: '5px'
-//                                     },
-//                                     onClick: () => {
-//                                         // this.show(params.index)
-//                                     }
-//                                 }, {
-//                                     default() {
-//                                         return '編輯'
-//                                     }
-//                                 }),
-//                                 // h(resolveComponent('Button'), {
-//                                 //     props: {
-//                                 //         type: 'error',
-//                                 //         size: 'small'
-//                                 //     },
-//                                 //     onClick: () => {
-//                                 //         this.remove(params.index)
-//                                 //     }
-//                                 // }, {
-//                                 //     default() {
-//                                 //         return 'Delete'
-//                                 //     }
-//                                 // })
-//                             ]);
-//                         }
-//                     }
-//                 ],
-//                 dataS: [
-//                     {
-//                         no: 'M001',
-//                         type: '會員問題',
-//                         Q:  '請問我忘記密碼了怎麼辦？',
-//                         A:  '請撥打客服電話，由專人為您服務。',
-// 						state: '顯示',
-//                     },
-//                     {
-//                         no: 'M002',
-//                         type: '會員問題',
-//                         Q: '請問客服電話是？我找不到。',
-//                         A: '您好，客服電話是：00-0000-0000。',
-// 						state: '顯示',
-//                     },
-//                     {
-//                         no: 'M003',
-//                         type: '會員問題',
-//                         Q:  '請問可以不要填寫LINE ID嗎？',
-//                         A:  '可以的，親。',
-// 						state: '顯示',
-//                     },
-//                 ],
-//                 dataT: [
-//                     {
-//                         no: 'T001',
-//                         type: '行程訂單問題',
-//                         Q:  '我不小心訂錯行程了，請問要如何退訂？',
-//                         A:  '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
-// 						state: '顯示',
-//                     },
-//                     {
-//                         no: 'T002',
-//                         type: '行程訂單問題',
-//                         Q: '我想要刷卡，但我不能填寫安全碼？',
-//                         A: '請撥打客服電話，由專人為您服務。',
-// 						state: '顯示',
-//                     },
-//                     {
-//                         no: 'T003',
-//                         type: '行程訂單問題',
-//                         Q:  '我請問我要如何查詢乘車座位？',
-//                         A:  '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
-// 						state: '隱藏',
-//                     },
-//                     {
-//                         no: 'T004',
-//                         type: '行程訂單問題',
-//                         Q:  '我購買了方案A，請問發車時間是？',
-//                         A:  '請撥打客服電話，由專人為您服務。',
-// 						state: '顯示',
-//                     },
-//                 ],
-//                 dataP: [
-//                     {
-//                         no: 'P001',
-//                         type: '商品訂單問題',
-//                         Q:  '請問現貨商品多久會寄出？',
-//                         A:  '請撥打客服電話，由專人為您服務。',
-// 						state: '顯示',
-//                     },
-//                     {
-//                         no: 'P002',
-//                         type: '商品訂單問題',
-//                         Q: '請問我要如何查詢貨況呢？',
-//                         A: '請撥打客服電話，由專人為您服務。',
-// 						state: '顯示',
-//                     },
-//                 ],
-//             }
-//         },
-//         methods: {
-// 			handleSelectAll (status) {
-//                 this.$refs.selection.selectAll(status);
-//             },
-//             show (index) {
-//                 this.$Modal.info({
-//                     title: 'User Info',
-//                     content: `Name：${this.data[index].name}<br>Age：${this.data[index].age}<br>Address：${this.data[index].address}`
-//                 })
-//             },
-//             // remove (index) {
-//             //     this.data.splice(index, 1);
-//             // }
-//         }
-//     }
 export default {
     data () {
         return {
+            isShow: false,
+            // modal1: false,
+            // modal2: false,
+            // modal1: false,
+            // modal_loading: false,
             // seenNew:false, //新表格彈窗，綁新表單v-show、按鈕@click="newToggle"
             // seeOnData:false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
             // seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
@@ -377,50 +262,60 @@ export default {
             // editIndex: -1,  // 当前聚焦的输入框的行数
             }
         },
-        methods: {
-        newToggle(){ //新表單
-            this.seenNew = !this.seenNew
-        },
-        editOnData(){ //上架編輯表單彈窗
-            this.seeOnData = !this.seeOnData
-        },
-        editDraftData(){ //草稿編輯表單彈窗
-            this.seeDraftData = !this.seeDraftData
-        },
-        checkOffData(){ //下架資料彈窗
-            this.seeOffData = !this.seeOffData
+    computed: {
+        modalStyle() {
+            return {
+                'display': this.isShow ? '' : 'none'
+            };
         }
-        ,
-        methods: {
-            // show (index) {
-            //     this.$Modal.info({
-            //         title: 'User Info',
-            //         content: `Name：${this.data[index].name}<br>Age：${this.data[index].age}<br>Address：${this.data[index].address}`
-            //     })
-            // },
-            remove (index) {
-                this.data.splice(index, 1);
-            }
+  },
+    methods: {
+        // del () {
+        //     this.modal_loading = true;
+        //     setTimeout(() => {
+        //         this.modal_loading = false;
+        //         this.modal1 = false;
+        //         this.$Message.success('Successfully delete');
+        //     }, 2000);
+        // }
+        toggleModal() {
+            this.isShow = !this.isShow;
         }
     }
 }
-
 </script>
 
 <style scoped lang="scss">
-@import "../assets/Css/Reset.css";
 @import "../assets/Scss/pages/QA.scss";
-.btn-box{
-    span{
-        cursor: pointer;
-        &:hover{
-            color: $clr_blue_L3;
-        }
-    }
+h4 {
+  margin: 1rem 0;
+  font-size: 1rem;
 }
-// #edit{
-//     bottom+bottom{
-//         // margin-right: 40px;
-//     };
-// }
+
+.modal-mask {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: table;
+  background-color: rgba(0, 0, 0, 0.05);
+  transition: opacity .3s ease;
+}
+
+.modal-container {
+  cursor: pointer;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-body {
+  cursor: auto;
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+}
 </style>
