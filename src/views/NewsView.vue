@@ -4,20 +4,21 @@
 📢 按鈕先套套件 success error，有時間再回頭依照mockup設計
 🔹 新增消息 
     "新增消息"，"取消"toggle 新增表格彈窗    ✔
-    按下確認鍵的資料修改(若選擇上架，需要檢查欄位是否都填妥)
+    關掉畫面，上次輸入的資料還是保留  keep-alive✔
+    按下確認鍵的資料修改(若選擇上架，需要檢查欄位是否都填妥) (連動資料本身)
 🔹 編輯消息(上架)
     彈窗  ✔
-    已有的資料綁定
-    按下確認鍵的資料修改(不可有空職欄位)
+    已有的資料綁定 ✔ (狀態、分類、圖片尚未綁定)
+    按下確認鍵的資料修改(不可有空職欄位)(連動資料本身)
 🔹 編輯消息(草稿)
     彈窗  ✔
-    已有的資料綁定
-    按下確認鍵的資料修改
+    已有的資料綁定 ✔ (狀態、分類、圖片尚未綁定)
+    按下確認鍵的資料修改(連動資料本身)
 🔹 查看消息(下架)
     彈窗 ✔
-    已有的資料綁定
+    已有的資料綁定  ✔ (狀態、分類、圖片尚未綁定)
 🔹 刪除消息(草稿)
-🔹 上下頁、顯示資料數設定  (目前用卷軸
+🔹 上下頁、顯示資料數設定  (目前用卷軸 ✔
 🔹 各狀態資料筆數顯示於下方
 🔹 排序filter
     上架日期 ✔
@@ -39,12 +40,12 @@
         <div class="backstage-content">
             <div class="backstage-path font-16">最新消息管理 / 消息列表</div>
             <div class="btn-add">
-                <button class="font-20" @click="newToggle">新增消息</button>
+                <button class="font-20 " @click="newToggle">新增消息</button>
             </div>
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
                     <TabPane label="上架" >
-                        <Table height="280" stripe border :columns="columns" :data="dataOn" >
+                        <Table height="350" stripe border :columns="columns" :data="dataOn" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-if="editIndex === index" />
@@ -84,7 +85,7 @@
                         </Table>
                     </TabPane>
                     <TabPane label="草稿" >
-                        <Table height="280" stripe border :columns="columns" :data="dataDraft" >
+                        <Table height="350" stripe border :columns="columns" :data="dataDraft" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -116,18 +117,18 @@
                                 <span v-else>{{ row.news_status }}</span>
                             </template>
                             <!-- 按鈕 -->
-                            <template #action>
+                            <template #action="{  index }">
                                 <div class="btn-box">
                                     <Space :size="size">
                                         <Button size="default" type="success" @click="editDraftData">編輯</Button>
-                                        <Button type="error">刪除</Button>
+                                        <Button type="error" @click="remove(index)">刪除</Button>
                                     </Space>
                                 </div>
                             </template>
                         </Table>
                     </TabPane>
                     <TabPane label="下架" >
-                        <Table height="280" stripe border :columns="columns" :data="dataOff" >
+                        <Table height="350" stripe border :columns="columns" :data="dataOff" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -168,113 +169,115 @@
                     </TabPane>
                 </Tabs>
             </div>
-            <div class="btn-bottom">
+            <!-- <div class="btn-bottom"> 目前用卷軸去顯示所有的資料
                 <button class="font-18">上一頁</button>
                 <button class="font-18">下一頁</button>
-            </div>
+            </div> -->
         </div>
     </div>
     <!-- style="display:none" -->
     <!--一張全新表單 -->
-    <div class="popup " v-show="seenNew" >
-        <div class="popup-head font-20">
-            <div class="news-no">
-                <span>公告編號</span>
-                <span></span>
+    <keep-alive>
+        <div class="popup " v-show="seenNew" >
+            <div class="popup-head font-20">
+                <div class="news-no">
+                    <span>公告編號</span>
+                    <span></span>
+                </div>
+                <div class="on-date">
+                    <span class="date">發布時間</span>
+                    <span class="date"></span>
+                </div>
+                <div class="last-edit-date">
+                    <span class="date">最後更新</span>
+                    <span class="date"></span>
+                </div>
             </div>
-            <div class="on-date">
-                <span class="date">發布時間</span>
-                <span class="date"></span>
-            </div>
-            <div class="last-edit-date">
-                <span class="date">最後更新</span>
-                <span class="date"></span>
+            <div class="popup-content font-18">
+                <div class="popup-data">
+                    <label for="">狀態(必填)
+                        <select name="" id="">
+                            <option value="draft">草稿</option>
+                            <option value="on">上架</option>
+                            <option value="off">下架</option>
+                        </select>
+                    </label>
+                    <label for="">分類
+                        <select name="" id="">
+                            <option value="important">重要</option>
+                            <option value="action">活動</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="input-txt">
+                    <div class="input-title">
+                        <label for="">標題：
+                            <Input placeholder="請輸入標題" clearable style="width: 500px" />
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">引文：
+                            <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">內文：
+                            <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">內文：
+                            <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">結尾：
+                            <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-pic">
+                    <label class="test" for="">插入圖片：
+                        <input type="file">
+                    </label>
+                </div>
+                <div class="input-pic-des">
+                    <label for="">圖片敘述：
+                        <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                    </label>
+                </div>
+                <div class="popup-btn">
+                    <button @click="newToggle">取消</button>
+                    <button>確認</button>
+                </div>
             </div>
         </div>
-        <div class="popup-content font-18">
-            <div class="popup-data">
-                <label for="">狀態(必填)
-                    <select name="" id="">
-                        <option value="draft">草稿</option>
-                        <option value="on">上架</option>
-                        <option value="off">下架</option>
-                    </select>
-                </label>
-                <label for="">分類
-                    <select name="" id="">
-                        <option value="important">重要</option>
-                        <option value="action">活動</option>
-                        <option value="other">其他</option>
-                    </select>
-                </label>
-
-            </div>
-            <div class="input-txt">
-                <div class="input-title">
-                    <label for="">標題：
-                        <Input placeholder="請輸入標題" clearable style="width: 500px" />
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">引文：
-                        <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">內文：
-                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">內文：
-                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">結尾：
-                        <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
-                    </label>
-                </div>
-            </div>
-            <div class="input-pic">
-                <label class="test" for="">插入圖片：
-                    <input type="file">
-                </label>
-            </div>
-            <div class="input-pic-des">
-                <label for="">圖片敘述：
-                    <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
-                </label>
-            </div>
-            <div class="popup-btn">
-                <button @click="newToggle">取消</button>
-                <button>確認</button>
-            </div>
-        </div>
-    </div>
+    </keep-alive>
 
     <!--串聯資料用表單(上架)可繼續上架、下架，無草稿-->
+    <!-- 目前表格雙向綁定第0筆 -->
     <div class="popup on" v-show="seeOnData">
         <div class="popup-head font-20">
             <div class="news-no">
                 <span>公告編號</span>
-                <span>A110000</span>
+                <span >{{dataOn[0].news_no}}</span>
             </div>
             <div class="on-date">
                 <span class="date">發布時間</span>
-                <span class="date">20221120</span>
+                <span class="date">{{dataOn[0].news_time}}</span>
             </div>
             <div class="last-edit-date">
                 <span class="date">最後更新</span>
-                <span class="date">20221120</span>
+                <span class="date">{{dataOn[0].news_last_edit}}</span>
             </div>
         </div>
         <div class="popup-content font-18">
             <div class="popup-data">
                 <label for="">狀態
-                    <select name="" id="">
-                        <option value="on">上架</option>
-                        <option value="off">下架</option>
+                    <select name="" id="" >
+                        <option value="on" >上架</option>
+                        <option value="off" >下架</option>
                     </select>
                 </label>
                 <label for="">分類
@@ -288,27 +291,27 @@
             <div class="input-txt">
                 <div class="input-title">
                     <label for="">標題：
-                        <Input placeholder="請輸入標題" clearable style="width: 500px" />
+                        <Input v-model="dataOn[0].news_title" clearable style="width: 500px" />
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">引文：
-                        <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                        <Input v-model="dataOn[0].news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">內文：
-                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                        <Input v-model="dataOn[0].news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">內文：
-                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                        <Input v-model="dataOn[0].news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
                     <label for="">結尾：
-                        <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                        <Input v-model="dataOn[0].news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                     </label>
                 </div>
             </div>
@@ -319,7 +322,7 @@
             </div>
             <div class="input-pic-des">
                 <label for="">圖片敘述：
-                    <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                    <Input v-model="dataOn[0].news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                 </label>
             </div>
             <div class="popup-btn">
@@ -330,95 +333,97 @@
     </div>
 
     <!--串聯資料用表單(草稿)可上架無下架 -->
-    <div class="popup used" v-show="seeDraftData">
-        <div class="popup-head font-20">
-            <div class="news-no">
-                <span>公告編號</span>
-                <span>A110000</span>
-            </div>
-            <div class="on-date">
-                <span class="date">發布時間</span>
-                <span class="date"></span>
-            </div>
-            <div class="last-edit-date">
-                <span class="date">最後更新</span>
-                <span class="date">20221120</span>
-            </div>
-        </div>
-        <div class="popup-content font-18">
-            <div class="popup-data">
-                <label for="">狀態(必填)
-                    <select name="" id="">
-                        <option value="draft">草稿</option>
-                        <option value="on">上架</option>
-                    </select>
-                </label>
-                <label for="">分類
-                    <select name="" id="">
-                        <option value="important">重要</option>
-                        <option value="action">活動</option>
-                        <option value="other">其他</option>
-                    </select>
-                </label>
-            </div>
-            <div class="input-txt">
-                <div class="input-title">
-                    <label for="">標題：
-                        <Input placeholder="請輸入標題" clearable style="width: 500px" />
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">引文：
-                        <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">內文：
-                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">內文：
-                        <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <label for="">結尾：
-                        <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
-                    </label>
-                </div>
-            </div>
-            <div class="input-pic">
-                <label class="test" for="">插入圖片：
-                    <input type="file">
-                </label>
-            </div>
-            <div class="input-pic-des">
-                <label for="">圖片敘述：
-                    <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
-                </label>
-            </div>
-            <div class="popup-btn">
-                <button @click="editDraftData">取消</button>
-                <button>確認</button>
-            </div>
-        </div>
-    </div>
-
-    <!--串聯資料用表單(下架)查看(不可更改內容)，所以無取消鍵，確認僅為回到畫面 -->
-    <div class="popup used" v-show="seeOffData">
+    <keep-alive>
+        <div class="popup used" v-show="seeDraftData">
             <div class="popup-head font-20">
                 <div class="news-no">
                     <span>公告編號</span>
-                    <span>A110000</span>
+                    <span>{{dataDraft[0].news_no}}</span>
                 </div>
                 <div class="on-date">
                     <span class="date">發布時間</span>
-                    <span class="date">20221120</span>
+                    <span class="date">{{dataDraft[0].news_time}}</span>
                 </div>
                 <div class="last-edit-date">
                     <span class="date">最後更新</span>
-                    <span class="date">20221120</span>
+                    <span class="date">{{dataDraft[0].news_last_edit}}</span>
+                </div>
+            </div>
+            <div class="popup-content font-18">
+                <div class="popup-data">
+                    <label for="">狀態(必填)
+                        <select name="" id="">
+                            <option value="draft">草稿</option>
+                            <option value="on">上架</option>
+                        </select>
+                    </label>
+                    <label for="">分類
+                        <select name="" id="">
+                            <option value="important">重要</option>
+                            <option value="action">活動</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="input-txt">
+                    <div class="input-title">
+                        <label for="">標題：
+                            <Input v-model="dataDraft[0].news_title" placeholder="請輸入標題" clearable style="width: 500px" />
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">引文：
+                            <Input v-model="dataDraft[0].news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">內文：
+                            <Input v-model="dataDraft[0].news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">內文：
+                            <Input v-model="dataDraft[0].news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <label for="">結尾：
+                            <Input v-model="dataDraft[0].news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-pic">
+                    <label class="test" for="">插入圖片：
+                        <input type="file">
+                    </label>
+                </div>
+                <div class="input-pic-des">
+                    <label for="">圖片敘述：
+                        <Input v-model="dataDraft[0].news_img_des"  placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                    </label>
+                </div>
+                <div class="popup-btn">
+                    <button @click="editDraftData">取消</button>
+                    <button>確認</button>
+                </div>
+            </div>
+        </div>
+    </keep-alive>
+
+    <!--串聯資料用表單(下架)查看(不可更改內容)，所以無取消鍵，確認僅為回到畫面 -->
+    <div class="popup off" v-show="seeOffData">
+            <div class="popup-head font-20">
+                <div class="news-no">
+                    <span>公告編號</span>
+                    <span >{{dataOff[0].news_no}}</span>
+                </div>
+                <div class="on-date">
+                    <span class="date">發布時間</span>
+                    <span class="date">{{dataOff[0].news_time}}</span>
+                </div>
+                <div class="last-edit-date">
+                    <span class="date">最後更新</span>
+                    <span class="date">{{dataOff[0].news_last_edit}}</span>
                 </div>
             </div>
             <div class="popup-content font-18">
@@ -432,34 +437,34 @@
                         <select name="" id="" disabled>
                             <option value="important">重要</option>
                             <option value="action">活動</option>
-                            <option value="other">其他</option>
+                            <option value="other" >其他</option>
                         </select>
                     </label>
                 </div>
                 <div class="input-txt">
                     <div class="input-title">
                         <label for="">標題：
-                            <Input disabled placeholder="請輸入標題" clearable style="width: 500px" />
+                            <Input disabled v-model="dataOff[0].news_title" clearable style="width: 500px" />
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">引文：
-                            <Input disabled clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                            <Input disabled v-model="dataOff[0].news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input disabled clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                            <Input disabled v-model="dataOff[0].news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input disabled clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                            <Input disabled v-model="dataOff[0].news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">結尾：
-                            <Input disabled clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                            <Input disabled v-model="dataOff[0].news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                         </label>
                     </div>
                 </div>
@@ -470,7 +475,7 @@
                 </div>
                 <div class="input-pic-des">
                     <label for="">圖片敘述：
-                        <Input disabled placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                        <Input disabled v-model="dataOff[0].news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                     </label>
                 </div>
                 <div class="popup-btn">
@@ -505,6 +510,19 @@
                 seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
                 seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
                 size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
+                // 以下for全新表單(好像可以把它變成陣列)
+                input_new_no: '',
+                input_new_time: '',
+                input_new_last_edit:'',
+                input_new_type: '',
+                input_new_title: '',
+                input_new_text_start:'',
+                input_new_text_middle:'',
+                input_new_text_trans:'',
+                input_new_text_end:'',
+                input_new_img:'',
+                input_new_img_des:'',
+                input_new_status:'',
                 columns: [
             {
                 title: '公告編號',
@@ -833,6 +851,9 @@
             },
             checkOffData(){ //下架資料彈窗
                 this.seeOffData = !this.seeOffData
+            },
+            remove (index) { //草稿 -刪除資料(目前僅畫面上顯示刪除)
+            this.dataDraft.splice(index, 1);
             }
         }
     }
