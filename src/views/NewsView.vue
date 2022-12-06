@@ -1,7 +1,6 @@
 <template>
 <!---------------------use case(簡易隨寫)-----------------------
 <div>
-📢 按鈕先套套件 success error，有時間再回頭依照mockup設計
 🔹 新增消息 
     "新增消息"，"取消"toggle 新增表格彈窗    ✔
     關掉畫面，上次輸入的資料還是保留  keep-alive✔
@@ -40,7 +39,7 @@
         <div class="backstage-content">
             <div class="backstage-path font-16">最新消息管理 / 消息列表</div>
             <div class="btn-add">
-                <button class="font-20 " @click="newToggle">新增消息</button>
+                <button class="font-20 btn-blue" @click="newToggle">新增消息</button>
             </div>
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
@@ -79,7 +78,7 @@
                             <!-- 按鈕 -->
                             <template #action>
                                 <div class="btn-box">
-                                    <Button type="success" @click="editOnData">編輯</Button>
+                                    <button class="btn-success"  @click="editOnData">編輯</button>
                                 </div>
                             </template>
                         </Table>
@@ -120,8 +119,8 @@
                             <template #action="{  index }">
                                 <div class="btn-box">
                                     <Space :size="size">
-                                        <Button size="default" type="success" @click="editDraftData">編輯</Button>
-                                        <Button type="error" @click="remove(index)">刪除</Button>
+                                        <button class="btn-success"   @click="editDraftData">編輯</button>
+                                        <button class="btn-danger"  @click="remove(index)">刪除</button>
                                     </Space>
                                 </div>
                             </template>
@@ -162,7 +161,7 @@
                             <!-- 按鈕 -->
                             <template #action>
                                 <div class="btn-box">
-                                    <Button type="success" @click="checkOffData">查看</Button>
+                                    <button class="btn-success"  @click="checkOffData">查看</button>
                                 </div>
                             </template>
                         </Table>
@@ -248,8 +247,8 @@
                     </label>
                 </div>
                 <div class="popup-btn">
-                    <button @click="newToggle">取消</button>
-                    <button>確認</button>
+                    <button class="btn-blue_2nd" @click="newToggle">取消</button>
+                    <button class="btn-blue">確認</button>
                 </div>
             </div>
         </div>
@@ -326,8 +325,8 @@
                 </label>
             </div>
             <div class="popup-btn">
-                <button @click="editOnData">取消</button>
-                <button>確認</button>
+                <button class="btn-blue_2nd" @click="editOnData">取消</button>
+                <button class="btn-blue">確認</button>
             </div>
         </div>
     </div>
@@ -403,8 +402,8 @@
                     </label>
                 </div>
                 <div class="popup-btn">
-                    <button @click="editDraftData">取消</button>
-                    <button>確認</button>
+                    <button class="btn-blue_2nd" @click="editDraftData">取消</button>
+                    <button class="btn-blue">確認</button>
                 </div>
             </div>
         </div>
@@ -479,24 +478,25 @@
                     </label>
                 </div>
                 <div class="popup-btn">
-                    <button @click="checkOffData">確認</button>
+                    <button @click="checkOffData" class="btn-blue">確認</button>
                 </div>
             </div>
     </div>
 
     <!-- 新增成功 -->
+    <!-- style="display:none" -->
     <div class="popup-box add font-18" style="display:none">
         <p class="popup-box-close">X</p>
         <p class="check-des">新增資料成功</p>
-        <button >確認</button>
+        <button class="btn-success">確認</button>
     </div>
 
 
     <!-- 修改成功 -->
-    <div class="popup-box fix font-18" style="display:none">
+    <div class="popup-box fix font-18" style="display:none" >
         <p class="popup-box-close">X</p>
         <p class="check-des">修改資料成功</p>
-        <button >確認</button>
+        <button class="btn-success">確認</button>
     </div>
 
 </template>
@@ -986,6 +986,10 @@
     text-align: end;
     margin-right: 60px;
 }
+.btn-add button{
+    padding: 8px 16px;
+
+}
 /* 管理介面 */
 .news-manager{
     height: 45vh;
@@ -1002,4 +1006,26 @@
 .btn-bottom button{
     margin-left: 80px;
 }
+
+/* 確認彈窗按鈕 */
+.popup-box .btn-success{
+    padding: 8px 32px;
+}
+
+/* 確認彈窗文字 */
+.popup-box .check-des{
+    translate:0 -16px ;
+}
+
+// class名稱
+// .btn-blue        按鈕:藍色
+// .btn-blue_2nd    按鈕:白底藍框
+// .btn-gold        按鈕:土色
+// .btn-gold_2nd    按鈕:白底土框
+// .btn-success     按鈕:綠色
+// .btn-success_2nd 按鈕:白底綠框
+// .btn-danger      按鈕:紅色
+// .btn-danger_2nd  按鈕:白底紅框
+
+
 </style>
