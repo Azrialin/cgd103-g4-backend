@@ -23,6 +23,7 @@
     上架日期 ✔
     最後修改 ✔
     分類 ✔
+🔹 確認彈窗 功能
 </div>
 ------------------------------------------------------->
 
@@ -485,18 +486,18 @@
 
     <!-- 新增成功 -->
     <!-- style="display:none" -->
-    <div class="popup-box add font-18" style="display:none">
+    <div class="popup-box add font-18" v-show="seeCheck">
         <p class="popup-box-close">X</p>
         <p class="check-des">新增資料成功</p>
-        <button class="btn-success">確認</button>
+        <button @click="okToggle" class="btn-success">確認</button>
     </div>
 
 
     <!-- 修改成功 -->
-    <div class="popup-box fix font-18" style="display:none" >
+    <div class="popup-box fix font-18" v-show="seeCheck" >
         <p class="popup-box-close">X</p>
         <p class="check-des">修改資料成功</p>
-        <button class="btn-success">確認</button>
+        <button @click="okToggle" class="btn-success">確認</button>
     </div>
 
 </template>
@@ -509,6 +510,7 @@
                 seeOnData:false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
                 seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
                 seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
+                seeCheck:false, //確認彈窗、v-show="seeCheck" 按鈕@click="okToggle"
                 size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
                 // 以下for全新表單(好像可以把它變成陣列)
                 input_new_no: '',
@@ -854,6 +856,9 @@
             },
             remove (index) { //草稿 -刪除資料(目前僅畫面上顯示刪除)
             this.dataDraft.splice(index, 1);
+            },
+            okToggle () { //確認彈窗
+                this.seeCheck = !this.seeCheck
             }
         }
     }
