@@ -247,31 +247,30 @@
             {
                 title: '開團編號',
                 slot: 'news_session',
-                width: 160,
                 align: 'center'
             },
             {
                 title: '方案編號',
                 slot: 'news_no',
-                width: 160,
+                width: 120,
                 align: 'center'
             },
             {
                 title: '出發日期',
                 slot: 'news_time',
-                width: 160,
+                width: 150,
                 align: 'center'
             },
             {
                 title: '行程價格',
                 slot: 'news_price',
-                width: 160,
+                width: 150,
                 align: 'center'
             },
             {
                 title: '人數上限',
                 slot: 'news_title',
-                width: 160,
+                width: 150,
                 align: 'center'
             },
             {
@@ -283,6 +282,7 @@
             {
                 title: '截止報名日期',
                 slot: 'news_status',
+                width: 160,
                 align: 'center'
             },
             {
@@ -298,7 +298,6 @@
             {
                 title: '行程訂單編號',
                 slot: 'news_session',
-                width: 160,
                 align: 'center'
             },
             {
@@ -310,13 +309,13 @@
             {
                 title: '預約會員編號',
                 slot: 'news_class',
-                width: 160,
+                width: 120,
                 align: 'center'
             },
             {
                 title: '會員姓名',
                 slot: 'news_title',
-                width: 160,
+                width: 120,
                 align: 'center'
             },
             {
@@ -340,6 +339,7 @@
             {
                 title: '付款狀態',
                 slot: 'news_status',
+                width: 160,
                 align: 'center'
             },
                 ],

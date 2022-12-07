@@ -59,7 +59,7 @@
                 
                 <div class="type travelcode">
                     <p class="nname">價格 / 人 :</p>
-                    <Input class="succe" type="text" v-model="value" style="width: 300px" />
+                    <Input class="succe" type="text" v-model="value2" style="width: 300px" />
                 </div>
                 <div class="delcan">
                     <div class="shure">取消</div>
@@ -75,6 +75,7 @@
             return {
                 selected:"",
                 value:"",
+                value2:"",
             }
         }
     }
