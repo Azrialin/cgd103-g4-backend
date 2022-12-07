@@ -21,6 +21,7 @@
 </template> -->
 
 <style lang="scss">
+
 @import "../src/assets/Css/Reset.css";
 @import "../src/assets/Scss/base/common.scss";
 @import "../src/assets/Scss/base/font.scss";

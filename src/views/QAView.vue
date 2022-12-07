@@ -57,7 +57,9 @@
                         </template>
                         <!-- 刪除 -->
                         <template #delete>
-                            <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px;" @click="isShow = true">delete</span>
+                            <span class="icon material-symbols-outlined"
+                            style="font-size:26px; margin-top: 5px;"
+                            @click="isShow = true">delete</span>
                         </template>
                     </Table>
                 </TabPane>
@@ -206,7 +208,7 @@
                             <span>Delete confirmation</span>
                         </p>
                         <p class="font-16-15em">確定要刪除嗎？</p>
-                        <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                        <Button class="btn-danger_2nd" long :loading="modal_loading" @click.self="toggleModal">取消</Button>
                         <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
                     </div>
                 </div>
@@ -259,11 +261,8 @@
     </div>
 </div>
 
-
-
-
 <!-- 分頁頁碼 -->
-            <Page :total="40" size="small" show-elevator show-sizer />
+            <!-- <Page :total="40" size="small" show-elevator show-sizer /> -->
 		</main>
 	</div>
 
@@ -492,7 +491,7 @@ export default {
                 this.$Message.success('已成功刪除一筆常見問題');
             }, 200);
         },
-        to2ggleModal(){
+        toggleModal(){
             this.isShow = !this.isShow;
             // console.log(this);
         },
@@ -512,7 +511,6 @@ export default {
     left: 300px;
     margin: auto;
     z-index: 10;
-
     width: 40%;
     background-color: #4F6573;
 }
