@@ -16,8 +16,9 @@
 			</div>
 
             <Tabs class="tabs" type="card" :animated="false">
-                <TabPane label="全部" >
-                    <Table stripe border :columns="columns" :data="datas" >
+<!-- 問題：全部 -->
+                <TabPane class="scrollBar" label="全部" >
+                    <Table stripe border :columns="columns" :data="dataAll" >
                         <!-- 多選 -->
                         <template #check="{ row, index }">
                             <Input type="text" v-if="editIndex === index" />
@@ -45,7 +46,8 @@
                         </template>
                         <!-- 狀態 -->
                         <template #faqState>
-                            <Switch true-color="#13ce66" false-color="#E6E6E6" />
+                            <!-- <Switch true-color="#13ce66" false-color="#E6E6E6" /> -->
+                            <Switch true-color="#6C9255" false-color="#E6E6E6" />
                         </template>
                         <!-- 編輯 -->
                         <template #edit>
@@ -55,57 +57,173 @@
                         </template>
                         <!-- 刪除 -->
                         <template #delete>
-                            <!-- <div class="modal-mask" :style="modalStyle">
-                                <div class="modal-container" @click.self="toggleModal">
-                                    <div class="modal-body">
-                                        <p class="font-16-15em">
-                                            <span class="icon material-symbols-outlined">error</span>
-                                            <span>Delete confirmation</span>
-                                        </p>
-                                        <p class="font-16-15em">確定要刪除嗎？</p>
-                                        <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
-                                        <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <span class="icon material-symbols-outlined" style="font-size:26px" @click="isShow = true">delete</span>
+                            <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px;" @click="isShow = true">delete</span>
+                        </template>
+                    </Table>
+                </TabPane>
+<!-- 問題：會員 -->
+                <TabPane label="會員問題" >
+                    <Table stripe border :columns="columns" :data="dataM" >
+                        <!-- 多選 -->
+                        <template #check="{ row, index }">
+                            <Input type="text" v-if="editIndex === index" />
+                            <span v-else>{{ row.check }}</span>
+                        </template>
+                        <!-- 編號 -->
+                        <template #faqNo="{ row, index }">
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else>{{ row.faqNo }}</span>
+                        </template>
+                        <!-- 分類 -->
+                        <template #faqType="{ row, index }">
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else>{{ (row.faqType) }}</span>
+                        </template>
+                        <!-- 問題 -->
+                        <template #fqaQ="{ row, index }" >
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else >{{ row.fqaQ }}</span>
+                        </template>
+                        <!-- 回答 -->
+                        <template #fqaA="{ row, index }" >
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else >{{ row.fqaQ }}</span>
+                        </template>
+                        <!-- 狀態 -->
+                        <template #faqState>
+                            <!-- <Switch true-color="#13ce66" false-color="#E6E6E6" /> -->
+                            <Switch true-color="#6C9255" false-color="#E6E6E6" />
+                        </template>
+                        <!-- 編輯 -->
+                        <template #edit>
+                            <div class="btn-box">
+                                <span class="icon material-symbols-outlined" @click="show(index)">edit_square</span>
+                            </div>
+                        </template>
+                        <!-- 刪除 -->
+                        <template #delete>
+                            <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px;" @click="isShow = true">delete</span>
+                        </template>
+                    </Table>
+                </TabPane>
+<!-- 問題：行程 -->
+                <TabPane label="行程問題" >
+                    <Table stripe border :columns="columns" :data="dataT" >
+                        <!-- 多選 -->
+                        <template #check="{ row, index }">
+                            <Input type="text" v-if="editIndex === index" />
+                            <span v-else>{{ row.check }}</span>
+                        </template>
+                        <!-- 編號 -->
+                        <template #faqNo="{ row, index }">
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else>{{ row.faqNo }}</span>
+                        </template>
+                        <!-- 分類 -->
+                        <template #faqType="{ row, index }">
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else>{{ (row.faqType) }}</span>
+                        </template>
+                        <!-- 問題 -->
+                        <template #fqaQ="{ row, index }" >
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else >{{ row.fqaQ }}</span>
+                        </template>
+                        <!-- 回答 -->
+                        <template #fqaA="{ row, index }" >
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else >{{ row.fqaQ }}</span>
+                        </template>
+                        <!-- 狀態 -->
+                        <template #faqState>
+                            <!-- <Switch true-color="#13ce66" false-color="#E6E6E6" /> -->
+                            <Switch true-color="#6C9255" false-color="#E6E6E6" />
+                        </template>
+                        <!-- 編輯 -->
+                        <template #edit>
+                            <div class="btn-box">
+                                <span class="icon material-symbols-outlined" @click="show(index)">edit_square</span>
+                            </div>
+                        </template>
+                        <!-- 刪除 -->
+                        <template #delete>
+                            <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px;" @click="isShow = true">delete</span>
+                        </template>
+                    </Table>
+                </TabPane>
+<!-- 問題：商品 -->
+                <TabPane label="商品問題" >
+                    <Table stripe border :columns="columns" :data="dataP" >
+                        <!-- 多選 -->
+                        <template #check="{ row, index }">
+                            <Input type="text" v-if="editIndex === index" />
+                            <span v-else>{{ row.check }}</span>
+                        </template>
+                        <!-- 編號 -->
+                        <template #faqNo="{ row, index }">
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else>{{ row.faqNo }}</span>
+                        </template>
+                        <!-- 分類 -->
+                        <template #faqType="{ row, index }">
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else>{{ (row.faqType) }}</span>
+                        </template>
+                        <!-- 問題 -->
+                        <template #fqaQ="{ row, index }" >
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else >{{ row.fqaQ }}</span>
+                        </template>
+                        <!-- 回答 -->
+                        <template #fqaA="{ row, index }" >
+                            <Input type="text"  v-if="editIndex === index" />
+                            <span v-else >{{ row.fqaQ }}</span>
+                        </template>
+                        <!-- 狀態 -->
+                        <template #faqState>
+                            <!-- <Switch true-color="#13ce66" false-color="#E6E6E6" /> -->
+                            <Switch true-color="#6C9255" false-color="#E6E6E6" />
+                        </template>
+                        <!-- 編輯 -->
+                        <template #edit>
+                            <div class="btn-box">
+                                <span class="icon material-symbols-outlined" @click="show(index)">edit_square</span>
+                            </div>
+                        </template>
+                        <!-- 刪除 -->
+                        <template #delete>
+                            <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px;" @click="isShow = true">delete</span>
                         </template>
                     </Table>
                 </TabPane>
             </Tabs>
-            
+<!-- 彈窗：刪除確認 -->
             <div class="modal-mask" :style="modalStyle">
-                            <div class="modal-container" @click.self="toggleModal">
-                                <div class="modal-body">
-                                    <p class="font-16-15em">
-                                        <span class="icon material-symbols-outlined">error</span>
-                                        <span>Delete confirmation</span>
-                                    </p>
-                                    <p class="font-16-15em">確定要刪除嗎？</p>
-                                    <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
-                                    <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
-                                </div>
-                            </div>
-                        </div>
-
+                <div class="modal-container" @click.self="toggleModal">
+                    <div class="modal-body">
+                        <p class="font-16-15em">
+                            <span class="icon material-symbols-outlined">error</span>
+                            <span>Delete confirmation</span>
+                        </p>
+                        <p class="font-16-15em">確定要刪除嗎？</p>
+                        <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                        <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
+                    </div>
+                </div>
+            </div>
+<!-- 分頁頁碼 -->
             <Page :total="40" size="small" show-elevator show-sizer />
 		</main>
 	</div>
 
 </template>
 <script>
-import { resolveComponent } from 'vue'
-
+// import { resolveComponent } from 'vue'
 export default {
     data () {
         return {
             isShow: false,
             modal_loading: false,
-            // seenNew:false, //新表格彈窗，綁新表單v-show、按鈕@click="newToggle"
-            // seeOnData:false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
-            // seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
-            // seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
-            // size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
             columns: [
                 {
                     type: 'selection',
@@ -177,7 +295,7 @@ export default {
                     align: 'center'
                 }
             ],
-            datas: [
+            dataAll: [
                 {
                     faqNo: 'M001',
                     faqType: '會員問題',
@@ -204,20 +322,20 @@ export default {
 
                 },
                 {
-                    faqNo: 'T001',
+                    faqNo: 'T002',
                     faqType: '行程問題',
                     fqaQ: '我想要刷卡，但我不能填寫安全碼？',
                     fqaA: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'T001',
+                    faqNo: 'T003',
                     faqType: '行程問題',
                     fqaQ: '我請問我要如何查詢乘車座位？',
                     fqaA: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
                 },
                 {
-                    faqNo: 'T001',
-                    faqType: '商品問題',
+                    faqNo: 'T004',
+                    faqType: '行程問題',
                     fqaQ: '我購買了方案A，請問發車時間是？',
                     fqaA: '請撥打客服電話，由專人為您服務。',
                 },
@@ -228,14 +346,75 @@ export default {
                     fqaA: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'P001',
+                    faqNo: 'P002',
                     faqType: '商品問題',
                     fqaQ: '請問我要如何查詢貨況呢？',
                     fqaA: '請撥打客服電話，由專人為您服務。',
                 },
             ],
-            }
-        },
+            dataM: [
+                {
+                    faqNo: 'M001',
+                    faqType: '會員問題',
+                    fqaQ: '請問我忘記密碼了怎麼辦？',
+                    fqaA: '請撥打客服電話，由專人為您服務。',
+                },
+                {
+                    faqNo: 'M002',
+                    faqType: '會員問題',
+                    fqaQ: '請問客服電話是？我找不到。',
+                    fqaA: '您好，客服電話是：00-0000-0000',
+                },
+                {
+                    faqNo: 'M003',
+                    faqType: '會員問題',
+                    fqaQ: '請問可以不要填寫LINE ID嗎？',
+                    fqaA: '可以的，親。',
+                },
+            ],
+            dataT: [
+                {
+                    faqNo: 'T001',
+                    faqType: '行程問題',
+                    fqaQ: '我不小心訂錯行程了，請問要如何退訂？',
+                    fqaA: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
+
+                },
+                {
+                    faqNo: 'T002',
+                    faqType: '行程問題',
+                    fqaQ: '我想要刷卡，但我不能填寫安全碼？',
+                    fqaA: '請撥打客服電話，由專人為您服務。',
+                },
+                {
+                    faqNo: 'T003',
+                    faqType: '行程問題',
+                    fqaQ: '我請問我要如何查詢乘車座位？',
+                    fqaA: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
+                },
+                {
+                    faqNo: 'T004',
+                    faqType: '行程問題',
+                    fqaQ: '我購買了方案A，請問發車時間是？',
+                    fqaA: '請撥打客服電話，由專人為您服務。',
+                },
+            ],
+            dataP: [
+                {
+                    faqNo: 'P001',
+                    faqType: '商品問題',
+                    fqaQ: '請問現貨商品多久會寄出？',
+                    fqaA: '請撥打客服電話，由專人為您服務。',
+                },
+                {
+                    faqNo: 'P002',
+                    faqType: '商品問題',
+                    fqaQ: '請問我要如何查詢貨況呢？',
+                    fqaA: '請撥打客服電話，由專人為您服務。',
+                },
+            ],
+        }
+    },
     computed: {
         modalStyle(){
             return {
@@ -245,7 +424,10 @@ export default {
     },
     methods: {
         del(index){
-            this.datas.splice(index, 1);
+            this.dataAll.splice(index, 1);
+            this.dataM.splice(index, 1);
+            this.dataT.splice(index, 1);
+            this.dataP.splice(index, 1);
             this.modal_loading = true;
             setTimeout(() => {
                 this.modal_loading = false;
