@@ -107,6 +107,8 @@ $desk: back;
 
 // 按鈕樣式:後台
 %btn-backStyle{
+    width: min-content;
+    white-space:nowrap;
     // min-width: 80px;
     @include btnPadding(4, 10);
     @include btnFont(500, 14){

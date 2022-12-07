@@ -53,7 +53,7 @@ $font-lh: 15, 24;
 @each $lh in $font-lh{
 	.font-16-#{$lh}em{
 		font: 400 16px / #{$lh/10} + em 'Noto Sans';
-		letter-spacing: 0.15em;
+		// letter-spacing: 0.15em;
 		text-align: justify;
 	}
 }

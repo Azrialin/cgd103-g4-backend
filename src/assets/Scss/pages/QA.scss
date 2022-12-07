@@ -1,6 +1,12 @@
 @import "../base/font.scss";
 @import "../components/btn.scss";
 .QA{
+    .icon{
+        cursor: pointer;
+        &:hover{
+            color: $clr_blue_L3;
+        }
+    }
     header{
         width: 100%;
         padding: 20px 40px;
@@ -35,6 +41,46 @@
         }
         .tabs{
             flex-grow: 1;
+        }
+        .modal-mask{
+            position: absolute;
+            z-index: 10;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: table;
+            background-color: rgba(0, 0, 0, 0.3);
+            transition: opacity .3s ease;
+        }
+        .modal-container{
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .modal-body{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            left: calc(50% - 150px);
+            transform: translate(-50%, -50%);
+            width: fit-content;
+            margin: auto;
+            padding: 30px 80px;
+            border-radius: 10px;
+            background-color: #fff;
+            p{
+                text-align: center;
+                margin-bottom: 10px;
+                &:first-child{
+                    margin-bottom: 5px;
+                    span{
+                        vertical-align: top;
+                    }
+                }
+            }
+            Button+Button{
+                margin-left: 30px;
+            }
         }
     }
 }

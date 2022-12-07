@@ -44,71 +44,49 @@
                             <span v-else >{{ row.fqaQ }}</span>
                         </template>
                         <!-- 狀態 -->
-                        <template #faqState="{ row, index }">
+                        <template #faqState>
                             <Switch true-color="#13ce66" false-color="#E6E6E6" />
                         </template>
                         <!-- 編輯 -->
                         <template #edit>
                             <div class="btn-box">
-                                <span class="material-symbols-outlined" @click="show(index)">edit_square</span>
+                                <span class="icon material-symbols-outlined" @click="show(index)">edit_square</span>
                             </div>
                         </template>
                         <!-- 刪除 -->
-                        <!-- <template #delate="{index }">
-                            <div class="btn-box">
-                                <span class="material-symbols-outlined" style="font-size:26px" @click="remove(index)">delete</span>
-                            </div>
-                        </template> -->
-
-                        <!-- <template #delate>
-                            <Modal v-model="modal1" width="360" style="background: #fff;">
-                                <template #header>
-                                    <p style="color:#f60;text-align:center">
-                                        <Icon type="ios-information-circle"></Icon>
-                                        <span>Delete confirmation</span>
-                                    </p>
-                                </template>
-                                <div style="text-align:center">
-                                    <p>After this task is deleted, the downstream 10 tasks will not be implemented.</p>
-                                    <p>Will you delete it?</p>
+                        <template #delete>
+                            <!-- <div class="modal-mask" :style="modalStyle">
+                                <div class="modal-container" @click.self="toggleModal">
+                                    <div class="modal-body">
+                                        <p class="font-16-15em">
+                                            <span class="icon material-symbols-outlined">error</span>
+                                            <span>Delete confirmation</span>
+                                        </p>
+                                        <p class="font-16-15em">確定要刪除嗎？</p>
+                                        <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                                        <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
+                                    </div>
                                 </div>
-                                <template #footer>
-                                    <Button type="error" size="large" long :loading="modal_loading" @click="del">Delete</Button>
-                                </template>
-                            </Modal>
-                            <Button @click="modal1 = true">Custom header and footer</Button>
-                        </template> -->
-
-                        <!-- <template #delate>
-                            <Button @click="modal1 = true">20px from the top</Button>
-                            <Modal 
-                                title="Title"
-                                v-model="modal1"
-                                :styles="{top: '20px'}">
-                                <p>Content of dialog</p>
-                                <p>Content of dialog</p>
-                                <p>Content of dialog</p>
-                            </Modal>
-                        </template> -->
-
-                        <!-- 刪除 -->
-                        <template #delate>
-                            <div class="modal-mask" :style="modalStyle">
-                                <div class="modal-container" @click="toggleModal">
-                                <div class="modal-body">Hello!</div>
-                                </div>
-                            </div>
-                            <!-- <button @click="isShow = true">Click Me</button> -->
-                            <div class="btn-box">
-                                <span class="material-symbols-outlined" style="font-size:26px" @click="isShow = true">delete</span>
-                                <!-- <span class="material-symbols-outlined" style="font-size:26px" @click="remove(index)">delete</span> -->
-                            </div>
+                            </div> -->
+                            <span class="icon material-symbols-outlined" style="font-size:26px" @click="isShow = true">delete</span>
                         </template>
-                        
                     </Table>
                 </TabPane>
-
             </Tabs>
+            
+            <div class="modal-mask" :style="modalStyle">
+                            <div class="modal-container" @click.self="toggleModal">
+                                <div class="modal-body">
+                                    <p class="font-16-15em">
+                                        <span class="icon material-symbols-outlined">error</span>
+                                        <span>Delete confirmation</span>
+                                    </p>
+                                    <p class="font-16-15em">確定要刪除嗎？</p>
+                                    <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                                    <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
+                                </div>
+                            </div>
+                        </div>
 
             <Page :total="40" size="small" show-elevator show-sizer />
 		</main>
@@ -122,10 +100,7 @@ export default {
     data () {
         return {
             isShow: false,
-            // modal1: false,
-            // modal2: false,
-            // modal1: false,
-            // modal_loading: false,
+            modal_loading: false,
             // seenNew:false, //新表格彈窗，綁新表單v-show、按鈕@click="newToggle"
             // seeOnData:false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
             // seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
@@ -197,7 +172,7 @@ export default {
                 },
                 {
                     title: '刪除',
-                    slot: 'delate',
+                    slot: 'delete',
                     width: 70,
                     align: 'center'
                 }
@@ -259,27 +234,28 @@ export default {
                     fqaA: '請撥打客服電話，由專人為您服務。',
                 },
             ],
-            // editIndex: -1,  // 当前聚焦的输入框的行数
             }
         },
     computed: {
-        modalStyle() {
+        modalStyle(){
             return {
                 'display': this.isShow ? '' : 'none'
             };
         }
-  },
+    },
     methods: {
-        // del () {
-        //     this.modal_loading = true;
-        //     setTimeout(() => {
-        //         this.modal_loading = false;
-        //         this.modal1 = false;
-        //         this.$Message.success('Successfully delete');
-        //     }, 2000);
-        // }
-        toggleModal() {
+        del(index){
+            this.datas.splice(index, 1);
+            this.modal_loading = true;
+            setTimeout(() => {
+                this.modal_loading = false;
+                this.isShow = false;
+                this.$Message.success('已成功刪除一筆常見問題');
+            }, 200);
+        },
+        toggleModal(){
             this.isShow = !this.isShow;
+            console.log(this);
         }
     }
 }
@@ -287,35 +263,6 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/Scss/pages/QA.scss";
-h4 {
-  margin: 1rem 0;
-  font-size: 1rem;
-}
 
-.modal-mask {
-  position: absolute;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: table;
-  background-color: rgba(0, 0, 0, 0.05);
-  transition: opacity .3s ease;
-}
 
-.modal-container {
-  cursor: pointer;
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-body {
-  cursor: auto;
-  display: block;
-  width: 50%;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #fff;
-}
 </style>
