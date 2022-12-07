@@ -1,24 +1,21 @@
-<template>
+<!-- <template>
 	<div class="container">
 		<Aside/>
 		<div class="main"><router-view/></div>
 	</div>
-</template>
-<!-- <template>
-	<div class="container">
+</template> -->
+<template>
+	<div class="app_wrapper">
 		<Aside/>
-		<section class="main">
-			<header>
-				<h1 class="font-32">Q&A 管理</h1>
-				<div>
-					<span class="font-18">管理員名稱</span>
-					<span class="font-18">登出</span>
-				</div>
-			</header>
-			<router-view/>
+		<section class="app_container">
+			<Header/>
+			<main class="app_main">
+				<Breadcrumb/>
+				<router-view/>
+			</main>
 		</section>
 	</div>
-</template> -->
+</template>
 
 <style lang="scss">
 
@@ -42,11 +39,15 @@ a{
 <script>
 // @ is an alias to /src
 import Aside from '@/components/Aside.vue'
+import Header from '@/components/Header.vue'
+import Breadcrumb from '@/components/Breadcrumb.vue'
 
 export default {
 	name: 'App',
 	components: {
-		Aside
+		Aside,
+		Header,
+		Breadcrumb
 	}
 }
 </script>

@@ -1,9 +1,13 @@
 // Aside
-.container{
-    display: flex;
-}
-.main{
-    position: relative;
-    width: calc(100% - 300px);
-    left: 300px;
+.app_wrapper{
+    // display: flex;
+    .app_container{
+        position: relative;
+        width: calc(100% - 300px);
+        min-height: 100vh;
+        left: 300px;
+        .app_main{
+            padding: 40px;
+        }
+    }
 }

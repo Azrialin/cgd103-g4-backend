@@ -1,20 +1,11 @@
 <template>
     	<div class="QA">
-		<header>
-			<h1 class="font-32">Q&A 管理</h1>
-			<div>
-				<span class="font-18">管理員名稱</span>
-                <span class="font-18">登出</span>
-			</div>
-		</header>
 		<main>
-			<div class="font-16">Q&A 管理 /</div>
 			<div class="btns">
 				<button class="btn-blue_2nd">顯示/隱藏</button>
 				<button class="btn-blue" @click="isShow2 = true">新增</button>
 				<button class="btn-blue">刪除</button>
 			</div>
-
             <Tabs class="tabs" type="card" :animated="false">
 <!-- 問題：全部 -->
                 <TabPane class="scrollBar" label="全部" >
@@ -269,9 +260,13 @@
 </template>
 <script>
 // import { resolveComponent } from 'vue'
+// import Breadcrumb from '@/components/Breadcrumb.vue';
 export default {
     data () {
         return {
+            components: {
+                // Breadcrumb
+            },
             isShow: false,
             isShow2: false,
             modal_loading: false,
