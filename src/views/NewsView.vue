@@ -45,8 +45,8 @@
             </div>
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
-                    <TabPane label="上架" >
-                        <Table height="350" stripe border :columns="columns" :data="dataOn" >
+                    <TabPane class="scrollBar"  label="上架" >
+                        <Table  stripe border :columns="columns" :data="dataOn" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-if="editIndex === index" />
@@ -86,7 +86,7 @@
                         </Table>
                     </TabPane>
                     <TabPane label="草稿" >
-                        <Table height="350" stripe border :columns="columns" :data="dataDraft" >
+                        <Table class="scrollBar" stripe border :columns="columns" :data="dataDraft" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -129,7 +129,7 @@
                         </Table>
                     </TabPane>
                     <TabPane label="下架" >
-                        <Table height="350" stripe border :columns="columns" :data="dataOff" >
+                        <Table class="scrollBar" stripe border :columns="columns" :data="dataOff" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -883,6 +883,7 @@
 </script>
 
 <style scoped lang="scss">
+@import "../assets/Scss/components/scrollBar.scss";
 /* -------------------彈窗 ------------------------*/
 .popup{
     position: absolute;
