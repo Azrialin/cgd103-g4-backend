@@ -11,7 +11,7 @@
 			<div class="font-16">Q&A 管理 /</div>
 			<div class="btns">
 				<button class="btn-blue_2nd">顯示/隱藏</button>
-				<button class="btn-blue">新增</button>
+				<button class="btn-blue" @click="isShow2 = true">新增</button>
 				<button class="btn-blue">刪除</button>
 			</div>
 
@@ -211,6 +211,57 @@
                     </div>
                 </div>
             </div>
+
+<!-- 新增表單 -->
+<div class="modal-mask" :style="modalStyle2">
+    <div class="modal-container" @click.self="toggleModal2">
+        <div class="popup ">
+            <div class="popup-head font-20">新增員工帳號</div>
+            <div class="popup-content font-18">
+                <div class="input-txt">
+                    <div class="input-info">
+                        <label for="">員工編號：
+                            <Input type="text" placeholder="" clearable style="width: 200px" />
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工帳號：
+                            <Input type="text" placeholder="英數大小寫10個字元以上" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工密碼：
+                            <Input type="password" placeholder="英數大小寫8個字元以上" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工姓名：
+                            <Input type="text" placeholder="請輸入姓名" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工信箱：
+                            <Input type="email" placeholder="請輸入Email" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-switchs">
+                    <label class="state" for="">帳號狀態：
+                        <Switch true-color="#13ce66" false-color="#E6E6E6" />
+                    </label>
+                </div>
+                <div class="popup-btn">
+                    <Button type="primary">新增帳號</Button>
+                    <Button @click="toggleModal2">取消</Button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <!-- 分頁頁碼 -->
             <Page :total="40" size="small" show-elevator show-sizer />
 		</main>
@@ -223,6 +274,7 @@ export default {
     data () {
         return {
             isShow: false,
+            isShow2: false,
             modal_loading: false,
             columns: [
                 {
@@ -420,6 +472,11 @@ export default {
             return {
                 'display': this.isShow ? '' : 'none'
             };
+        },
+        modalStyle2(){
+            return {
+                'display': this.isShow2 ? '' : 'none'
+            };
         }
     },
     methods: {
@@ -435,9 +492,13 @@ export default {
                 this.$Message.success('已成功刪除一筆常見問題');
             }, 200);
         },
-        toggleModal(){
+        to2ggleModal(){
             this.isShow = !this.isShow;
-            console.log(this);
+            // console.log(this);
+        },
+        toggleModal2(){
+            this.isShow2 = !this.isShow2;
+            // console.log(this);
         }
     }
 }
@@ -445,6 +506,57 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/Scss/pages/QA.scss";
+.popup{
+    position: absolute;
+    top: 60px;
+    left: 300px;
+    margin: auto;
+    z-index: 10;
 
+    width: 40%;
+    background-color: #4F6573;
+}
+/* 上方區塊顏色 */
+.popup-head{
+    background-color: #2D3740;
+    height: 40px;
+    color: #ccc;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.input-txt{
+    margin-top: 50px;
+}
+.input-info{
+    margin-bottom: 40px;
+    padding-left: 85px;
+}
+.input-switchs{
+    margin-bottom: 15px;
+    padding-left: 85px;
+}
+.input-txt{
+    margin-bottom: 40px;
+}
+.popup-btn{
+    margin: 70px 90px 50px 0 ;
+    display: flex;
+    justify-content: right;
+
+}
+
+.popup-btn Button{
+    margin: 0 20px;
+}
+
+/* 彈窗字顏色 */
+.popup label{
+    color: #fff;
+}
+.date{
+    color: #ccc;
+}
 
 </style>
