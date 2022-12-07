@@ -1,6 +1,7 @@
 <template>
 <!---------------------use case(簡易隨寫)-----------------------
 <div>
+    📣 確認鍵所連動的功能還沒寫好，都先暫放toggle
 🔹 新增消息 
     "新增消息"，"取消"toggle 新增表格彈窗    ✔
     關掉畫面，上次輸入的資料還是保留  keep-alive✔
@@ -248,8 +249,9 @@
                     </label>
                 </div>
                 <div class="popup-btn">
-                    <button class="btn-blue_2nd" @click="newToggle">取消</button>
-                    <button class="btn-blue">確認</button>
+                    <button class="btn-blue_2nd" @click="newToggle">取消</button> 
+                    <button class="btn-blue" @click="newToggle">確認</button> 
+                    <!-- 確認鍵功能待補，暫放toggle -->
                 </div>
             </div>
         </div>
@@ -327,7 +329,8 @@
             </div>
             <div class="popup-btn">
                 <button class="btn-blue_2nd" @click="editOnData">取消</button>
-                <button class="btn-blue">確認</button>
+                <button class="btn-blue" @click="editOnData">確認</button>
+                    <!-- 確認鍵功能待補，暫放toggle -->
             </div>
         </div>
     </div>
@@ -404,7 +407,7 @@
                 </div>
                 <div class="popup-btn">
                     <button class="btn-blue_2nd" @click="editDraftData">取消</button>
-                    <button class="btn-blue">確認</button>
+                    <button class="btn-blue" @click="editDraftData">確認</button>
                 </div>
             </div>
         </div>
@@ -886,7 +889,7 @@
     top: 5px;
     left: 150px;
     margin: auto;
-    z-index: 10;
+    z-index: 20;
 
     width: 70%;
     background-color: #4F6573;
@@ -1035,6 +1038,20 @@
 /* 確認彈窗文字 */
 .popup-box .check-des{
     translate:0 -16px ;
+}
+
+/* 彈窗背景 */
+
+.modal-mask {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: table;
+    background-color: rgba(0, 0, 0, .5);
+    transition: opacity .3s ease;
 }
 
 // class名稱

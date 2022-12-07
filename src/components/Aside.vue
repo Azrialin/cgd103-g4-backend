@@ -26,7 +26,7 @@
 					:class="{on: item.id == activeItem.id}"
 					@click.stop="tabChange(item)"
 				>
-					<router-link :to ="{path:item.source}">
+					<router-link :to="{path:item.source}">
 						<span class="material-symbols-outlined">{{item.icon}}</span>
 						{{item.name}}
 					</router-link>
