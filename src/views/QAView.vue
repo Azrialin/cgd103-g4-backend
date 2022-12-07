@@ -425,9 +425,9 @@ export default {
     methods: {
         del(index){
             this.dataAll.splice(index, 1);
-            this.dataM.splice(index, 1);
-            this.dataT.splice(index, 1);
-            this.dataP.splice(index, 1);
+            // this.dataM.splice(index, 1);
+            // this.dataT.splice(index, 1);
+            // this.dataP.splice(index, 1);
             this.modal_loading = true;
             setTimeout(() => {
                 this.modal_loading = false;
