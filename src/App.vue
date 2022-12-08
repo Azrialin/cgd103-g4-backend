@@ -1,9 +1,3 @@
-<!-- <template>
-	<div class="container">
-		<Aside/>
-		<div class="main"><router-view/></div>
-	</div>
-</template> -->
 <template>
 	<div class="app_wrapper">
 		<Aside/>
