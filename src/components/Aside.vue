@@ -21,8 +21,8 @@
 						<div class="plus-minus"><span></span><span></span></div>
 					</a>
 					<ul class="child-list">
-						<li><router-link to="/Administrator" @click="listOpen">管理者帳號</router-link></li>
-						<li><router-link to="/Membership" @click="listOpen">會員帳號</router-link></li>
+						<li><router-link to= "/accounts/Administrator" >管理者帳號</router-link></li>
+						<li><router-link to="/accounts/Membership" >會員帳號</router-link></li>
 					</ul>
 				</li>
 				<li v-for="item in items"

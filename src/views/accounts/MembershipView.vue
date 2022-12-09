@@ -1,6 +1,6 @@
 <template>
     <div class="Membership">
-      <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
+    會員帳號頁面
     </div>
   </template>
   

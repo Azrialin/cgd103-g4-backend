@@ -1,7 +1,10 @@
 <template>
     <header>
-        <h2 class="font-32"
-            v-for="(item, i) in breadcrumbList" :key="i">{{ item.meta.title }}</h2>
+        <div class="title">
+            <h2 class="font-32"
+                v-for="(item, i) in breadcrumbList" :key="i">{{ item.meta.title }}
+            </h2>
+        </div>
         <div>
             <span class="font-18">管理員名稱</span>
             <span class="font-18">登出</span>
@@ -44,6 +47,19 @@ header{
         display: flex;
         justify-content: space-between;
         align-items: center;
+        .title{
+            display: flex;
+            h2{
+                &::after{
+                    content: '／';
+                }
+                &:last-child{
+                    &::after{
+                        content: '';
+                    }
+                }
+            }
+        }
         span{
             &:last-child{
                 cursor: pointer;

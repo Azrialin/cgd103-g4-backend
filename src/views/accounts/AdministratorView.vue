@@ -1,6 +1,6 @@
 <template>
     <div class="backstage-administrator" >
-        <!-- <div class="backstage-name">
+        <div class="backstage-name">
             <div>
                 <h2 class="font-36" >帳號管理</h2>
             </div>
@@ -8,9 +8,9 @@
                 <span class="font-18">管理員名稱</span>
                 <span class="font-18">登出</span>
             </div>
-        </div> -->
+        </div>
         <div class="backstage-content">
-            <!-- <div class="backstage-path font-16">帳號管理 / 管理者帳號</div> -->
+            <div class="backstage-path font-16">帳號管理 / 管理者帳號</div>
             <div class="btn-add">
                 <Button type="primary"
                 @click="addToggle">新增帳號</Button>
@@ -43,33 +43,16 @@
                     <Switch true-color="#13ce66" false-color="#E6E6E6" />
                 </template>
                 <!-- 刪除帳號 -->
-                <!-- <template #action_error="{ row, index }">
+                <template #action_error="{ row, index }">
                     <Button type="error" size="small" @click="remove(index, row)">刪除</Button>
-                </template> -->
-                <template #action_error>
-                    <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow = true">delete</span>
                 </template>
             </Table>
-            <!-- 彈窗：刪除確認 -->
-            <div class="modal-mask" :style="modalStyle">
-                <div class="modal-container" @click.self="toggleModal">
-                    <div class="modal-body">
-                        <p class="font-16-15em">
-                            <span class="icon material-symbols-outlined">error</span>
-                            <span>Delete confirmation</span>
-                        </p>
-                        <p class="font-16-15em">確定要刪除嗎？</p>
-                        <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
-                        <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <!-- <Page :total="40" size="small" /> -->
 
     <!-- style="display:none" -->
-    <!--新增表單 -->
+    <!--一張全新表單 -->
     <div class="popup " v-show="seenAdd" >
         <div class="popup-head font-20">新增員工帳號</div>
         <div class="popup-content font-18">
@@ -121,8 +104,6 @@ export default {
 	},
     data () {
         return {
-            isShow: false,
-            modal_loading: false,
             seenAdd:false, //新表格彈窗，綁新表單v-show、按鈕@click="seenAdd"
             size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
             columns: [
@@ -187,13 +168,6 @@ export default {
             ]
         }
     },
-    computed: {
-        modalStyle(){
-            return {
-                'display': this.isShow ? '' : 'none'
-            };
-        }
-    },
     methods: {
         show (index) {
             this.$Modal.info({
@@ -206,26 +180,13 @@ export default {
         },
         addToggle(){ //新表單
             this.seenAdd = !this.seenAdd
-        },
-        del(index){
-            this.data.splice(index, 1);
-            this.modal_loading = true;
-            setTimeout(() => {
-                this.modal_loading = false;
-                this.isShow = false;
-                this.$Message.success('已刪除一筆管理者帳號');
-            }, 200);
-        },
-        toggleModal(){
-            this.isShow = !this.isShow;
-            console.log(this);
         }
     }
 }
 </script>
 
 <style scoped lang="scss">
-@import "../assets/Scss/components/btn.scss";
+
 /* 後台header */
 .backstage-name{
     display: flex;
@@ -271,14 +232,12 @@ export default {
 }
 
 /* 管理介面 */
-
 .administrator-manager{
-    // height: 45vh;
-    // height: calc(100VH - 80px - 19.2px - 32px);
+    height: 45vh;
     margin: 30px 40px;
 }
 
-/* -------------------新增帳號彈窗 ------------------------*/
+/* -------------------彈窗 ------------------------*/
 .popup{
     position: absolute;
     top: 60px;
@@ -333,49 +292,5 @@ export default {
 }
 
 
-/* -------------------新增帳號彈窗結束----------------- */
-/* -------------------刪除彈窗----------------- */
-.modal-mask{
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: table;
-    background-color: rgba(0, 0, 0, 0.3);
-    transition: opacity .3s ease;
-}
-.modal-container{
-    display: table-cell;
-    vertical-align: middle;
-}
-.modal-body{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    left: calc(50% - 150px);
-    transform: translate(-50%, -50%);
-    width: fit-content;
-    margin: auto;
-    padding: 30px 80px;
-    border-radius: 10px;
-    background-color: #fff;
-    p{
-        text-align: center;
-        margin-bottom: 10px;
-        &:first-child{
-            margin-bottom: 5px;
-            span{
-                vertical-align: top;
-            }
-        }
-        }
-    Button+Button{
-        margin-left: 30px;
-    }
-}
-.backstage-administrator{
-    min-height: 100vh;
-}
+/* -------------------彈窗結束----------------- */
 </style>
