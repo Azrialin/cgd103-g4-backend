@@ -76,13 +76,13 @@ export default {
 				{
 					id: '006',
 					name: '商品管理',
-					source: '/',
+					source: '/productmanage',
 					icon: 'card_travel',
 				},
 				{
 					id: '007',
 					name: '商品訂單管理',
-					source: '/',
+					source: '/shoporder',
 					icon: 'content_paste_search',
 				},
 				{

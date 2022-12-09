@@ -50,6 +50,18 @@ const routes = [
 	component: () => import('../views/TraveladdView.vue')
 },
 {
+	path: '/productmanage',
+	name: 'productmanage',
+	component: () => import('../views/ProductManage.vue'),
+	meta: { title: '商品管理' }
+},
+{
+	path: '/shoporder',
+	name: 'shoporder',
+	component: () => import('../views/ShopOrder.vue'),
+	meta: { title: '商品訂單管理' }
+},
+{
 	path: '/QA',
 	name: 'QA',
 	component: () => import('../views/QAView.vue'),
