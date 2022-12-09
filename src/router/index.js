@@ -28,10 +28,6 @@ const routes = [
 		},
 	]
 },
-
-
-
-
 // {
 // 	path: '/Administrator',
 // 	name: 'Administrator',
@@ -44,9 +40,6 @@ const routes = [
 // 	component: () => import('../views/MembershipView.vue'),
 // 	meta: { title: '會員帳號' }
 // },
-
-
-
 {
 	path: '/news',
 	name: 'news',
