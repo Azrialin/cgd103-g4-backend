@@ -93,8 +93,8 @@ export default {
 				},
 				{
 					id: '009',
-					name: 'Q&A 管理',
-					source: '/QA',
+					name: 'FAQ管理',
+					source: '/faq',
 					icon: 'quiz',
 				},
 			],

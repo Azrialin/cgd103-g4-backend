@@ -1,5 +1,5 @@
 <template>
-    	<div class="QA">
+    	<div class="FAQ">
 		<main>
 			<div class="btns">
 				<button class="btn-blue_2nd">顯示/隱藏</button>
@@ -16,24 +16,24 @@
                             <span v-else>{{ row.check }}</span>
                         </template>
                         <!-- 編號 -->
-                        <template #faqNo="{ row, index }">
+                        <template #faq_no="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ row.faqNo }}</span>
+                            <span v-else>{{ row.faq_no }}</span>
                         </template>
                         <!-- 分類 -->
-                        <template #faqType="{ row, index }">
+                        <template #faq_type="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ (row.faqType) }}</span>
+                            <span v-else>{{ (row.faq_type) }}</span>
                         </template>
                         <!-- 問題 -->
-                        <template #fqaQ="{ row, index }" >
+                        <template #fqa_q="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 回答 -->
-                        <template #fqaA="{ row, index }" >
+                        <template #fqa_a="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 狀態 -->
                         <template #faqState>
@@ -63,24 +63,24 @@
                             <span v-else>{{ row.check }}</span>
                         </template>
                         <!-- 編號 -->
-                        <template #faqNo="{ row, index }">
+                        <template #faq_no="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ row.faqNo }}</span>
+                            <span v-else>{{ row.faq_no }}</span>
                         </template>
                         <!-- 分類 -->
-                        <template #faqType="{ row, index }">
+                        <template #faq_type="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ (row.faqType) }}</span>
+                            <span v-else>{{ (row.faq_type) }}</span>
                         </template>
                         <!-- 問題 -->
-                        <template #fqaQ="{ row, index }" >
+                        <template #fqa_q="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 回答 -->
-                        <template #fqaA="{ row, index }" >
+                        <template #fqa_a="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 狀態 -->
                         <template #faqState>
@@ -108,24 +108,24 @@
                             <span v-else>{{ row.check }}</span>
                         </template>
                         <!-- 編號 -->
-                        <template #faqNo="{ row, index }">
+                        <template #faq_no="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ row.faqNo }}</span>
+                            <span v-else>{{ row.faq_no }}</span>
                         </template>
                         <!-- 分類 -->
-                        <template #faqType="{ row, index }">
+                        <template #faq_type="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ (row.faqType) }}</span>
+                            <span v-else>{{ (row.faq_type) }}</span>
                         </template>
                         <!-- 問題 -->
-                        <template #fqaQ="{ row, index }" >
+                        <template #fqa_q="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 回答 -->
-                        <template #fqaA="{ row, index }" >
+                        <template #fqa_a="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 狀態 -->
                         <template #faqState>
@@ -153,24 +153,24 @@
                             <span v-else>{{ row.check }}</span>
                         </template>
                         <!-- 編號 -->
-                        <template #faqNo="{ row, index }">
+                        <template #faq_no="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ row.faqNo }}</span>
+                            <span v-else>{{ row.faq_no }}</span>
                         </template>
                         <!-- 分類 -->
-                        <template #faqType="{ row, index }">
+                        <template #faq_type="{ row, index }">
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else>{{ (row.faqType) }}</span>
+                            <span v-else>{{ (row.faq_type) }}</span>
                         </template>
                         <!-- 問題 -->
-                        <template #fqaQ="{ row, index }" >
+                        <template #fqa_q="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 回答 -->
-                        <template #fqaA="{ row, index }" >
+                        <template #fqa_a="{ row, index }" >
                             <Input type="text"  v-if="editIndex === index" />
-                            <span v-else >{{ row.fqaQ }}</span>
+                            <span v-else >{{ row.fqa_q }}</span>
                         </template>
                         <!-- 狀態 -->
                         <template #faqState>
@@ -206,51 +206,51 @@
             </div>
 
 <!-- 新增表單 -->
-<div class="modal-mask" :style="modalStyle2">
-    <div class="modal-container" @click.self="toggleModal2">
-        <div class="popup ">
-            <div class="popup-head font-20">新增員工帳號</div>
-            <div class="popup-content font-18">
-                <div class="input-txt">
-                    <div class="input-info">
-                        <label for="">員工編號：
-                            <Input type="text" placeholder="" clearable style="width: 200px" />
-                        </label>
+            <div class="modal-mask" :style="modalStyle2">
+                <div class="modal-container" @click.self="toggleModal2">
+                    <div class="popup ">
+                        <div class="popup-head font-20">新增員工帳號</div>
+                        <div class="popup-content font-18">
+                            <div class="input-txt">
+                                <div class="input-info">
+                                    <label for="">員工編號：
+                                        <Input type="text" placeholder="" clearable style="width: 200px" />
+                                    </label>
+                                </div>
+                                <div class="input-info">
+                                    <label for="">員工帳號：
+                                        <Input type="text" placeholder="英數大小寫10個字元以上" clearable  style="width: 200px"/>
+                                    </label>
+                                </div>
+                                <div class="input-info">
+                                    <label for="">員工密碼：
+                                        <Input type="password" placeholder="英數大小寫8個字元以上" clearable  style="width: 200px"/>
+                                    </label>
+                                </div>
+                                <div class="input-info">
+                                    <label for="">員工姓名：
+                                        <Input type="text" placeholder="請輸入姓名" clearable  style="width: 200px"/>
+                                    </label>
+                                </div>
+                                <div class="input-info">
+                                    <label for="">員工信箱：
+                                        <Input type="email" placeholder="請輸入Email" clearable  style="width: 200px"/>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="input-switchs">
+                                <label class="state" for="">帳號狀態：
+                                    <Switch true-color="#13ce66" false-color="#E6E6E6" />
+                                </label>
+                            </div>
+                            <div class="popup-btn">
+                                <Button type="primary">新增帳號</Button>
+                                <Button @click="toggleModal2">取消</Button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="input-info">
-                        <label for="">員工帳號：
-                            <Input type="text" placeholder="英數大小寫10個字元以上" clearable  style="width: 200px"/>
-                        </label>
-                    </div>
-                    <div class="input-info">
-                        <label for="">員工密碼：
-                            <Input type="password" placeholder="英數大小寫8個字元以上" clearable  style="width: 200px"/>
-                        </label>
-                    </div>
-                    <div class="input-info">
-                        <label for="">員工姓名：
-                            <Input type="text" placeholder="請輸入姓名" clearable  style="width: 200px"/>
-                        </label>
-                    </div>
-                    <div class="input-info">
-                        <label for="">員工信箱：
-                            <Input type="email" placeholder="請輸入Email" clearable  style="width: 200px"/>
-                        </label>
-                    </div>
-                </div>
-                <div class="input-switchs">
-                    <label class="state" for="">帳號狀態：
-                        <Switch true-color="#13ce66" false-color="#E6E6E6" />
-                    </label>
-                </div>
-                <div class="popup-btn">
-                    <Button type="primary">新增帳號</Button>
-                    <Button @click="toggleModal2">取消</Button>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
 <!-- 分頁頁碼 -->
             <!-- <Page :total="40" size="small" show-elevator show-sizer /> -->
@@ -259,8 +259,6 @@
 
 </template>
 <script>
-// import { resolveComponent } from 'vue'
-// import Breadcrumb from '@/components/Breadcrumb.vue';
 export default {
     data () {
         return {
@@ -278,13 +276,13 @@ export default {
                 },
                 {
                     title: '編號',
-                    slot: 'faqNo',
+                    slot: 'faq_no',
                     width: 100,
                     align: 'center',
                 },
                 {
                     title: '分類',
-                    slot: 'faqType',
+                    slot: 'faq_type',
                     width: 120,
                     align: 'center',
                     filters: [
@@ -304,22 +302,22 @@ export default {
                             filterMultiple: false, //https://www.iviewui.com/view-ui-plus/component/form/table#Brief_Introduction
                             filterMethod (value,row) { 
                                 if (value === 1) {
-                                    return row.faqType==='會員問題';
+                                    return row.faq_type==='會員問題';
                                 } else if (value === 2) {
-                                    return row.faqType==='行程問題' ;
+                                    return row.faq_type==='行程問題' ;
                                 }else if (value === 3) {
-                                    return row.faqType==='商品問題' ;
+                                    return row.faq_type==='商品問題' ;
                                 }
                             }
                 },
                 {
                     title: '問題',
-                    slot: 'fqaQ',
+                    slot: 'fqa_q',
                     align: 'center'
                 },
                 {
                     title: '回答',
-                    slot: 'fqaA',
+                    slot: 'fqa_a',
                     align: 'center'
                 },
                 {
@@ -343,120 +341,120 @@ export default {
             ],
             dataAll: [
                 {
-                    faqNo: 'M001',
-                    faqType: '會員問題',
-                    fqaQ: '請問我忘記密碼了怎麼辦？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'M001',
+                    faq_type: '會員問題',
+                    fqa_q: '請問我忘記密碼了怎麼辦？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'M002',
-                    faqType: '會員問題',
-                    fqaQ: '請問客服電話是？我找不到。',
-                    fqaA: '您好，客服電話是：00-0000-0000',
+                    faq_no: 'M002',
+                    faq_type: '會員問題',
+                    fqa_q: '請問客服電話是？我找不到。',
+                    fqa_a: '您好，客服電話是：00-0000-0000',
                 },
                 {
-                    faqNo: 'M003',
-                    faqType: '會員問題',
-                    fqaQ: '請問可以不要填寫LINE ID嗎？',
-                    fqaA: '可以的，親。',
+                    faq_no: 'M003',
+                    faq_type: '會員問題',
+                    fqa_q: '請問可以不要填寫LINE ID嗎？',
+                    fqa_a: '可以的，親。',
                 },
                 {
-                    faqNo: 'T001',
-                    faqType: '行程問題',
-                    fqaQ: '我不小心訂錯行程了，請問要如何退訂？',
-                    fqaA: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
+                    faq_no: 'T001',
+                    faq_type: '行程問題',
+                    fqa_q: '我不小心訂錯行程了，請問要如何退訂？',
+                    fqa_a: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
 
                 },
                 {
-                    faqNo: 'T002',
-                    faqType: '行程問題',
-                    fqaQ: '我想要刷卡，但我不能填寫安全碼？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'T002',
+                    faq_type: '行程問題',
+                    fqa_q: '我想要刷卡，但我不能填寫安全碼？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'T003',
-                    faqType: '行程問題',
-                    fqaQ: '我請問我要如何查詢乘車座位？',
-                    fqaA: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
+                    faq_no: 'T003',
+                    faq_type: '行程問題',
+                    fqa_q: '我請問我要如何查詢乘車座位？',
+                    fqa_a: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
                 },
                 {
-                    faqNo: 'T004',
-                    faqType: '行程問題',
-                    fqaQ: '我購買了方案A，請問發車時間是？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'T004',
+                    faq_type: '行程問題',
+                    fqa_q: '我購買了方案A，請問發車時間是？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'P001',
-                    faqType: '商品問題',
-                    fqaQ: '請問現貨商品多久會寄出？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'P001',
+                    faq_type: '商品問題',
+                    fqa_q: '請問現貨商品多久會寄出？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'P002',
-                    faqType: '商品問題',
-                    fqaQ: '請問我要如何查詢貨況呢？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'P002',
+                    faq_type: '商品問題',
+                    fqa_q: '請問我要如何查詢貨況呢？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
             ],
             dataM: [
                 {
-                    faqNo: 'M001',
-                    faqType: '會員問題',
-                    fqaQ: '請問我忘記密碼了怎麼辦？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'M001',
+                    faq_type: '會員問題',
+                    fqa_q: '請問我忘記密碼了怎麼辦？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'M002',
-                    faqType: '會員問題',
-                    fqaQ: '請問客服電話是？我找不到。',
-                    fqaA: '您好，客服電話是：00-0000-0000',
+                    faq_no: 'M002',
+                    faq_type: '會員問題',
+                    fqa_q: '請問客服電話是？我找不到。',
+                    fqa_a: '您好，客服電話是：00-0000-0000',
                 },
                 {
-                    faqNo: 'M003',
-                    faqType: '會員問題',
-                    fqaQ: '請問可以不要填寫LINE ID嗎？',
-                    fqaA: '可以的，親。',
+                    faq_no: 'M003',
+                    faq_type: '會員問題',
+                    fqa_q: '請問可以不要填寫LINE ID嗎？',
+                    fqa_a: '可以的，親。',
                 },
             ],
             dataT: [
                 {
-                    faqNo: 'T001',
-                    faqType: '行程問題',
-                    fqaQ: '我不小心訂錯行程了，請問要如何退訂？',
-                    fqaA: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
+                    faq_no: 'T001',
+                    faq_type: '行程問題',
+                    fqa_q: '我不小心訂錯行程了，請問要如何退訂？',
+                    fqa_a: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
 
                 },
                 {
-                    faqNo: 'T002',
-                    faqType: '行程問題',
-                    fqaQ: '我想要刷卡，但我不能填寫安全碼？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'T002',
+                    faq_type: '行程問題',
+                    fqa_q: '我想要刷卡，但我不能填寫安全碼？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'T003',
-                    faqType: '行程問題',
-                    fqaQ: '我請問我要如何查詢乘車座位？',
-                    fqaA: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
+                    faq_no: 'T003',
+                    faq_type: '行程問題',
+                    fqa_q: '我請問我要如何查詢乘車座位？',
+                    fqa_a: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
                 },
                 {
-                    faqNo: 'T004',
-                    faqType: '行程問題',
-                    fqaQ: '我購買了方案A，請問發車時間是？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'T004',
+                    faq_type: '行程問題',
+                    fqa_q: '我購買了方案A，請問發車時間是？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
             ],
             dataP: [
                 {
-                    faqNo: 'P001',
-                    faqType: '商品問題',
-                    fqaQ: '請問現貨商品多久會寄出？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'P001',
+                    faq_type: '商品問題',
+                    fqa_q: '請問現貨商品多久會寄出？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
                 {
-                    faqNo: 'P002',
-                    faqType: '商品問題',
-                    fqaQ: '請問我要如何查詢貨況呢？',
-                    fqaA: '請撥打客服電話，由專人為您服務。',
+                    faq_no: 'P002',
+                    faq_type: '商品問題',
+                    fqa_q: '請問我要如何查詢貨況呢？',
+                    fqa_a: '請撥打客服電話，由專人為您服務。',
                 },
             ],
         }
@@ -499,7 +497,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../assets/Scss/pages/QA.scss";
+@import "../assets/Scss/pages/faq.scss";
 .popup{
     position: absolute;
     top: 60px;
