@@ -1,21 +1,9 @@
 <template>
     <!-- style="display:none" -->
     <div class="backstage-news" >
-        <div class="backstage-name">
-            <div>
-                <h2 class="font-36">行程方案管理</h2>
-            </div>
-            <div class="backstage-account">
-                <span class="font-18">管理員名稱</span>
-                <span class="font-18">登出</span>
-            </div>
-        </div>
         <div class="backstage-content">
-            <div class="backstage-path font-16">行程方案管理 / 行程方案列表</div>
             <div class="btn-add">
-                <button class="font-20">
-                    <router-link class="addc" to="/traveladd">新增方案</router-link>
-                </button>
+                <button class="font-20 btn-blue">新增方案</button>
             </div>
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
@@ -140,10 +128,6 @@
                         </Table>
                     </TabPane>
                 </Tabs>
-            </div>
-            <div class="btn-bottom">
-                <button class="font-18">上一頁</button>
-                <button class="font-18">下一頁</button>
             </div>
         </div>
     </div>
@@ -424,10 +408,7 @@
     text-align: end;
     margin-right: 60px;
     .font-20{
-        .addc{
-            text-decoration: none;
-            color: #2D3740;
-        }
+        padding: 8px 16px;
     }
 }
 /* 管理介面 */

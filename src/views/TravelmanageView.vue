@@ -1,20 +1,7 @@
 <template>
     <!-- style="display:none" -->
     <div class="backstage-news" >
-        <div class="backstage-name">
-            <div>
-                <h2 class="font-36">行程訂單管理</h2>
-            </div>
-            <div class="backstage-account">
-                <span class="font-18">管理員名稱</span>
-                <span class="font-18">登出</span>
-            </div>
-        </div>
         <div class="backstage-content">
-            <div class="backstage-path font-16">行程訂單管理 / 行程訂單列表</div>
-            <!-- <div class="btn-add">
-                <button class="font-20">新增方案</button>
-            </div> -->
             <div class="news-manager">
                 <Tabs  type="card" :animated="false">
                     <TabPane label="會員訂單查詢" >
@@ -230,10 +217,6 @@
                     </TabPane>
                 </Tabs>
             </div>
-            <div class="btn-bottom">
-                <button class="font-18">上一頁</button>
-                <button class="font-18">下一頁</button>
-            </div>
         </div>
     </div>
 </template>
@@ -247,6 +230,7 @@
             {
                 title: '開團編號',
                 slot: 'news_session',
+                width: 120,
                 align: 'center'
             },
             {
@@ -276,19 +260,18 @@
             {
                 title: '開放報名日期',
                 slot: 'news_number',
-                width: 160,
+                width: 130,
                 align: 'center'
             },
             {
                 title: '截止報名日期',
                 slot: 'news_status',
-                width: 160,
+                width: 130,
                 align: 'center'
             },
             {
                 title: '編輯',
                 slot: 'news_class',
-                width: 160,
                 align: 'center'
             },
                 ],
@@ -298,12 +281,13 @@
             {
                 title: '行程訂單編號',
                 slot: 'news_session',
+                width: 160,
                 align: 'center'
             },
             {
                 title: '方案編號',
                 slot: 'news_no',
-                width: 160,
+                width: 130,
                 align: 'center'
             },
             {
@@ -321,7 +305,7 @@
             {
                 title: '行程下訂日期',
                 slot: 'news_time',
-                width: 160,
+                width: 130,
                 align: 'center'
             },
             {
@@ -333,13 +317,12 @@
             {
                 title: '票券購買數量',
                 slot: 'news_number',
-                width: 160,
+                width: 130,
                 align: 'center'
             },
             {
                 title: '付款狀態',
                 slot: 'news_status',
-                width: 160,
                 align: 'center'
             },
                 ],

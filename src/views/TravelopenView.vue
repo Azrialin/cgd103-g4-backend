@@ -1,17 +1,5 @@
 <template>
     <div class="backstage-news" >
-        <div class="backstage-name">
-            <div>
-                <h2 class="font-36">開團管理</h2>
-            </div>
-            <div class="backstage-account">
-                <span class="font-18">管理員名稱</span>
-                <span class="font-18">登出</span>
-            </div>
-        </div>
-        <div class="backstage-content">
-            <div class="backstage-path font-16">開團管理 / 開團設定</div>
-        </div>
         <div class="container">
             <div class="content">
                 <div class="type opencode">
@@ -123,11 +111,12 @@
             max-width: 30%;
             display: flex;
             justify-content: space-between;
-            margin: 20px auto;
+            margin: auto;
+            padding: 20px 0px;
             .shure{
                 background-color: $back_color_main;
                 padding: 5px 30px;
-                border-radius: 10px;
+                border-radius: 6px;
                 color: #fff;
                 cursor: pointer;
                 font-size: 16px;
@@ -144,6 +133,7 @@
                 font-size: 16px;
                 width: 50%;
                 padding: 30px 0px;
+                padding-left: 20%;
             }
             .choose{
                 font-size: 16px;
@@ -151,8 +141,14 @@
                 display: flex;
                 margin: auto auto auto 0px;
                 .choosein{
+                    height: 35px;
                     width: 300px;
-                    font-size: 16px;
+                    font-size: 14px;
+                    border-radius: 6px;
+                    text-align: center;
+                    option{
+                        color: #333;
+                    }
                 }
             }
             .succe{
