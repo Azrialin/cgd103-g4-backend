@@ -260,13 +260,13 @@
             {
                 title: '開放報名日期',
                 slot: 'news_number',
-                width: 130,
+                width: 160,
                 align: 'center'
             },
             {
                 title: '截止報名日期',
                 slot: 'news_status',
-                width: 130,
+                width: 160,
                 align: 'center'
             },
             {
@@ -293,19 +293,18 @@
             {
                 title: '預約會員編號',
                 slot: 'news_class',
-                width: 120,
+                width: 130,
                 align: 'center'
             },
             {
                 title: '會員姓名',
                 slot: 'news_title',
-                width: 120,
                 align: 'center'
             },
             {
                 title: '行程下訂日期',
                 slot: 'news_time',
-                width: 130,
+                width: 160,
                 align: 'center'
             },
             {
@@ -323,6 +322,7 @@
             {
                 title: '付款狀態',
                 slot: 'news_status',
+                width: 130,
                 align: 'center'
             },
                 ],

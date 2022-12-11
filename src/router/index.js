@@ -65,11 +65,6 @@ const routes = [
 	meta: { title: '開團管理' }
 },
 {
-	path: '/traveladd',
-	name: 'traveladd',
-	component: () => import('../views/TraveladdView.vue')
-},
-{
 	path: '/productmanage',
 	name: 'productmanage',
 	component: () => import('../views/ProductManage.vue'),
