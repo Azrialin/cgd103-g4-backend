@@ -39,13 +39,16 @@ $trs: 0.5s;
 			height: fit-content;
 			padding: 35px;
 			>li{
+				position: relative;
 				>a{
 					@include font(20px);
 					padding: 10px 15px;
 					margin: 10px 0;
 					display: block;
 					color: #fff;
-					// transition: $trs;
+					&.router-link-exact-active{
+						background: $clr_blue_L2;
+					}
 					&:hover{
 						color: $clr_blue_L3;
 						transition: $trs;
@@ -80,49 +83,58 @@ $trs: 0.5s;
 					}
 				}
 				.child-list{
-					display: none
+					display: none;
+					// position: absolute;
+					// left: -100vw;
+					// opacity: 0;
+					// transition: opacity $trs, left 0s $trs;
+					padding: 0 46px;
+					text-align: start;
+					a{
+						@include font(18px);
+						color: $clr_blue_L3;
+						position: relative;
+						&:hover{
+							color: #fff;
+						}
+						&.router-link-exact-active::before{
+							content: '>';
+							position: absolute;
+							left: -20px;
+						}
+					}
+					li+li{
+						margin-top: 10px;
+					}
 				}
 				&:first-child.on{
+					>a{
+						.plus-minus span{
+							&:first-child{
+								transform: rotate(180deg);
+								transition: 0.5s;
+							}
+							&:last-child{
+								transform: rotate(-180deg);
+								transition: 0.5s;
+							}
+						}
+					}
 					.child-list{
 						display: block;
-						padding: 10px 46px 0;
-						text-align: start;
-						a{
-							@include font(18px);
-							color: $clr_blue_L3;
-							position: relative;
-							&:hover{
-								color: #fff;
-							}
-						}
-						a.show{
-							&::before{
-								content: '>';
-								position: absolute;
-								left: -20px;
-							}
-						}
-						li+li{
-							margin-top: 10px;
-						}
+						// position: relative;
+						// left: 0;
+						// opacity: 1;
+						// transition: opacity $trs;
 					}
 				}
 			}
-			>li.on{
-				>a{
-                    background: $clr_blue_L2;
-					.plus-minus span{
-						&:first-child{
-							transform: rotate(180deg);
-							transition: 0.5s;
-						}
-						&:last-child{
-							transform: rotate(-180deg);
-							transition: 0.5s;
-						}
-					}
-                }
-			}
 		}
+	}
+}
+
+#account:has(>ul>li>a.router-link-exact-active){
+	>a{
+		background: $clr_blue_L2;
 	}
 }
