@@ -11,25 +11,17 @@
 		<hr>
 		<nav>
 			<ul class="parent-list">
-				<li id="001"
-					:key="id"
-					:class="{on: id == activeItem.id}"
-					@click.stop="tabChange"
-				>
-					<a href="javascript:void(0);">
+				<li id="account" :class="toggle?'on':''">
+					<a @click.capture.self="toggle=!toggle" href="javascript:void(0);">
 						<span class="material-symbols-outlined">manage_accounts</span> 帳號管理
 						<div class="plus-minus"><span></span><span></span></div>
 					</a>
 					<ul class="child-list">
-						<li><router-link to= "/accounts/Administrator" >管理者帳號</router-link></li>
-						<li><router-link to="/accounts/Membership" >會員帳號</router-link></li>
+						<li><router-link to= "/accounts/Administrator">管理者帳號</router-link></li>
+						<li><router-link to="/accounts/Membership">會員帳號</router-link></li>
 					</ul>
 				</li>
-				<li v-for="item in items"
-					:key="item.id"
-					:class="{on: item.id == activeItem.id}"
-					@click.stop="tabChange(item)"
-				>
+				<li v-for="item in items" :key="item.name" @click="removeOn">
 					<router-link :to="{path:item.source}">
 						<span class="material-symbols-outlined">{{item.icon}}</span>
 						{{item.name}}
@@ -47,52 +39,45 @@ export default {
 	},
 	data(){
         return{
+			toggle: true,
 			activeItem: '',
             items:[
 				{
-					id: '002',
 					name: '最新消息管理',
 					source: '/news',
 					icon: 'format_list_bulleted',
 				},
 				{
-					id: '003',
 					name: '行程方案管理',
 					source: '/travelcase',
 					icon: 'edit_calendar',
 				},
 				{
-					id: '004',
 					name: '行程訂單管理',
 					source: '/travelmanage',
 					icon: 'content_paste_search',
 				},
 				{
-					id: '005',
 					name: '開團管理',
 					source: '/travelopen',
 					icon: 'pending_actions',
 				},
 				{
-					id: '006',
 					name: '商品管理',
 					source: '/productmanage',
 					icon: 'card_travel',
 				},
 				{
-					id: '007',
 					name: '商品訂單管理',
 					source: '/shoporder',
 					icon: 'content_paste_search',
 				},
 				{
-					id: '008',
 					name: '意見表管理',
 					source: '/',
 					icon: 'mark_chat_read',
 				},
 				{
-					id: '009',
 					name: 'FAQ管理',
 					source: '/faq',
 					icon: 'quiz',
@@ -101,15 +86,11 @@ export default {
         }
     },
 	methods: {
-		listOpen(tab){
-			this.classList.toggle('show');
-			this.activeItem = tab;
-		},
-		tabChange(tab){
-			this.activeItem = tab;
-			// console.log( this.activeItem);
-			// console.log( this.activeList);
+		removeOn(){
+			let account = document.getElementById("account");
+			account.classList.remove("on");
 		}
+
 	},
 }
 </script>

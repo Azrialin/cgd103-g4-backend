@@ -37,7 +37,7 @@
                 }
             }
         }
-        .modal-mask{
+        .alert-mask{
             position: absolute;
             z-index: 10;
             top: 0;
@@ -48,11 +48,11 @@
             background-color: rgba(0, 0, 0, 0.3);
             transition: opacity .3s ease;
         }
-        .modal-container{
+        .alert-container{
             display: table-cell;
             vertical-align: middle;
         }
-        .modal-body{
+        .alert-body{
             position: absolute;
             top: 50%;
             left: 50%;
@@ -75,6 +75,158 @@
             }
             Button+Button{
                 margin-left: 30px;
+            }
+        }
+    }
+
+
+
+    // 假的分頁
+    .tabs{
+        $lineClr: #DCDEE2;
+        $inactiveClr: #f8f8f9;
+        $hvrClr: #2d8cf0;
+        position: relative;
+        border-bottom: 1px solid $lineClr;
+        margin-bottom: 15px;
+        text-align: start;
+        .tab{
+            cursor: pointer;
+            position: relative;
+            top: 1px;
+            display: inline-block;
+            margin-left: 4px;
+            height: 31px;
+            background: $inactiveClr;
+            color: $clr_gray_L1;
+            border: 1px solid $lineClr;
+            border-radius: 5px 5px 0px 0px;
+            padding: 5px 14px;
+            transition: 0.3s;
+            &:hover{
+                color: $hvrClr;
+                transition: 0.3s;
+            }
+            &:active{
+                background:#fff;
+                color: $hvrClr;
+            }
+            &:focus-visible{
+                border-radius: 8px;
+            }
+            &:focus:not(:focus-visible){
+                outline: none;
+            }
+        }
+        .tab.on{
+            background:#fff;
+            border-bottom: 1px solid #fff;
+            color: $hvrClr;
+        }
+    }
+
+
+    
+    // 新增表單
+    .faq_form{
+        position: relative;
+        left: -150px;
+        width: fit-content;
+        margin: auto;
+        background: $clr_blue_L2;
+        .form-head{
+            position: relative;
+            background: $clr_blue_L0;
+            color: $clr_gray_L5;
+            padding: 10px;
+            display: flex;
+            justify-content: flex-end;
+            p{
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            span{
+                cursor: pointer;
+                transition: 0.3s;
+                &:hover{
+                    color: $clr_blue_L3;
+                    transition: 0.3s;
+                }
+            }
+        }
+        .form-body{
+            padding: 40px;
+            >div:not(:last-child){
+                margin-bottom: 30px;
+            }
+            >div:nth-of-type(1){
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                >p{
+                    color: $clr_gray_L5;
+                    vertical-align: bottom;
+                    &:not(:first-child){
+                        margin-left: 30px;
+                    }
+                    &:nth-of-type(3){
+                        color: $clr_blue_L3;
+                    }
+                }
+            }
+            >div:nth-of-type(2), >div:nth-of-type(3){
+                display: flex;
+                p{
+                    color: $clr_gray_L5;
+                    white-space: nowrap;
+                }
+                textarea{
+                    resize: none ;
+                    width: 100%;
+                    flex-grow: 1;
+                    position: relative;
+                    $dropDownTrs: 0.5s;
+                    $dropDownTxtClr: #515a6e;
+                    $dropDownTxtClr: #C5C8CE;
+                    $dropDownClr_L1: #2d8cf0;
+                    $dropDownClr_L2: #57a3f3;
+                    justify-content: center;
+                    border: 1px solid #dcdee2;
+                    border-radius: 4px;
+                    background: #fff;
+                    padding: 5px;
+                    transition: 0.3s;
+                    &:hover{
+                        border-color: $dropDownClr_L2;
+                        transition: 0.3s;
+                    }
+                    &:focus{
+                        outline: none;
+                        border-color: $dropDownClr_L2;
+                        -webkit-box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
+                        box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
+                        transition: 0.3s;
+                    }
+                    &::placeholder{
+                        color: $dropDownTxtClr;
+                    }
+                    span{
+                        // position: absolute;
+                    }
+                }
+            }
+            >div:nth-of-type(4){
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                button:nth-of-type(2){
+                    margin-left: 40px;
+                }
+                p{
+                    flex-grow: 1;
+                    color: $clr_blue_L3;
+                }
             }
         }
     }

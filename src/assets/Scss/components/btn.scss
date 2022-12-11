@@ -140,7 +140,7 @@ $btn-type:
 @mixin btn-vary_1st($main, $hover, $active, $focus){
     background: $main;
     color: $clr_fff;
-    @include border(0, transparent, 6px);
+    @include border(1px, $main, 6px);
     &:hover{
         background: $hover;
         transition: $trs;
@@ -297,4 +297,77 @@ $btn-type:
 // 按鈕:白底紅框
 .btn-danger_2nd{
     @include btn-plain_2nd($clr_danger);
+}
+
+
+
+// input(暫時用)
+%input-style{
+    vertical-align: top;
+    appearance: none;
+    outline: none;
+    @include btnPadding(10, 20);
+    @include btnFont(600, 16){
+        font-family: 'Noto Serif TC';
+        letter-spacing: 0.1em;
+        color: $clr_gray_L1;
+    }
+    &::placeholder{
+        color: $clr_gray_L2;
+        opacity: .8;
+    }
+    &:disabled{
+        background: $clr_gray_L4;
+    }
+}
+
+@mixin inputClr($main, $hover){
+    @include border(1px, $main, 10px);
+    &:active{
+        border-color: $hover;
+    }
+    &:focus{
+        border-color: $hover;
+    }
+    @content;
+}
+
+$input-type: 'blue', 'gold', 'danger';
+
+@each $type in $input-type{
+    .input-#{$type}{
+        @extend %input-style;
+    }
+}
+
+.input-blue{
+    @include inputClr($clr_blue_L2, $clr_blue_L1);
+}
+.input-gold{
+    @include inputClr($clr_gold_L2, $clr_gold_L0);
+}
+.input-danger{
+    position: relative;
+    border: 1px solid $clr_danger;
+    border-radius: 10px;
+        &::placeholder{
+            color: $clr_danger;
+        }
+        &:active{
+            outline: 2px solid lighten($clr_danger, 10);
+        }
+        &:focus{
+            outline: 2px solid lighten($clr_danger, 10);
+        }
+        // input 不支持偽元素
+        // &::after{
+        //     content: '123';
+        //     display: block;
+        //     font-size: 14px;
+        //     font-family: 'Noto Serif TC', '微軟正黑體';
+        //     font-weight: 700;
+        //     line-height: 1.2em;
+        //     letter-spacing: 0.15em;
+        // }
+
 }
