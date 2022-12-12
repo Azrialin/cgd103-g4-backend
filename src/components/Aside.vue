@@ -11,7 +11,7 @@
 		<hr>
 		<nav>
 			<ul class="parent-list">
-				<li id="account" :class="{'on':toggle}">
+				<li :class="{'on':toggle}">
 					<a @click.capture.self="toggle=!toggle" href="javascript:void(0);">
 						<span class="material-symbols-outlined">manage_accounts</span> 帳號管理
 						<div class="plus-minus"><span></span><span></span></div>
@@ -22,7 +22,6 @@
 					</ul>
 				</li>
 				<li v-for="item in items" :key="item.name" @click="toggle=false">
-				<!-- <li v-for="item in items" :key="item.name" @click="removeOn"> -->
 					<router-link :to="{path:item.source}">
 						<span class="material-symbols-outlined">{{item.icon}}</span>
 						{{item.name}}
@@ -41,7 +40,6 @@ export default {
 	data(){
         return{
 			toggle: false,
-			activeItem: '',
             items:[
 				{
 					name: '最新消息管理',
@@ -86,18 +84,9 @@ export default {
 			],
         }
     },
-	methods: {
-		// removeOn(){
-			// let account = document.getElementById("account");
-			// account.classList.remove("on");
-			// toggle = false;
-		// }
-
-	},
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "../assets/Css/Reset.css";
 @import "../assets/Scss/pages/aside.scss";

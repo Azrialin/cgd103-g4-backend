@@ -34,12 +34,39 @@ $trs: 0.5s;
 			background-color: $clr_blue_L2;
 			border-radius: 4px;
 		}
+		// 主選單
 		.parent-list{
 			position: relative;
 			height: fit-content;
 			padding: 35px;
 			>li{
 				position: relative;
+				&:first-child{
+					// 點到"帳號管理"的時候
+					&.on{
+						>a{
+							.plus-minus span{
+								&:first-child{
+									transform: rotate(180deg);
+									transition: 0.5s;
+								}
+								&:last-child{
+									transform: rotate(-180deg);
+									transition: 0.5s;
+								}
+							}
+						}
+						.child-list{
+							display: block;
+						}
+					}
+					// 點到"管理者帳號"/"會員帳號"時，"帳號管理"加背景色
+					&:has(>ul>li>a.router-link-exact-active){
+						>a{
+							background: $clr_blue_L2;
+						}
+					}
+				}
 				>a{
 					@include font(20px);
 					padding: 10px 15px;
@@ -82,12 +109,9 @@ $trs: 0.5s;
 						}
 					}
 				}
+				// 子選單
 				.child-list{
 					display: none;
-					// position: absolute;
-					// left: -100vw;
-					// opacity: 0;
-					// transition: opacity $trs, left 0s $trs;
 					padding: 0 46px;
 					text-align: start;
 					a{
@@ -107,34 +131,7 @@ $trs: 0.5s;
 						margin-top: 10px;
 					}
 				}
-				&:first-child.on{
-					>a{
-						.plus-minus span{
-							&:first-child{
-								transform: rotate(180deg);
-								transition: 0.5s;
-							}
-							&:last-child{
-								transform: rotate(-180deg);
-								transition: 0.5s;
-							}
-						}
-					}
-					.child-list{
-						display: block;
-						// position: relative;
-						// left: 0;
-						// opacity: 1;
-						// transition: opacity $trs;
-					}
-				}
 			}
 		}
-	}
-}
-
-#account:has(>ul>li>a.router-link-exact-active){
-	>a{
-		background: $clr_blue_L2;
 	}
 }

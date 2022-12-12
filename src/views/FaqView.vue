@@ -8,7 +8,7 @@
 			</div>
 <!-- 分頁標籤 -->
             <ul class="tabs">
-                <li id="tabAll" class="tab font-16" @click="TabAll">全部</li>
+                <li id="tabAll" class="tab font-16" @click="clickAll">全部</li>
                 <li class="tab font-16"
                     v-for="category in categoryList"
                     :key="category.faq_type"
@@ -78,7 +78,7 @@
                         <!-- 標題 -->
                         <div class="form-head">
                             <p class="font-20">新增 FAQ</p>
-                            <span class="material-symbols-outlined" @click.self="toggleNewForm">close</span>
+                            <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
                         </div>
                         <div class="form-body">
                             <div>
@@ -212,7 +212,7 @@
                                     <template #close><span>OFF</span></template>
                                 </Switch>
                                 <!-- 編號 -->
-                                <p class="font-16">編號：001</p>
+                                <p class="font-16">編號：{{activeList.faq_no}}</p>
                             </div>
                             <!-- 輸入框 -->
                             <div>
@@ -322,6 +322,7 @@ export default {
             value1: '',
             value2: '',
 // ----------- 分頁 ------------
+            // showAll: true,
             activeCategory: '',
             activeList: [],
             categoryList:[
@@ -402,71 +403,72 @@ export default {
                 }
             ],
 // ----------- 假資料 ------------
-            faqList: [
-                {
-                    faq_no: '001',
-                    faq_type: '會員問題',
-                    faq_q: '請問我忘記密碼了怎麼辦？',
-                    faq_a: '請撥打客服電話，由專人為您服務。',
-                    faq_status: 1,
-                },
-                {
-                    faq_no: '002',
-                    faq_type: '會員問題',
-                    faq_q: '請問客服電話是？我找不到。',
-                    faq_a: '您好，客服電話是：00-0000-0000',
-                    faq_status: 1,
-                },
-                {
-                    faq_no: '003',
-                    faq_type: '會員問題',
-                    faq_q: '請問可以不要填寫LINE ID嗎？',
-                    faq_a: '可以的，親。',
-                    faq_status: 1,
-                },
-                {
-                    faq_no: '004',
-                    faq_type: '行程問題',
-                    faq_q: '我不小心訂錯行程了，請問要如何退訂？',
-                    faq_a: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
-                    faq_status: 1,
-                },
-                {
-                    faq_no: '005',
-                    faq_type: '行程問題',
-                    faq_q: '我想要刷卡，但我不能填寫安全碼？',
-                    faq_a: '請撥打客服電話，由專人為您服務。',
-                    faq_status: 1,
-                },
-                {
-                    faq_no: '006',
-                    faq_type: '行程問題',
-                    faq_q: '我請問我要如何查詢乘車座位？',
-                    faq_a: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
-                    faq_status: 0,
-                },
-                {
-                    faq_no: '007',
-                    faq_type: '行程問題',
-                    faq_q: '我購買了方案A，請問發車時間是？',
-                    faq_a: '請撥打客服電話，由專人為您服務。',
-                    faq_status: 1,
-                },
-                {
-                    faq_no: '008',
-                    faq_type: '商品問題',
-                    faq_q: '請問現貨商品多久會寄出？',
-                    faq_a: '請撥打客服電話，由專人為您服務。',
-                    faq_status: 1,
-                },
-                {
-                    faq_no: '009',
-                    faq_type: '商品問題',
-                    faq_q: '請問我要如何查詢貨況呢？',
-                    faq_a: '請撥打客服電話，由專人為您服務。',
-                    faq_status: 1,
-                },
-            ]
+            // faqList: [
+            //     {
+            //         faq_no: '001',
+            //         faq_type: '會員問題',
+            //         faq_q: '請問我忘記密碼了怎麼辦？',
+            //         faq_a: '請撥打客服電話，由專人為您服務。',
+            //         faq_status: 1,
+            //     },
+            //     {
+            //         faq_no: '002',
+            //         faq_type: '會員問題',
+            //         faq_q: '請問客服電話是？我找不到。',
+            //         faq_a: '您好，客服電話是：00-0000-0000',
+            //         faq_status: 1,
+            //     },
+            //     {
+            //         faq_no: '003',
+            //         faq_type: '會員問題',
+            //         faq_q: '請問可以不要填寫LINE ID嗎？',
+            //         faq_a: '可以的，親。',
+            //         faq_status: 1,
+            //     },
+            //     {
+            //         faq_no: '004',
+            //         faq_type: '行程問題',
+            //         faq_q: '我不小心訂錯行程了，請問要如何退訂？',
+            //         faq_a: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
+            //         faq_status: 1,
+            //     },
+            //     {
+            //         faq_no: '005',
+            //         faq_type: '行程問題',
+            //         faq_q: '我想要刷卡，但我不能填寫安全碼？',
+            //         faq_a: '請撥打客服電話，由專人為您服務。',
+            //         faq_status: 1,
+            //     },
+            //     {
+            //         faq_no: '006',
+            //         faq_type: '行程問題',
+            //         faq_q: '我請問我要如何查詢乘車座位？',
+            //         faq_a: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
+            //         faq_status: 0,
+            //     },
+            //     {
+            //         faq_no: '007',
+            //         faq_type: '行程問題',
+            //         faq_q: '我購買了方案A，請問發車時間是？',
+            //         faq_a: '請撥打客服電話，由專人為您服務。',
+            //         faq_status: 1,
+            //     },
+            //     {
+            //         faq_no: '008',
+            //         faq_type: '商品問題',
+            //         faq_q: '請問現貨商品多久會寄出？',
+            //         faq_a: '請撥打客服電話，由專人為您服務。',
+            //         faq_status: 1,
+            //     },
+            //     {
+            //         faq_no: '009',
+            //         faq_type: '商品問題',
+            //         faq_q: '請問我要如何查詢貨況呢？',
+            //         faq_a: '請撥打客服電話，由專人為您服務。',
+            //         faq_status: 1,
+            //     },
+            // ],
+            activeIndex: null,
         }
     },
     computed: {
@@ -485,13 +487,23 @@ export default {
                 'display': this.ShowNewForm ? '' : 'none'
             };
         },
-        EditForm(){
+        EditForm(no){
+            // this.ShowEditForm = !this.ShowEditForm;
+            this.activeIndex = no;
             return {
                 'display': this.ShowEditForm ? '' : 'none'
             };
         },
     },
     methods: {
+        // 測試本地資料庫
+        getFaqData(){
+			fetch('http://localhost/CGD103_PHP_class/PDO/list.php')
+            .then(res=>res.json())
+            .then(json=>{
+                this.faqList = json;
+            })
+		},
         add(){
             this.Alert_loading = true;
             setTimeout(() => {
@@ -535,22 +547,27 @@ export default {
         toggleNewForm(){
             this.ShowNewForm = !this.ShowNewForm;
         },
-        toggleEditForm(){
+        toggleEditForm(no){
             this.ShowEditForm = !this.ShowEditForm;
+            this.activeIndex = no;
         },
 // ----------- 分頁換頁 ------------
-        TabAll(e){
+        clickAll(e){
             this.activeList = this.faqList;
+            // showAll = true;
             e.target.classList.add('on');
             e.target.parentNode.childNodes[2].classList.remove('on');
             e.target.parentNode.childNodes[3].classList.remove('on');
             e.target.parentNode.childNodes[4].classList.remove('on');
+            // console.log(showAll);
         },
         changeTab(tab){
+            // showAll = false;
             this.activeCategory = tab;
             this.activeList = this.faqList.filter(item => {
                 return item.faq_type === tab.faq_type;
             });
+            // console.log(showAll);
             let tabAll = document.getElementById("tabAll");
             tabAll.classList.remove('on');
         },
@@ -584,7 +601,11 @@ export default {
             }
             // console.log(this.faqList[index].faq_status);
         },
-    }
+    },
+    created(){
+		this.getFaqData();
+	},
+	mounted(){},
 }
 
 </script>
