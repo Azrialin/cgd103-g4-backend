@@ -170,8 +170,8 @@
                     <div class="faq_form">
                         <!-- 標題 -->
                         <div class="form-head">
-                            <p class="font-20">新增 FAQ</p>
-                            <span class="material-symbols-outlined" @click.self="toggleNewForm">close</span>
+                            <p class="font-20">編輯 FAQ</p>
+                            <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
                         </div>
                         <div class="form-body">
                             <div>
@@ -212,7 +212,7 @@
                                     <template #close><span>OFF</span></template>
                                 </Switch>
                                 <!-- 編號 -->
-                                <p class="font-16">編號：新增後生成</p>
+                                <p class="font-16">編號：001</p>
                             </div>
                             <!-- 輸入框 -->
                             <div>
