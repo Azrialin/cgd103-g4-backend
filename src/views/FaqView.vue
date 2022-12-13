@@ -72,98 +72,103 @@
                 </template>
             </Table>
 <!-- 新增表單 -->
-            <div class="alert-mask" :style="NewForm">
-                <div class="alert-container">
-                    <div class="faq_form">
-                        <!-- 標題 -->
-                        <div class="form-head">
-                            <p class="font-20">新增 FAQ</p>
-                            <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
+<form id="myForm" method="post" enctype="multipart/form-data">
+    <div class="alert-mask" :style="NewForm">
+        <div class="alert-container">
+            <div class="faq_form">
+                <!-- 標題 -->
+                <div class="form-head">
+                    <p class="font-20">新增 FAQ</p>
+                    <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
+                </div>
+                <div class="form-body">
+                    <div>
+                        <input type="text" name="faq_type">
+                        <input type="text" name="faq_status">
+                        <p class="font-16">＊類別：</p>
+                        <!-- 下拉選單 -->
+                        <!-- <Dropdown
+                            :dropdownWidth="dropdownWidth"
+                            :activeTxt="activeTxt"
+                            :dropDownList="dropDownList"
+                        /> -->
+                        <div class="dropDown">
+                            <div class="dropdown-select font-16"
+                                :style="{ width: dropdownWidth }"
+                                :class="toggle?'on':''"
+                                @click="toggle=!toggle"
+                            >
+                                <p >{{activeTxt}}</p>
+                                <span class="Icon material-symbols-outlined">expand_more</span>
+                            </div>
+                            <ul class="dropdown-list" :class="toggle?'show':''">
+                                <li class="dropdown-item font-16"
+                                    :style="{ width: dropdownWidth }"
+                                    v-for="(dropDownItem, index) in dropDownList"
+                                    :key="dropDownItem"
+                                    @click.self="changeSelect(index)"
+                                >
+                                    {{dropDownItem.text}}
+                                </li>
+                            </ul>
                         </div>
-                        <div class="form-body">
-                            <div>
-                                <p class="font-16">＊類別：</p>
-                                <!-- 下拉選單 -->
-                                <!-- <Dropdown
-                                    :dropdownWidth="dropdownWidth"
-                                    :activeTxt="activeTxt"
-                                    :dropDownList="dropDownList"
-                                /> -->
-                                <div class="dropDown">
-                                    <div class="dropdown-select font-16"
-                                        :style="{ width: dropdownWidth }"
-                                        :class="toggle?'on':''"
-                                        @click="toggle=!toggle"
-                                    >
-                                        <p >{{activeTxt}}</p>
-                                        <span class="Icon material-symbols-outlined">expand_more</span>
-                                    </div>
-                                    <ul class="dropdown-list" :class="toggle?'show':''">
-                                        <li class="dropdown-item font-16"
-                                            :style="{ width: dropdownWidth }"
-                                            v-for="(dropDownItem, index) in dropDownList"
-                                            :key="dropDownItem"
-                                            @click.self="changeSelect(index)"
-                                        >
-                                            {{dropDownItem.text}}
-                                        </li>
-                                    </ul>
-                                </div>
-                                <!-- 狀態開關 -->
-                                <p class="font-16">＊狀態：</p>
-                                <Switch size="large"
-                                    true-color="#6C9255"
-                                    false-color="#E6E6E6"
-                                >
-                                    <template #open><span>ON</span></template>
-                                    <template #close><span>OFF</span></template>
-                                </Switch>
-                                <!-- 編號 -->
-                                <p class="font-16">編號：新增後生成</p>
-                            </div>
-                            <!-- 輸入框 -->
-                            <div>
-                                <p class="font-16">＊問題：</p>
-                                <textarea
-                                    showCount
-                                    class="font-16"
-                                    rows="3"
-                                    maxlength="100"
-                                    v-model="value1"
-                                    placeholder="Enter something..."
-                                >
-                                </textarea>
-                            </div>
-                            <div>
-                                <p class="font-16">＊回覆：</p>
-                                <textarea
-                                    showCount
-                                    class="font-16"
-                                    rows="10"
-                                    maxlength="100"
-                                    v-model="value2"
-                                    placeholder="Enter something..."
-                                >
-                                </textarea>
-                            </div>
-                            <!-- <span class="ivu-input-word-count">0/100</span> -->
-                            <!-- <Space class="inputs">
-                                <Input class="input question"
-                                    v-model="value1" maxlength="100"
-                                    show-word-limit placeholder="Enter something..."
-                                    style="width: 200px"/>
-                            </Space> -->
-                            <!-- 按鈕 -->
-                            <div>
-                                <p class="font-16">＊為必填／必選項目</p>
-                                <button class="btn-blue_2nd" @click="ShowCheckAlert = true">取消</button>
-                                <!-- <button class="btn-blue_2nd" @click.self="toggleNewForm">取消</button> -->
-                                <button class="btn-blue" @click="add">新增</button>
-                            </div>
-                        </div>
+                        <!-- 狀態開關 -->
+                        <p class="font-16">＊狀態：</p>
+                        <Switch size="large"
+                            true-color="#6C9255"
+                            false-color="#E6E6E6"
+                        >
+                            <template #open><span>ON</span></template>
+                            <template #close><span>OFF</span></template>
+                        </Switch>
+                        <!-- 編號 -->
+                        <p class="font-16">編號：新增後生成</p>
+                    </div>
+                    <!-- 輸入框 -->
+                    <div>
+                        <p class="font-16">＊問題：</p>
+                        <textarea name="faq_q"
+                            showCount
+                            class="font-16"
+                            rows="3"
+                            maxlength="100"
+                            v-model="value1"
+                            placeholder="Enter something..."
+                        >
+                        </textarea>
+                    </div>
+                    <div>
+                        <p class="font-16">＊回覆：</p>
+                        <textarea name="faq_a"
+                            showCount
+                            class="font-16"
+                            rows="10"
+                            maxlength="100"
+                            v-model="value2"
+                            placeholder="Enter something..."
+                        >
+                        </textarea>
+                    </div>
+                    <!-- <span class="ivu-input-word-count">0/100</span> -->
+                    <!-- <Space class="inputs">
+                        <Input class="input question"
+                            v-model="value1" maxlength="100"
+                            show-word-limit placeholder="Enter something..."
+                            style="width: 200px"/>
+                    </Space> -->
+                    <!-- 按鈕 -->
+                    <div>
+                        <p class="font-16">＊為必填／必選項目</p>
+                        <button class="btn-blue_2nd" @click="ShowCheckAlert = true">取消</button>
+                        <!-- <button class="btn-blue_2nd" @click.self="toggleNewForm">取消</button> -->
+                        <!-- <button class="btn-blue" @click="add">新增</button> -->
+                        <button class="btn-blue" @click="addFaqData">新增</button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</form>
 <!-- 編輯表單 -->
             <div class="alert-mask" :style="EditForm">
                 <div class="alert-container">
@@ -513,9 +518,22 @@ export default {
                     faqVue.faqList = JSON.parse(xhr.responseText);
 				}
 			}
-			xhr.open("get", "http://localhost/CGD103_PHP_class/PDO/list.php", true);
+			// xhr.open("get", "http://localhost/CGD103_PHP_class/PDO/list.php", true);
+			xhr.open("get", "http://localhost/CGD103_PHP_class/project_books_formData/getFaqData.php", true);
 			xhr.send(null);
 		},
+// 測試新增資料
+        addFaqData(){
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function(){
+                let result = JSON.parse(xhr.responseText);
+                alert(result.msg);
+                // document.getElementById("btnReset").click();
+                // $id("btnReset").click();
+            }
+            xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faq_insert.php", true);
+            xhr.send(new FormData(document.getElementById("myForm")));
+        },
 // --------------------
         add(){
             this.Alert_loading = true;
