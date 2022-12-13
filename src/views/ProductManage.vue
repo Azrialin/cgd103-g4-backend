@@ -133,22 +133,32 @@
             </div>
           </div>
           <div class="pro-pic">
-            <div class="input-title">
-              <label class="test" for=""
+            <div class="input-title-pic">
+              <label class="picpic" for=""
                 >商品主圖：
-                <input type="file" />
+                <input type="file" @change="previewImage" class="pic-input"/>
+                <div v-if="preview" class="pro-pic-preview">
+                  <img :src="preview"/>
+                </div>
               </label>
             </div>
-            <div class="input-title">
-              <label class="test" for=""
-                >商品副圖A：
-                <input type="file" />
+            
+            <div class="input-title-pic">
+              <label class="picpic" for=""
+                >商品副圖：
+                <input type="file" @change="previewImage1" class="pic-input"/>
+                <div v-if="preview1" class="pro-pic-preview">
+                  <img :src="preview1"/>
+                </div>
               </label>
             </div>
-            <div class="input-title">
-              <label class="test" for=""
-                >商品副圖B：
-                <input type="file" />
+            <div class="input-title-pic">
+              <label class="picpic" for=""
+                >商品副圖：
+                <input type="file" @change="previewImage2" class="pic-input"/>
+                <div v-if="preview2" class="pro-pic-preview">
+                  <img :src="preview2"/>
+                </div>
               </label>
             </div>
           </div>
@@ -242,20 +252,20 @@
         </div>
         <div class="pro-pic">
           <div class="input-title">
-            <label class="test" for=""
+            <label class="picpic" for=""
               >商品主圖：
               <input type="file" />
             </label>
           </div>
           <div class="input-title">
-            <label class="test" for=""
-              >商品副圖A：
+            <label class="picpic" for=""
+              >商品副圖：
               <input type="file" />
             </label>
           </div>
           <div class="input-title">
-            <label class="test" for=""
-              >商品副圖B：
+            <label class="picpic" for=""
+              >商品副圖：
               <input type="file" />
             </label>
           </div>
@@ -294,6 +304,10 @@ export default {
   components: {},
   data() {
     return {
+      preview: null,  //預覽主圖片
+      preview1: null,  //預覽圖片a
+      preview2: null,  //預覽圖片b
+
       seenNew: false, //新表格彈窗，綁新表單v-show、按鈕@click="newToggle"
       seeOnData: false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
       size: "default", //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
@@ -506,6 +520,42 @@ export default {
     };
   },
   methods: {
+    //預覽主圖片
+    previewImage: function(event) {
+      var input = event.target;
+      if (input.files) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          this.preview = e.target.result;
+        }
+        this.image=input.files[0];
+        reader.readAsDataURL(input.files[0]);
+      }
+    },
+    //預覽圖片a
+    previewImage1: function(event) {
+      var input = event.target;
+      if (input.files) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          this.preview1 = e.target.result;
+        }
+        this.image=input.files[0];
+        reader.readAsDataURL(input.files[0]);
+      }
+    },
+    //預覽圖片b
+    previewImage2: function(event) {
+      var input = event.target;
+      if (input.files) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          this.preview2 = e.target.result;
+        }
+        this.image=input.files[0];
+        reader.readAsDataURL(input.files[0]);
+      }
+    },
     newToggle() {
       //新表單
       this.seenNew = !this.seenNew;
@@ -578,11 +628,33 @@ export default {
 .input-title {
   margin-bottom: 20px;
 }
-.input-txt,
-.pro-pic {
-  width: 50%;
+.input-title-pic {
+  margin-bottom: 20px;
+}
+.input-txt{
+  width: 45%;
   margin: 20px;
   text-align: end;
+}
+.pro-pic{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 60%;
+  margin: 20px;
+}
+.picpic{
+  display: flex;
+  align-items: center;
+}
+.pic-input{
+  width: 40%;
+}
+.pro-pic-preview{
+  width: 30%;
+  img{
+    width: 70%;
+  }
 }
 
 .popup-btn {
@@ -627,9 +699,9 @@ export default {
   padding-right: 20px;
 }
 
-.check-des {
-  margin-top: 70px;
-}
+// .check-des {
+//   margin-top: 70px;
+// }
 
 .popup-box button {
   margin-top: 30px;
@@ -643,7 +715,7 @@ export default {
 }
 
 /* 確認彈窗文字 */
-.popup-box .check-des {
+.popup-box {
   translate: 0 -16px;
 }
 
