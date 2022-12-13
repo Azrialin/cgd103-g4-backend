@@ -95,7 +95,7 @@
                                         :class="toggle?'on':''"
                                         @click="toggle=!toggle"
                                     >
-                                        <p :key="dropDownItem">{{activeTxt}}</p>
+                                        <p >{{activeTxt}}</p>
                                         <span class="Icon material-symbols-outlined">expand_more</span>
                                     </div>
                                     <ul class="dropdown-list" :class="toggle?'show':''">
@@ -188,14 +188,14 @@
                                         :class="toggle?'on':''"
                                         @click="toggle=!toggle"
                                     >
-                                        <p :key="dropDownItem">{{activeTxt}}</p>
+                                        <p>{{activeTxt}}</p>
                                         <span class="Icon material-symbols-outlined">expand_more</span>
                                     </div>
                                     <ul class="dropdown-list" :class="toggle?'show':''">
                                         <li class="dropdown-item font-16"
                                             :style="{ width: dropdownWidth }"
                                             v-for="(dropDownItem, index) in dropDownList"
-                                            :key="dropDownItem"
+                                            :key="index"
                                             @click.self="changeSelect(index)"
                                         >
                                             {{dropDownItem.text}}
@@ -403,71 +403,71 @@ export default {
                 }
             ],
 // ----------- 假資料 ------------
-            // faqList: [
-            //     {
-            //         faq_no: '001',
-            //         faq_type: '會員問題',
-            //         faq_q: '請問我忘記密碼了怎麼辦？',
-            //         faq_a: '請撥打客服電話，由專人為您服務。',
-            //         faq_status: 1,
-            //     },
-            //     {
-            //         faq_no: '002',
-            //         faq_type: '會員問題',
-            //         faq_q: '請問客服電話是？我找不到。',
-            //         faq_a: '您好，客服電話是：00-0000-0000',
-            //         faq_status: 1,
-            //     },
-            //     {
-            //         faq_no: '003',
-            //         faq_type: '會員問題',
-            //         faq_q: '請問可以不要填寫LINE ID嗎？',
-            //         faq_a: '可以的，親。',
-            //         faq_status: 1,
-            //     },
-            //     {
-            //         faq_no: '004',
-            //         faq_type: '行程問題',
-            //         faq_q: '我不小心訂錯行程了，請問要如何退訂？',
-            //         faq_a: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
-            //         faq_status: 1,
-            //     },
-            //     {
-            //         faq_no: '005',
-            //         faq_type: '行程問題',
-            //         faq_q: '我想要刷卡，但我不能填寫安全碼？',
-            //         faq_a: '請撥打客服電話，由專人為您服務。',
-            //         faq_status: 1,
-            //     },
-            //     {
-            //         faq_no: '006',
-            //         faq_type: '行程問題',
-            //         faq_q: '我請問我要如何查詢乘車座位？',
-            //         faq_a: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
-            //         faq_status: 0,
-            //     },
-            //     {
-            //         faq_no: '007',
-            //         faq_type: '行程問題',
-            //         faq_q: '我購買了方案A，請問發車時間是？',
-            //         faq_a: '請撥打客服電話，由專人為您服務。',
-            //         faq_status: 1,
-            //     },
-            //     {
-            //         faq_no: '008',
-            //         faq_type: '商品問題',
-            //         faq_q: '請問現貨商品多久會寄出？',
-            //         faq_a: '請撥打客服電話，由專人為您服務。',
-            //         faq_status: 1,
-            //     },
-            //     {
-            //         faq_no: '009',
-            //         faq_type: '商品問題',
-            //         faq_q: '請問我要如何查詢貨況呢？',
-            //         faq_a: '請撥打客服電話，由專人為您服務。',
-            //         faq_status: 1,
-            //     },
-            // ],
+            faqList: [
+                // {
+                //     faq_no: '001',
+                //     faq_type: '會員問題',
+                //     faq_q: '請問我忘記密碼了怎麼辦？',
+                //     faq_a: '請撥打客服電話，由專人為您服務。',
+                //     faq_status: 1,
+                // },
+                // {
+                //     faq_no: '002',
+                //     faq_type: '會員問題',
+                //     faq_q: '請問客服電話是？我找不到。',
+                //     faq_a: '您好，客服電話是：00-0000-0000',
+                //     faq_status: 1,
+                // },
+                // {
+                //     faq_no: '003',
+                //     faq_type: '會員問題',
+                //     faq_q: '請問可以不要填寫LINE ID嗎？',
+                //     faq_a: '可以的，親。',
+                //     faq_status: 1,
+                // },
+                // {
+                //     faq_no: '004',
+                //     faq_type: '行程問題',
+                //     faq_q: '我不小心訂錯行程了，請問要如何退訂？',
+                //     faq_a: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
+                //     faq_status: 1,
+                // },
+                // {
+                //     faq_no: '005',
+                //     faq_type: '行程問題',
+                //     faq_q: '我想要刷卡，但我不能填寫安全碼？',
+                //     faq_a: '請撥打客服電話，由專人為您服務。',
+                //     faq_status: 1,
+                // },
+                // {
+                //     faq_no: '006',
+                //     faq_type: '行程問題',
+                //     faq_q: '我請問我要如何查詢乘車座位？',
+                //     faq_a: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
+                //     faq_status: 0,
+                // },
+                // {
+                //     faq_no: '007',
+                //     faq_type: '行程問題',
+                //     faq_q: '我購買了方案A，請問發車時間是？',
+                //     faq_a: '請撥打客服電話，由專人為您服務。',
+                //     faq_status: 1,
+                // },
+                // {
+                //     faq_no: '008',
+                //     faq_type: '商品問題',
+                //     faq_q: '請問現貨商品多久會寄出？',
+                //     faq_a: '請撥打客服電話，由專人為您服務。',
+                //     faq_status: 1,
+                // },
+                // {
+                //     faq_no: '009',
+                //     faq_type: '商品問題',
+                //     faq_q: '請問我要如何查詢貨況呢？',
+                //     faq_a: '請撥打客服電話，由專人為您服務。',
+                //     faq_status: 1,
+                // },
+            ],
             activeIndex: null,
         }
     },
@@ -496,14 +496,27 @@ export default {
         },
     },
     methods: {
-        // 測試本地資料庫
-        getFaqData(){
-			fetch('http://localhost/CGD103_PHP_class/PDO/list.php')
-            .then(res=>res.json())
-            .then(json=>{
-                this.faqList = json;
-            })
+// 測試本地資料庫 fetch
+        // getFaqData(){
+        //     fetch('http://localhost/CGD103_PHP_class/PDO/list.php')
+        //     .then(res=>res.json())
+        //     .then(json=>{
+        //         this.faqList = json;
+        //     })
+		// },
+// 測試本地資料庫 XML
+        getFaqData_XML(){
+            let faqVue = this;
+			let xhr = new XMLHttpRequest();
+			xhr.onload = ()=>{
+                if(xhr.status == 200){
+                    faqVue.faqList = JSON.parse(xhr.responseText);
+				}
+			}
+			xhr.open("get", "http://localhost/CGD103_PHP_class/PDO/list.php", true);
+			xhr.send(null);
 		},
+// --------------------
         add(){
             this.Alert_loading = true;
             setTimeout(() => {
@@ -553,6 +566,8 @@ export default {
         },
 // ----------- 分頁換頁 ------------
         clickAll(e){
+            console.log(this.faqList);
+            console.log(this.activeList);
             this.activeList = this.faqList;
             // showAll = true;
             e.target.classList.add('on');
@@ -603,9 +618,11 @@ export default {
         },
     },
     created(){
-		this.getFaqData();
+		/* this.getFaqData(); */
 	},
-	mounted(){},
+	mounted(){
+        this.getFaqData_XML();
+    },
 }
 
 </script>
