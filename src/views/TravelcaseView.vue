@@ -1,4 +1,45 @@
 <template>
+    <div class="popup" v-show="seenAdd" >
+        <div class="popup-head font-20">編輯資料</div>
+        <div class="popup-content font-18">
+          <div class="input-txt">
+              <div class="input-info">
+                  <label for="">前台區塊：
+                      <Input type="text" clearable style="width: 200px" />
+                  </label>
+              </div>
+              <div class="input-info">
+                  <label for="">方案編號：
+                      <Input type="text" clearable  style="width: 200px"/>
+                  </label>
+              </div>
+              <div class="input-info">
+                  <label for="">上架日期：
+                      <Input type="" clearable  style="width: 200px"/>
+                  </label>
+              </div>
+              <div class="input-info">
+                  <label for="">標題：
+                      <Input type="email" clearable  style="width: 200px"/>
+                  </label>
+              </div>
+              <div class="input-info">
+                  <label for="">推薦商品：
+                      <Input type="tel" clearable  style="width: 200px"/>
+                  </label>
+              </div>
+              <div class="input-info">
+                  <label for="">狀態：
+                      <Input type="tel" clearable  style="width: 200px"/>
+                  </label>
+              </div>
+          </div>
+        </div> 
+        <div class="popup-btn">
+            <!-- <Button type="primary">新增帳號</Button> -->
+            <Button @click="seenAdd=false">返回</Button>
+        </div>
+    </div>
     <div class="backstage-newss" v-show="addnew" >
         <div class="container" @click.self="dbcheck">
             <div class="content">
@@ -122,7 +163,7 @@
                             <!-- 按鈕 -->
                             <template #action>
                                 <div class="btn-box">
-                                    <Button>編輯</Button>
+                                    <Button @click="seenAdd=!seenAdd">編輯</Button>
                                 </div>
                             </template>
                         </Table>
@@ -162,7 +203,7 @@
                             <!-- 按鈕 -->
                             <template #action>
                                 <div class="btn-box">
-                                    <Button >編輯</Button>
+                                    <Button @click="seenAdd=!seenAdd">編輯</Button>
                                 </div>
                             </template>
                         </Table>
@@ -202,7 +243,7 @@
                             <!-- 按鈕 -->
                             <template #action>
                                 <div class="btn-box">
-                                    <Button >編輯</Button>
+                                    <Button @click="seenAdd=!seenAdd">編輯</Button>
                                 </div>
                             </template>
                         </Table>
@@ -217,6 +258,7 @@
     export default {
         data () {
             return {
+                seenAdd:false,
                 selected:"",
                 value:"",
                 formItem: {
@@ -381,6 +423,16 @@
 /* -------------------彈窗 ------------------------*/
 @import "@/assets/Scss/base/color.scss";
 
+.popup{
+    .popup-content{
+    text-align: center;
+        .input-txt{
+            .input-info{
+                padding: 20px;
+            }
+        }
+    }
+}
 .backstage-newss{
     width: calc(100vw - 300px);
     background-color: rgba(#000,0.3);
@@ -417,11 +469,11 @@
     padding: 40px 0px;
     width: 100%;
     .content{
-        height: 700px;
+        height: 650px;
         overflow-y: scroll;
         width: 100%;
         max-width: 768px;
-        margin: auto;
+        margin: 0px auto;
         background-color: $back_color_active;
         .delcan{
             width: 100%;
