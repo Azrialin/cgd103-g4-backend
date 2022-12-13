@@ -58,54 +58,54 @@
           <div class="input-txt">
               <div class="input-info">
                   <label for="">會員編號：
-                      <Input type="text" placeholder="" clearable style="width: 200px" />
+                      <Input type="text" clearable style="width: 200px" />
                   </label>
               </div>
               <div class="input-info">
                   <label for="">會員姓名：
-                      <Input type="text" placeholder="英數大小寫10個字元以上" clearable  style="width: 200px"/>
+                      <Input type="text" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">會員性別：
-                      <Input type="" placeholder="性別" clearable  style="width: 200px"/>
+                      <Input type="" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">會員信箱：
-                      <Input type="email" placeholder="請輸入e-mail" clearable  style="width: 200px"/>
+                      <Input type="email" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">電話號碼：
-                      <Input type="tel" placeholder="請輸入電話號碼" clearable  style="width: 200px"/>
+                      <Input type="tel" clearable  style="width: 200px"/>
                   </label>
               </div>
           </div>
           <div class="input-txt">
               <div class="input-info">
                   <label for="">會員國籍：
-                      <Input type="text" placeholder="" clearable style="width: 200px" />
+                      <Input type="text" clearable style="width: 200px" />
                   </label>
               </div>
               <div class="input-info">
                   <label for="">會員地址：
-                      <Input type="text" placeholder="英數大小寫10個字元以上" clearable  style="width: 200px"/>
+                      <Input type="text" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">英文姓名：
-                      <Input type="" placeholder="性別" clearable  style="width: 200px"/>
+                      <Input type="" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">護照號碼：
-                      <Input type="email" placeholder="請輸入e-mail" clearable  style="width: 200px"/>
+                      <Input type="email" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">信用卡號：
-                      <Input type="tel" placeholder="請輸入電話號碼" clearable  style="width: 200px"/>
+                      <Input type="tel" clearable  style="width: 200px"/>
                   </label>
               </div>
           </div>
