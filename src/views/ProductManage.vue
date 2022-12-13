@@ -20,6 +20,16 @@
           <Input type="text" v-if="editIndex === index" />
           <span v-else>{{ row.product_name }}</span>
         </template>
+        <!-- 主類別 -->
+        <template #product_series="{ row, index }">
+          <Input type="text" v-if="editIndex === index" />
+          <span v-else>{{ row.product_series }}</span>
+        </template>
+        <!-- 子類別 -->
+        <template #product_type="{ row, index }">
+          <Input type="text" v-if="editIndex === index" />
+          <span v-else>{{ row.product_type }}</span>
+        </template>
         <!-- 商品價格 -->
         <template #product_price="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
@@ -42,41 +52,43 @@
     </div>
 
     <!-- style="display:none" -->
-    <!--一張全新表單 -->
+    <!--新增商品 -->
     <keep-alive>
       <div class="popup" v-show="seenNew">
-        <div class="popup-head font-20">
-          <div class="type opencode">
-            <p class="font-20">商品編號 001</p>
-          </div>
-        </div>
+        <div class="popup-head font-20">商品資訊</div>
         <div class="popup-content font-18">
-          <div class="popup-data">
-            <label for=""
-              >狀態(必填)
-              <select name="" id="">
-                <option value="on">上架</option>
-                <option value="off">下架</option>
-              </select>
-            </label>
-            <label for=""
-              >主類別
-              <select name="" id="">
-                <option value="gift">紀念品系列</option>
-                <option value="food">特產系列</option>
-              </select>
-            </label>
-            <label for=""
-              >子類別
-              <select name="" id="">
-                <option value="bottles">水壺</option>
-                <option value="boxes">便當盒</option>
-                <option value="snacks">零食</option>
-                <option value="sauce">調味料</option>
-              </select>
-            </label>
-          </div>
           <div class="input-txt">
+            <div class="input-title">
+              <label for=""
+                >商品編號：
+                <Input
+                  placeholder="預設"
+                  clearable
+                  style="width: 300px"
+                  disabled
+                />
+              </label>
+            </div>
+            <div class="input-title">
+              <label for=""
+                >主類別:
+                <select name="" id="" style="width: 300px">
+                  <option value="gift">紀念品系列</option>
+                  <option value="food">特產系列</option>
+                </select>
+              </label>
+            </div>
+            <div class="input-title">
+              <label for=""
+                >子類別:
+                <select name="" id="" style="width: 300px">
+                  <option value="bottles">水壺</option>
+                  <option value="boxes">便當盒</option>
+                  <option value="snacks">零食</option>
+                  <option value="sauce">調味料</option>
+                </select>
+              </label>
+            </div>
             <div class="input-title">
               <label for=""
                 >商品名稱：
@@ -87,248 +99,211 @@
                 />
               </label>
             </div>
-            <div class="input-des">
+            <div class="input-title">
               <label for=""
                 >商品價格：
                 <Input
                   type="number"
-                  :value="price"
+                  number="true"
                   placeholder="請輸入商品價格"
                   style="width: 300px"
                 />
               </label>
             </div>
-            <div class="input-des">
+            <div class="input-title">
               <label for=""
-                >內文：
+                >商品介紹：
                 <Input
                   clearable
                   type="textarea"
                   :rows="4"
-                  placeholder="詳細內文(承)"
-                  style="width: 500px"
+                  placeholder="請輸入商品介紹"
+                  style="width: 300px"
                 />
               </label>
             </div>
-            <div class="input-des">
+            <div class="input-title">
               <label for=""
-                >內文：
-                <Input
-                  clearable
-                  type="textarea"
-                  :rows="4"
-                  placeholder="詳細內文(轉)"
-                  style="width: 500px"
-                />
-              </label>
-            </div>
-            <div class="input-des">
-              <label for=""
-                >結尾：
-                <Input
-                  clearable
-                  type="textarea"
-                  :rows="2"
-                  placeholder="請輸入內容"
-                  style="width: 500px"
-                />
+                >商品狀態:
+                <select name="" id="" style="width: 300px">
+                  <option value="on">上架</option>
+                  <option value="off">下架</option>
+                </select>
               </label>
             </div>
           </div>
-          <div class="input-pic">
-            <label class="test" for=""
-              >插入圖片：
-              <input type="file" />
-            </label>
+          <div class="pro-pic">
+            <div class="input-title">
+              <label class="test" for=""
+                >商品主圖：
+                <input type="file" />
+              </label>
+            </div>
+            <div class="input-title">
+              <label class="test" for=""
+                >商品副圖A：
+                <input type="file" />
+              </label>
+            </div>
+            <div class="input-title">
+              <label class="test" for=""
+                >商品副圖B：
+                <input type="file" />
+              </label>
+            </div>
           </div>
-          <div class="input-pic-des">
-            <label for=""
-              >圖片敘述：
-              <Input
-                placeholder="請輸入圖片敘述"
-                clearable
-                style="width: 500px"
-              />
-            </label>
-          </div>
-          <div class="popup-btn">
-            <button class="btn-blue_2nd" @click="newToggle">取消</button>
-            <button class="btn-blue" @click="newToggle">確認</button>
-            <!-- 確認鍵功能待補，暫放toggle -->
-          </div>
+        </div>
+        <div class="popup-btn">
+          <button class="btn-blue_2nd" @click="newToggle">取消</button>
+          <button class="btn-blue" @click="newToggle">確認</button>
+          <!-- 確認鍵功能待補，暫放toggle -->
         </div>
       </div>
     </keep-alive>
 
+    <!-- 編輯商品 -->
     <div class="popup on" v-show="seeOnData">
-      <div class="popup-head font-20">
-        <div class="news-no">
-          <span>公告編號</span>
-          <span>{{ activeData.news_no }}</span>
-        </div>
-        <div class="on-date">
-          <span class="date">發布時間</span>
-          <span class="date">{{ activeData.news_time }}</span>
-        </div>
-        <div class="last-edit-date">
-          <span class="date">最後更新</span>
-          <span class="date">{{ activeData.news_last_edit }}</span>
-        </div>
-      </div>
+      <div class="popup-head font-20">商品資訊</div>
       <div class="popup-content font-18">
-        <div class="popup-data">
-          <label for=""
-            >狀態
-            <select name="" id="">
-              <option value="on">上架</option>
-              <option value="off">下架</option>
-            </select>
-          </label>
-          <label for=""
-            >分類
-            <select name="" id="">
-              <option value="important">重要</option>
-              <option value="action">活動</option>
-              <option value="other">其他</option>
-            </select>
-          </label>
-        </div>
         <div class="input-txt">
           <div class="input-title">
             <label for=""
-              >標題：
+              >商品編號：
               <Input
-                v-model="activeData.news_title"
+                v-model="activeData.product_no"
                 clearable
-                style="width: 500px"
+                style="width: 300px"
+                disabled
               />
             </label>
           </div>
-          <div class="input-des">
+          <div class="input-title">
             <label for=""
-              >引文：
+              >主類別:
+              <select name="" id="" style="width: 300px">
+                <option value="gift">紀念品系列</option>
+                <option value="food">特產系列</option>
+              </select>
+            </label>
+          </div>
+          <div class="input-title">
+            <label for=""
+              >子類別:
+              <select name="" id="" style="width: 300px">
+                <option value="bottles">水壺</option>
+                <option value="boxes">便當盒</option>
+                <option value="snacks">零食</option>
+                <option value="sauce">調味料</option>
+              </select>
+            </label>
+          </div>
+          <div class="input-title">
+            <label for=""
+              >商品名稱：
               <Input
-                v-model="activeData.news_text_start"
+                v-model="activeData.product_name"
                 clearable
-                type="textarea"
-                :rows="2"
-                placeholder="前台標題敘述"
-                style="width: 500px"
+                style="width: 300px"
               />
             </label>
           </div>
-          <div class="input-des">
+          <div class="input-title">
             <label for=""
-              >內文：
+              >商品價格：
               <Input
-                v-model="activeData.news_text_middle"
+                type="number"
+                number="true"
+                v-model="activeData.product_price"
+                style="width: 300px"
+              />
+            </label>
+          </div>
+          <div class="input-title">
+            <label for=""
+              >商品介紹：
+              <Input
                 clearable
                 type="textarea"
                 :rows="4"
-                placeholder="詳細內文(承)"
-                style="width: 500px"
+                v-model="activeData.product_intro"
+                style="width: 300px"
               />
             </label>
           </div>
-          <div class="input-des">
+          <div class="input-title">
             <label for=""
-              >內文：
-              <Input
-                v-model="activeData.news_text_trans"
-                clearable
-                type="textarea"
-                :rows="4"
-                placeholder="詳細內文(轉)"
-                style="width: 500px"
-              />
-            </label>
-          </div>
-          <div class="input-des">
-            <label for=""
-              >結尾：
-              <Input
-                v-model="activeData.news_text_end"
-                clearable
-                type="textarea"
-                :rows="2"
-                placeholder="請輸入內容"
-                style="width: 500px"
-              />
+              >商品狀態:
+              <select name="" id="" style="width: 300px">
+                <option value="on">上架</option>
+                <option value="off">下架</option>
+              </select>
             </label>
           </div>
         </div>
-        <div class="input-pic">
-          <label class="test" for=""
-            >插入圖片：
-            <input type="file" />
-          </label>
+        <div class="pro-pic">
+          <div class="input-title">
+            <label class="test" for=""
+              >商品主圖：
+              <input type="file" />
+            </label>
+          </div>
+          <div class="input-title">
+            <label class="test" for=""
+              >商品副圖A：
+              <input type="file" />
+            </label>
+          </div>
+          <div class="input-title">
+            <label class="test" for=""
+              >商品副圖B：
+              <input type="file" />
+            </label>
+          </div>
         </div>
-        <div class="input-pic-des">
-          <label for=""
-            >圖片敘述：
-            <Input
-              v-model="activeData.news_img_des"
-              placeholder="請輸入圖片敘述"
-              clearable
-              style="width: 500px"
-            />
-          </label>
-        </div>
-        <div class="popup-btn">
-          <button class="btn-blue_2nd" @click="editOnData">取消</button>
-          <button class="btn-blue" @click="editOnData">確認</button>
-          <!-- 確認鍵功能待補，暫放toggle -->
-        </div>
+      </div>
+      <div class="popup-btn">
+        <button class="btn-blue_2nd" @click="editOnData">取消</button>
+        <button class="btn-blue" @click="editOnData">確認</button>
+        <!-- 確認鍵功能待補，暫放toggle -->
       </div>
     </div>
   </div>
 
   <!-- 新增成功 -->
   <!-- style="display:none" -->
-  <div class="popup-box add font-18" v-show="seeCheck">
+  <!-- <div class="popup-box add font-18" v-show="seeCheck">
     <p class="popup-box-close">X</p>
     <p class="check-des">新增資料成功</p>
     <button @click="okToggle" class="btn-success">確認</button>
-  </div>
+  </div> -->
 
   <!-- 修改成功 -->
-  <div class="popup-box fix font-18" v-show="seeCheck">
+  <!-- <div class="popup-box fix font-18" v-show="seeCheck">
     <p class="popup-box-close">X</p>
     <p class="check-des">修改資料成功</p>
     <button @click="okToggle" class="btn-success">確認</button>
-  </div>
+  </div> -->
 </template>
 
 <script>
 export default {
   name: "ProductManage",
-  props:{
+  props: {
     price: Number,
   },
   components: {},
   data() {
     return {
       seenNew: false, //新表格彈窗，綁新表單v-show、按鈕@click="newToggle"
-      seeOnData:false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
+      seeOnData: false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
       size: "default", //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
       seeCheck: false, //確認彈窗、v-show="seeCheck" 按鈕@click="okToggle"
-      // 以下for全新表單(好像可以把它變成陣列)
-      input_new_no: "",
-      input_new_time: "",
-      input_new_last_edit: "",
-      input_new_type: "",
-      input_new_title: "",
-      input_new_text_start: "",
-      input_new_text_middle: "",
-      input_new_text_trans: "",
-      input_new_text_end: "",
-      input_new_img: "",
-      input_new_img_des: "",
-      input_new_status: "",
+
       columns: [
         {
           title: "商品編號",
           slot: "product_no",
+          width: 120,
           align: "center",
         },
         {
@@ -342,20 +317,81 @@ export default {
           align: "center",
         },
         {
+          title: "主類別",
+          slot: "product_series",
+          width: 120,
+          align: "center",
+          filters: [
+            {
+              label: "紀念品",
+              value: 1,
+            },
+            {
+              label: "特產",
+              value: 2,
+            },
+          ],
+          filterMultiple: false,
+          filterMethod(value, row) {
+            if (value === 1) {
+              return row.product_series === "紀念品";
+            } else if (value === 2) {
+              return row.product_series === "特產";
+            }
+          },
+        },
+        {
+          title: "子類別",
+          slot: "product_type",
+          width: 120,
+          align: "center",
+          filters: [
+            {
+              label: "水壺",
+              value: 3,
+            },
+            {
+              label: "便當盒",
+              value: 4,
+            },
+            {
+              label: "零食",
+              value: 5,
+            },
+            {
+              label: "調味料",
+              value: 6,
+            },
+          ],
+          filterMultiple: false,
+          filterMethod(value, row) {
+            if (value === 3) {
+              return row.product_type === "水壺";
+            } else if (value === 4) {
+              return row.product_type === "便當盒";
+            } else if (value === 5) {
+              return row.product_type === "零食";
+            } else if (value === 6) {
+              return row.product_type === "調味料";
+            }
+          },
+        },
+        {
           title: "商品價格",
           slot: "product_price",
+          width: 180,
           align: "center",
         },
         {
           title: "商品狀態",
           slot: "product_status",
-          width: 120,
+          width: 150,
           align: "center",
         },
         {
           title: "操作",
           slot: "product_action",
-          width: 120,
+          width: 150,
           align: "center",
         },
       ],
@@ -363,32 +399,110 @@ export default {
         {
           product_no: "001",
           product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"特產",
+          product_type:"零食",
           product_name: "九州福砂屋長崎蛋糕",
           product_price: "460",
+          product_intro:
+            "採用精選雞蛋、砂糖、糖漿和小麥粉的簡單材料，全程不用攪拌機，完全靠師傅手感攪拌，製作出口味道地且香甜綿潤的蛋糕點心。長崎蛋糕底砂糖結晶顆粒的粗糖，是攪拌蛋糕材料時留下來的，也是福砂屋長崎蛋糕的特徵。作為長崎蛋糕的傑作，特製五三燒長崎蛋糕的風味更濃，且香氣更濃郁。它由技術熟練的糕點師傅以高超技術製成，生量數量少，是福砂屋的特製長崎蛋糕，廣受長崎 蛋糕饕客們喜愛。",
           product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
         },
         {
           product_no: "002",
           product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"特產",
+          product_type:"零食",
           product_name: "JS怪奇薯條",
           product_price: "290",
+          product_intro:
+            "怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃",
           product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
         },
         {
           product_no: "003",
           product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"特產",
+          product_type:"調味料",
           product_name: "透明醬油",
           product_price: "320",
+          product_intro:
+            "透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃",
           product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
         },
         {
           product_no: "004",
           product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"特產",
+          product_type:"零食",
           product_name: "七彩洋芋片",
           product_price: "250",
+          product_intro:
+            "七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片",
           product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
+        },
+        {
+          product_no: "005",
+          product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"紀念品",
+          product_type:"水壺",
+          product_name: "九州切子",
+          product_price: "850",
+          product_intro:
+            "九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子",
+          product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
+        },
+        {
+          product_no: "006",
+          product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"紀念品",
+          product_type:"便當盒",
+          product_name: "火車便當盒",
+          product_price: "480",
+          product_intro:
+            "火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒",
+          product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
+        },
+        {
+          product_no: "007",
+          product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"特產",
+          product_type:"調味料",
+          product_name: "九州昆布湯包",
+          product_price: "320",
+          product_intro:
+            "九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包",
+          product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
+        },
+        {
+          product_no: "008",
+          product_pic: require(`@/assets/img/products/pro4.jpg`),
+          product_series:"特產",
+          product_type:"調味料",
+          product_name: "九州黑醋",
+          product_price: "220",
+          product_intro:
+            "九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋",
+          product_status: "上架",
+          product_pica: require(`@/assets/img/products/pro5.jpg`),
+          product_picb: require(`@/assets/img/products/pro6.jpg`),
         },
       ],
+      editIndex: -1,
+      activeIndex: null,
     };
   },
   methods: {
@@ -408,7 +522,7 @@ export default {
   },
   computed: {
     activeData() {
-      return this.dataOn.find((v) => v.news_no === this.activeIndex) ?? {};
+      return this.dataOn.find((v) => v.product_no === this.activeIndex) ?? {};
     },
   },
 };
@@ -429,127 +543,121 @@ export default {
   height: 45vh;
   margin: 30px 20px;
 }
-.type {
-  display: flex;
-  color: #fff;
-  align-items: center;
-}
+// .type {
+//   display: flex;
+//   color: #fff;
+//   align-items: center;
+// }
 
 /* -------------------彈窗 ------------------------*/
 .popup {
   position: absolute;
-  top: 5px;
+  top: 100px;
   left: 150px;
   margin: auto;
   z-index: 20;
   width: 80%;
+  height: 80%;
   background-color: #4f6573;
 }
 
 /* 上方區塊顏色 */
 .popup-head {
   background-color: #2d3740;
-  height: 80px;
+  height: 50px;
   color: #ccc;
-
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 }
-
-.popup-data{
-    margin: 30px 0;
-    display: flex;
-    justify-content: space-around;
+.popup-content {
+  display: flex;
+  padding: 30px;
+  justify-content: center;
 }
-.input-title{
-    margin-bottom: 40px;
-    padding-left: 85px;
+.input-title {
+  margin-bottom: 20px;
 }
-.input-des,
-.input-pic,
-.input-pic-des{
-    margin-bottom: 15px;
-    padding-left: 85px;
-
-}
-.input-txt{
-    margin-bottom: 40px;
-}
-.popup-btn{
-    margin: 90px 0 50px 0 ;
-    display: flex;
-    justify-content: center;
-
+.input-txt,
+.pro-pic {
+  width: 50%;
+  margin: 20px;
+  text-align: end;
 }
 
-.popup-btn button{
-    margin: 0 100px;
+.popup-btn {
+  width: 100%;
+  max-width: 30%;
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  padding: 20px 0px;
+}
+
+.popup-btn button {
+  padding: 5px 30px;
 }
 
 /* 彈窗字顏色 */
-.popup label{
-    color: #fff;
+.popup label {
+  color: #fff;
 }
-.date{
-    color: #ccc;
+.date {
+  color: #ccc;
 }
-
 
 /* -------------------彈窗結束----------------- */
 
 /* -------------------新增修改box ------------------------*/
-.popup-box{
-    position: absolute;
-    top: 200px;
-    left: 400px;
-    width: 400px;
-    height: 230px;
-    border: 1px solid #6c9255;
-    border-radius: 10px;
-    background-color: #ffffff;
-    text-align: center;
-}   
-
-.popup-box-close{
-    text-align: end;
-    margin-top: 10px;
-    padding-right: 20px;
+.popup-box {
+  position: absolute;
+  top: 200px;
+  left: 400px;
+  width: 400px;
+  height: 230px;
+  border: 1px solid #6c9255;
+  border-radius: 10px;
+  background-color: #ffffff;
+  text-align: center;
 }
 
-.check-des{
-    margin-top: 70px;
+.popup-box-close {
+  text-align: end;
+  margin-top: 10px;
+  padding-right: 20px;
 }
 
-.popup-box button{
-    margin-top: 30px;
+.check-des {
+  margin-top: 70px;
+}
+
+.popup-box button {
+  margin-top: 30px;
 }
 
 /* -------------------新增修改結束 ------------------------*/
 
-
 /* 確認彈窗按鈕 */
-.popup-box .btn-success{
-    padding: 8px 32px;
+.popup-box .btn-success {
+  padding: 8px 32px;
 }
 
 /* 確認彈窗文字 */
-.popup-box .check-des{
-    translate:0 -16px ;
+.popup-box .check-des {
+  translate: 0 -16px;
 }
 
 /* 彈窗背景 */
 
 .modal-mask {
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: table;
-    background-color: rgba(0, 0, 0, .5);
-    transition: opacity .3s ease;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: table;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease;
 }
-
 </style>
