@@ -12,7 +12,7 @@
             :class="toggle?'on':''"
             @click="toggle=!toggle"
         >
-            <p :key="dropDownItem">{{activeTxt}}</p>
+            <p>{{activeTxt}}</p>
             <span class="Icon material-symbols-outlined">expand_more</span>
         </div>
         <ul class="dropdown-list" :class="toggle?'show':''">
@@ -59,7 +59,7 @@ export default {
             // console.log(index);
             // console.log(this.dropDownList);
             // console.log(this.dropDownList[0]);
-            console.log(this.dropDownList[index]);
+            // console.log(this.dropDownList[index]);
         }
 	},
 }
