@@ -1,3 +1,13 @@
+<!-- 問題
+    1. 新增後，禁止畫面跳轉
+    2. 假的下拉選單取資料
+    3. 假的下拉選單及狀態切換開關，要怎麼回傳值
+    4. 修改資料/刪除資料
+    5. 編輯時，表單對應資料顯示
+    6. 多選
+    7. 各個彈窗寫成 component
+    8. 進入頁面預設打開"全部"
+-->
 <template>
     <div class="FAQ">
 		<main>
@@ -72,103 +82,103 @@
                 </template>
             </Table>
 <!-- 新增表單 -->
-<form id="myForm" method="post" enctype="multipart/form-data">
-    <div class="alert-mask" :style="NewForm">
-        <div class="alert-container">
-            <div class="faq_form">
-                <!-- 標題 -->
-                <div class="form-head">
-                    <p class="font-20">新增 FAQ</p>
-                    <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
-                </div>
-                <div class="form-body">
-                    <div>
-                        <input type="text" name="faq_type">
-                        <input type="text" name="faq_status">
-                        <p class="font-16">＊類別：</p>
-                        <!-- 下拉選單 -->
-                        <!-- <Dropdown
-                            :dropdownWidth="dropdownWidth"
-                            :activeTxt="activeTxt"
-                            :dropDownList="dropDownList"
-                        /> -->
-                        <div class="dropDown">
-                            <div class="dropdown-select font-16"
-                                :style="{ width: dropdownWidth }"
-                                :class="toggle?'on':''"
-                                @click="toggle=!toggle"
-                            >
-                                <p >{{activeTxt}}</p>
-                                <span class="Icon material-symbols-outlined">expand_more</span>
+            <form id="newForm" method="post" enctype="multipart/form-data">
+                <div class="alert-mask" :style="NewForm">
+                    <div class="alert-container">
+                        <div class="faq_form">
+                            <!-- 標題 -->
+                            <div class="form-head">
+                                <p class="font-20">新增 FAQ</p>
+                                <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
                             </div>
-                            <ul class="dropdown-list" :class="toggle?'show':''">
-                                <li class="dropdown-item font-16"
-                                    :style="{ width: dropdownWidth }"
-                                    v-for="(dropDownItem, index) in dropDownList"
-                                    :key="dropDownItem"
-                                    @click.self="changeSelect(index)"
-                                >
-                                    {{dropDownItem.text}}
-                                </li>
-                            </ul>
+                            <div class="form-body">
+                                <!-- 選單還不能用，先放個測試欄位 -->
+                                <input type="text" name="faq_type">
+                                <input type="text" name="faq_status">
+                                <div>
+                                    <p class="font-16">＊類別：</p>
+                                    <!-- 下拉選單 -->
+                                    <!-- <Dropdown
+                                        :dropdownWidth="dropdownWidth"
+                                        :activeTxt="activeTxt"
+                                        :dropDownList="dropDownList"
+                                    /> -->
+                                    <div class="dropDown">
+                                        <div class="dropdown-select font-16"
+                                            :style="{ width: dropdownWidth }"
+                                            :class="{'on':toggle}"
+                                            @click="toggle=!toggle"
+                                        >
+                                            <p>{{activeTxt}}</p>
+                                            <span class="Icon material-symbols-outlined">expand_more</span>
+                                        </div>
+                                        <ul class="dropdown-list" :class="{'show':toggle}">
+                                            <li class="dropdown-item font-16"
+                                                :style="{ width: dropdownWidth }"
+                                                v-for="(dropDownItem, index) in dropDownList"
+                                                :key="dropDownItem"
+                                                @click.self="changeSelect(index)"
+                                            >
+                                                {{dropDownItem.text}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- 狀態開關 -->
+                                    <p class="font-16">＊狀態：</p>
+                                    <Switch size="large"
+                                        true-color="#6C9255"
+                                        false-color="#E6E6E6"
+                                    >
+                                        <template #open><span>ON</span></template>
+                                        <template #close><span>OFF</span></template>
+                                    </Switch>
+                                    <!-- 編號 -->
+                                    <p class="font-16">編號：新增後生成</p>
+                                </div>
+                                <!-- 輸入框 -->
+                                <div>
+                                    <p class="font-16">＊問題：</p>
+                                    <textarea name="faq_q"
+                                        showCount
+                                        class="font-16"
+                                        rows="3"
+                                        maxlength="100"
+                                        v-model="value1"
+                                        placeholder="Enter something..."
+                                    >
+                                    </textarea>
+                                </div>
+                                <div>
+                                    <p class="font-16">＊回覆：</p>
+                                    <textarea name="faq_a"
+                                        showCount
+                                        class="font-16"
+                                        rows="10"
+                                        maxlength="100"
+                                        v-model="value2"
+                                        placeholder="Enter something..."
+                                    >
+                                    </textarea>
+                                </div>
+                                <!-- <span class="ivu-input-word-count">0/100</span> -->
+                                <!-- <Space class="inputs">
+                                    <Input class="input question"
+                                        v-model="value1" maxlength="100"
+                                        show-word-limit placeholder="Enter something..."
+                                        style="width: 200px"/>
+                                </Space> -->
+                                <!-- 按鈕 -->
+                                <div>
+                                    <p class="font-16">＊為必填／必選項目</p>
+                                    <button class="btn-blue_2nd" @click="ShowCheckAlert = true">取消</button>
+                                    <button class="btn-blue" @click="addFaqData">新增</button>
+                                    <!-- <button class="btn-blue" @click="add">新增</button> -->
+                                </div>
+                            </div>
                         </div>
-                        <!-- 狀態開關 -->
-                        <p class="font-16">＊狀態：</p>
-                        <Switch size="large"
-                            true-color="#6C9255"
-                            false-color="#E6E6E6"
-                        >
-                            <template #open><span>ON</span></template>
-                            <template #close><span>OFF</span></template>
-                        </Switch>
-                        <!-- 編號 -->
-                        <p class="font-16">編號：新增後生成</p>
-                    </div>
-                    <!-- 輸入框 -->
-                    <div>
-                        <p class="font-16">＊問題：</p>
-                        <textarea name="faq_q"
-                            showCount
-                            class="font-16"
-                            rows="3"
-                            maxlength="100"
-                            v-model="value1"
-                            placeholder="Enter something..."
-                        >
-                        </textarea>
-                    </div>
-                    <div>
-                        <p class="font-16">＊回覆：</p>
-                        <textarea name="faq_a"
-                            showCount
-                            class="font-16"
-                            rows="10"
-                            maxlength="100"
-                            v-model="value2"
-                            placeholder="Enter something..."
-                        >
-                        </textarea>
-                    </div>
-                    <!-- <span class="ivu-input-word-count">0/100</span> -->
-                    <!-- <Space class="inputs">
-                        <Input class="input question"
-                            v-model="value1" maxlength="100"
-                            show-word-limit placeholder="Enter something..."
-                            style="width: 200px"/>
-                    </Space> -->
-                    <!-- 按鈕 -->
-                    <div>
-                        <p class="font-16">＊為必填／必選項目</p>
-                        <button class="btn-blue_2nd" @click="ShowCheckAlert = true">取消</button>
-                        <!-- <button class="btn-blue_2nd" @click.self="toggleNewForm">取消</button> -->
-                        <!-- <button class="btn-blue" @click="add">新增</button> -->
-                        <button class="btn-blue" @click="addFaqData">新增</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</form>
+            </form>
 <!-- 編輯表單 -->
             <div class="alert-mask" :style="EditForm">
                 <div class="alert-container">
@@ -217,7 +227,8 @@
                                     <template #close><span>OFF</span></template>
                                 </Switch>
                                 <!-- 編號 -->
-                                <p class="font-16">編號：{{activeList.faq_no}}</p>
+                                <!-- <p class="font-16">編號：{{activeList.faq_no}}</p> -->
+                                <p class="font-16">編號：{{activeDraftData.faq_no}}</p>
                             </div>
                             <!-- 輸入框 -->
                             <div>
@@ -473,6 +484,7 @@ export default {
                 //     faq_status: 1,
                 // },
             ],
+            editIndex: -1,
             activeIndex: null,
         }
     },
@@ -499,11 +511,16 @@ export default {
                 'display': this.ShowEditForm ? '' : 'none'
             };
         },
+        activeDraftData(){
+            // return this.dataDraft.find(v=> v.news_no === this.activeIndex) ?? {}
+            // return this.activeList.find(v=> v.faq_no === this.activeIndex) ?? {}
+            return this.faqList.find(v=> v.faq_no === this.activeIndex) ?? {}
+        },
     },
     methods: {
 // 測試本地資料庫 fetch
-        // getFaqData(){
-        //     fetch('http://localhost/CGD103_PHP_class/PDO/list.php')
+        // getFaqData_Fetch(){
+        //     fetch('http://localhost/CGD103_PHP_class/PDO/getFaqData_Fetch.php')
         //     .then(res=>res.json())
         //     .then(json=>{
         //         this.faqList = json;
@@ -518,8 +535,7 @@ export default {
                     faqVue.faqList = JSON.parse(xhr.responseText);
 				}
 			}
-			// xhr.open("get", "http://localhost/CGD103_PHP_class/PDO/list.php", true);
-			xhr.open("get", "http://localhost/CGD103_PHP_class/project_books_formData/getFaqData.php", true);
+			xhr.open("get", "http://localhost/CGD103_PHP_class/project_books_formData/getFaqData_XML.php", true);
 			xhr.send(null);
 		},
 // 測試新增資料
@@ -528,13 +544,10 @@ export default {
             xhr.onload = function(){
                 let result = JSON.parse(xhr.responseText);
                 alert(result.msg);
-                // document.getElementById("btnReset").click();
-                // $id("btnReset").click();
             }
-            xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faq_insert.php", true);
-            xhr.send(new FormData(document.getElementById("myForm")));
+            xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faqInsert.php", true);
+            xhr.send(new FormData(document.getElementById("newForm")));
         },
-// --------------------
         add(){
             this.Alert_loading = true;
             setTimeout(() => {
@@ -584,15 +597,15 @@ export default {
         },
 // ----------- 分頁換頁 ------------
         clickAll(e){
-            console.log(this.faqList);
-            console.log(this.activeList);
-            this.activeList = this.faqList;
+            // console.log(this.faqList);
+            // console.log(this.activeList);
             // showAll = true;
+            // console.log(showAll);
+            this.activeList = this.faqList;
             e.target.classList.add('on');
             e.target.parentNode.childNodes[2].classList.remove('on');
             e.target.parentNode.childNodes[3].classList.remove('on');
             e.target.parentNode.childNodes[4].classList.remove('on');
-            // console.log(showAll);
         },
         changeTab(tab){
             // showAll = false;
@@ -634,9 +647,13 @@ export default {
             }
             // console.log(this.faqList[index].faq_status);
         },
+        // Instant(){
+
+        // }
     },
     created(){
-		/* this.getFaqData(); */
+		// this.getFaqData_Fetch();
+
 	},
 	mounted(){
         this.getFaqData_XML();
@@ -647,84 +664,4 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/Scss/pages/faq.scss";
-// 下拉選單
-.dropDown{
-    $dropDownTrs: 0.5s;
-    $dropDownTxtClr: #515a6e;
-    $dropDownClr_L1: #2d8cf0;
-    $dropDownClr_L2: #57a3f3;
-    position: relative;
-    width: fit-content;
-    display: inline-block;
-    .dropdown-select{
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        min-width: fit-content;
-        border: 1px solid #dcdee2;
-        border-radius: 4px;
-        background: #fff;
-        color: $dropDownTxtClr;
-        margin-bottom: -5px;
-        padding: 3px 10px 3px 15px;
-        text-align: center;
-        transition: 0.3s;
-        &:hover{
-            color: $dropDownClr_L1;
-            border-color: $dropDownClr_L2;
-            transition: 0.3s;
-        }
-        p{
-            padding-top: 3px;
-        }
-        .Icon{
-            transition: 0.3s;
-        }
-    }
-    .dropdown-select.on{
-        border-color: $dropDownClr_L2;
-        -webkit-box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
-        box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
-        transition: 0.3s;
-        .Icon{
-            transform: rotate(180deg);
-            transition: 0.3s;
-        }
-    }
-    .dropdown-list{
-        position: absolute;
-        z-index: 100;
-        left: -100vw;
-        min-width: fit-content;
-        box-sizing: border-box;
-        margin: 5px 0;
-        padding: 5px 0;
-        background-color: #fff;
-        color: $dropDownTxtClr;
-        border-radius: 4px;
-        box-shadow: 0 1px 6px rgb(0 0 0 / 20%);
-        opacity: 0;
-        transition: opacity $dropDownTrs, left 0s $dropDownTrs;
-        .dropdown-item{
-            cursor: pointer;
-            text-align: center;
-            padding: 6px 15px;
-            color: $dropDownTxtClr;
-            white-space: nowrap;
-            list-style: none;
-            &:hover{
-                background: $clr_blue_L4;
-            }
-            &:active{
-                color: $dropDownClr_L1;
-            }
-        }
-    }
-    .dropdown-list.show{
-        position: absolute;
-        left: 0;
-        opacity: 1;
-        transition: opacity $dropDownTrs;
-    }
-}
 </style>
