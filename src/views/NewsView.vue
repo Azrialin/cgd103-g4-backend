@@ -29,17 +29,8 @@
 ------------------------------------------------------->
 
     <div class="backstage-news" >
-        <div class="backstage-name">
-            <div>
-                <h2 class="font-36" >最新消息管理</h2>
-            </div>
-            <div class="backstage-account">
-                <span class="font-18">管理員名稱</span>
-                <span class="font-18">登出</span>
-            </div>
-        </div>
+
         <div class="backstage-content">
-            <div class="backstage-path font-16">最新消息管理 / 消息列表</div>
             <div class="btn-add">
                 <button class="font-20 btn-blue" @click="newToggle">新增消息</button>
             </div>
