@@ -39,13 +39,26 @@
                         <span v-else>{{ row.staff_email }}</span>
                 </template>
                 <!-- 帳號狀態 -->
-                <template #staff_state="{ row, index }">
-                    <Switch true-color="#13ce66" false-color="#E6E6E6" />
+                <template #staff_state>
+                    <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow_list = true">
+                        <Switch :before-change="handleBeforeChange" true-color="#13ce66" false-color="#E6E6E6" />
+                    </span>
                 </template>
+                <!-- 彈窗：帳號狀態變更確認 -->
+                <div class="modal-mask" :style="modalStyle">
+                    <div class="modal-container" @click="toggleModal">
+                        <div class="modal-body">
+                            <p class="font-16-15em">
+                                <span class="icon material-symbols-outlined">error</span>
+                                <span>Delete confirmation</span>
+                            </p>
+                            <p class="font-16-15em">確定要變更嗎？</p>
+                            <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                            <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">確認</Button>
+                        </div>
+                    </div>
+                </div>
                 <!-- 刪除帳號 -->
-                <!-- <template #action_error="{ row, index }">
-                    <Button type="error" size="small" @click="remove(index, row)">刪除</Button>
-                </template> -->
                 <template #action_error>
                     <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow = true">delete</span>
                 </template>
@@ -61,6 +74,20 @@
                         <p class="font-16-15em">確定要刪除嗎？</p>
                         <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
                         <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
+                    </div>
+                </div>
+            </div>
+            <!-- 彈窗：改狀態確認 -->
+            <div class="modal-mask" :style="modalStyle_list">
+                <div class="modal-container" @click.self="toggleModal">
+                    <div class="modal-body">
+                        <p class="font-16-15em">
+                            <span class="icon material-symbols-outlined">error</span>
+                            <span>Delete confirmation</span>
+                        </p>
+                        <p class="font-16-15em">確定要修改狀態嗎？</p>
+                        <Button class="btn-blue_2nd" long :loading="modal_loading" @click="toggleModal_list">取消</Button>
+                        <Button class="btn-blue" long :loading="modal_loading" @click="list(index)">確定</Button>
                     </div>
                 </div>
             </div>
@@ -81,12 +108,12 @@
                 </div>
                 <div class="input-info">
                     <label for="">員工帳號：
-                        <Input type="text" placeholder="英數大小寫10個字元以上" clearable  style="width: 200px"/>
+                        <Input type="text" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">員工密碼：
-                        <Input type="password" placeholder="英數大小寫8個字元以上" clearable  style="width: 200px"/>
+                        <Input type="password" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
@@ -114,14 +141,17 @@
 </template>
 
 <script>
+import { Switch } from 'view-ui-plus';
+
 export default {
 	name: 'AdministratorView',
 	components: {
-		
-	},
+    Switch
+},
     data () {
         return {
             isShow: false,
+            isShow_list: false,
             modal_loading: false,
             seenAdd:false, //新表格彈窗，綁新表單v-show、按鈕@click="seenAdd"
             size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
@@ -192,7 +222,12 @@ export default {
             return {
                 'display': this.isShow ? '' : 'none'
             };
-        }
+        },
+        modalStyle_list(){
+            return {
+                'display': this.isShow_list ? '' : 'none'
+            };
+        },
     },
     methods: {
         show (index) {
@@ -207,6 +242,7 @@ export default {
         addToggle(){ //新表單
             this.seenAdd = !this.seenAdd
         },
+        // 刪除帳號彈窗
         del(index){
             this.data.splice(index, 1);
             this.modal_loading = true;
@@ -216,10 +252,23 @@ export default {
                 this.$Message.success('已刪除一筆管理者帳號');
             }, 200);
         },
+        // 變更帳號狀態彈窗
+        list(index){
+            this.modal_loading = true;
+            setTimeout(() => {
+                this.modal_loading = false;
+                this.isShow_list = false;
+                this.$Message.success('已變更一筆管理者帳號狀態');
+            }, 200);
+        },
         toggleModal(){
             this.isShow = !this.isShow;
-            console.log(this);
-        }
+            // console.log(this);
+        },
+        toggleModal_list(){
+            this.isShow_list = !this.isShow_list;
+            // console.log(this);
+        },
     }
 }
 </script>
@@ -370,7 +419,7 @@ export default {
                 vertical-align: top;
             }
         }
-        }
+    }
     Button+Button{
         margin-left: 30px;
     }
