@@ -27,7 +27,19 @@
 🔹 確認彈窗 功能
 </div>
 ------------------------------------------------------->
-
+<!------------------- 
+點擊結果為點擊的內容
+1.按鈕click設定function，並帶參數 編輯 : (row.news_no)  | 刪除 (row)
+2. data新增屬性值 activeIndex:null,
+3-1 刪除函式:
+            remove (index) { //草稿 -刪除資料(目前僅畫面上顯示刪除)
+            this.dataDraft.splice(index, 1);
+            },
+3-2 編輯函式: 
+            activeDraftData(){
+            return this.dataDraft.find(v=> v.news_no === this.activeIndex) ?? {}
+            },
+--------------------->
     <div class="backstage-news" >
 
         <div class="backstage-content">
