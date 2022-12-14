@@ -87,6 +87,12 @@ const routes = [
 	name: 'about',
 	component: () => import('../views/AboutView.vue')
 },
+{
+	path: '/contactus',
+	name: 'contactus',
+	component: () => import('../views/ContactUS.vue'),
+	meta: { title: '意見表管理' }
+},
 ]
 
 // router 跳轉畫面後，維持置頂

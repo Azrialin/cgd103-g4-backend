@@ -73,7 +73,7 @@ export default {
 				},
 				{
 					name: '意見表管理',
-					source: '/',
+					source: '/contactus',
 					icon: 'mark_chat_read',
 				},
 				{
