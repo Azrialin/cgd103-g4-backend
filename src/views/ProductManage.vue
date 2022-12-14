@@ -299,7 +299,7 @@
 export default {
   name: "ProductManage",
   props: {
-    price: Number,
+    
   },
   components: {},
   data() {
