@@ -3,6 +3,53 @@
     <div class="backstage-news" >
         <div class="backstage-content">
             <div class="news-manager">
+                <div class="popup on" v-show="seeOnData">
+                    <div class="popup-head font-20">編輯方案</div>
+                    <div class="popup-content font-18">
+                        <div class="input-txt">
+                            <div class="input-title">
+                                <label for="">開團編號：
+                                    <Input v-model="activeData.news_no" clearable style="width: 300px" disabled/>
+                                </label>
+                            </div>
+                            <div class="input-title">
+                                <label for="">方案編號:
+                                    <Input v-model="activeData.news_session" clearable style="width: 300px" disabled/>
+                                </label>
+                            </div>
+                            <div class="input-title">
+                                <label for="">出發日期:
+                                    <DatePicker type="date" placeholder="Edit date" style="width: 300px" />
+                                </label>
+                            </div>
+                            <div class="input-title">
+                                <label for="">行程價格：
+                                <Input v-model="activeData.news_price" clearable style="width: 300px"/>
+                                </label>
+                            </div>
+                            <div class="input-title">
+                                <label for="">人數上限：
+                                <Input type="number" number="true" v-model="activeData.news_title" style="width: 300px"/>
+                                </label>
+                            </div>
+                            <div class="input-title">
+                                <label for="">開放報名時間：
+                                    <DatePicker type="date" placeholder="Edit date" style="width: 300px" />
+                                </label>
+                            </div>
+                            <div class="input-title">
+                                <label for="">截止報名時間:
+                                    <DatePicker type="date" placeholder="Edit date" style="width: 300px" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="popup-btn">
+                        <button class="btn-blue_2nd" @click="editOnData">取消</button>
+                        <button class="btn-blue" @click="editOnData">確認</button>
+                        <!-- 確認鍵功能待補，暫放toggle -->
+                    </div>
+                </div>
                 <Tabs  type="card" :animated="false">
                     <TabPane label="會員訂單查詢" >
                         <Table stripe border :columns="columns" :data="dataOn" >
@@ -66,7 +113,7 @@
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row, index }">
-                                <Button >編輯</Button>
+                                <Button @click="editOnData(row.news_no)">編輯</Button>
                             </template>
                             <!-- 標題 -->
                             <template #news_title="{ row, index }">
@@ -108,7 +155,7 @@
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row, index }">
-                                <Button >編輯</Button>
+                                <Button @click="editOnData(row.news_no)">編輯</Button>
                             </template>
                             <!-- 標題 -->
                             <template #news_title="{ row, index }">
@@ -150,7 +197,7 @@
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row, index }">
-                                <Button >編輯</Button>
+                                <Button @click="editOnData(row.news_no)">編輯</Button>
                             </template>
                             <!-- 標題 -->
                             <template #news_title="{ row, index }">
@@ -192,7 +239,7 @@
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row, index }">
-                                <Button >編輯</Button>
+                                <Button @click="editOnData(row.news_no)">編輯</Button>
                             </template>
                             <!-- 標題 -->
                             <template #news_title="{ row, index }">
@@ -224,6 +271,7 @@
     export default {
         data () {
             return {
+                seeOnData: false,
                 // 分頁的
                 others: [
                     
@@ -479,33 +527,60 @@
                 editnews_session: '',
                 editnews_price: '',
                 editnews_number: '',
+                activeIndex: null,
+                activeIndexb: null,
                 }
             },
             methods: {
-            handleEdit (row, index) {
-                this.editnews_no = row.news_no;
-                this.editnews_time = row.news_time;
-                this.editnews_title = row.news_title;
-                this.editnews_class = row.news_class;
-                this.editnews_status = row.news_status;
-                this.editnews_session = row.news_session;
-                this.editnews_price = row.news_price;
-                this.editnews_number = row.news_number;
-                this.editIndex = index;
+                editOnData(no) {
+                //上架編輯表單彈窗
+                this.seeOnData = !this.seeOnData;
+                this.activeIndex = no;
+                },
+                okToggle() {
+                //確認彈窗
+                this.seeCheck = !this.seeCheck;
+                },
+                handleEdit (row, index) {
+                    this.editnews_no = row.news_no;
+                    this.editnews_time = row.news_time;
+                    this.editnews_title = row.news_title;
+                    this.editnews_class = row.news_class;
+                    this.editnews_status = row.news_status;
+                    this.editnews_session = row.news_session;
+                    this.editnews_price = row.news_price;
+                    this.editnews_number = row.news_number;
+                    this.editIndex = index;
+                },
+                handleSave (index) {
+                    this.data[index].news_no = this.editnews_no;
+                    this.data[index].news_time = this.editnews_time;
+                    this.data[index].news_class = this.editnews_class;
+                    this.data[index].news_title = this.editnews_title;
+                    this.data[index].news_status = this.editnews_status;
+                    this.data[index].news_session = this.editnews_session;
+                    this.data[index].news_price = this.editnews_price;
+                    this.data[index].news_number = this.editnews_number;
+                    this.editIndex = -1;
+                }
             },
-            handleSave (index) {
-                this.data[index].news_no = this.editnews_no;
-                this.data[index].news_time = this.editnews_time;
-                this.data[index].news_class = this.editnews_class;
-                this.data[index].news_title = this.editnews_title;
-                this.data[index].news_status = this.editnews_status;
-                this.data[index].news_session = this.editnews_session;
-                this.data[index].news_price = this.editnews_price;
-                this.data[index].news_number = this.editnews_number;
-                this.editIndex = -1;
-            }
-        }
-
+            computed: {
+                activeData() {
+                    return this.dataA.find((c) => c.news_no === this.activeIndex) ?? {};
+                },
+                activeData() {
+                    return this.dataA.find((v) => v.news_no === this.activeIndex) ?? {};
+                },
+                activeData() {
+                    return this.dataB.find((v) => v.news_no === this.activeIndex) ?? {};
+                },
+                activeData() {
+                    return this.dataC.find((v) => v.news_no === this.activeIndex) ?? {};
+                },
+                activeData() {
+                    return this.dataD.find((v) => v.news_no === this.activeIndex) ?? {};
+                },
+            },
     }
 </script>
 
