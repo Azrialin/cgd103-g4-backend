@@ -40,6 +40,40 @@
             return this.dataDraft.find(v=> v.news_no === this.activeIndex) ?? {}
             },
 --------------------->
+<!-- 
+1.移動專案到wwwroot、source tree更改(remove mark原本的，add引進新的((路徑)))
+2.connect books新增一個專題版本，更改連動的資料庫(名稱、路徑) connectG4.php
+3.wwwroot php新增list 小龜的跨域那一段
+4.新增
+// 測試本地資料庫 fetch
+        // getFaqData(){
+        //     fetch('http://localhost/list.php')
+        //     .then(res=>res.json())
+        //     .then(json=>{
+        //         this.faqList = json;
+        //     })
+		// },
+5.調整資料結構與套件的資料顯示
+-->
+<!-- 
+目的: 新增資料    
+1. 新增資料function addNewsData
+        addNewsData(){
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function(){
+                let result = JSON.parse(xhr.responseText);
+                alert(result.msg);
+                // document.getElementById("btnReset").click();
+                // $id("btnReset").click();
+            }
+            xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faq_insert.php", true);
+            xhr.send(new FormData(document.getElementById("myForm")));
+        },
+2. html Form夾要傳送的資料範圍，給抓取的ID、method(post)、enctype
+3. 綁定送出按鈕 click="addNewsData"
+4.有兩個新增資料的方法 project_books_formData(HTML5) 1.js(prod_insert.html) 2.php(此次用的方法) prod_insert.php(改成news_insert.php)
+
+ -->
     <div class="backstage-news" >
 
         <div class="backstage-content">
@@ -182,82 +216,88 @@
     <!-- style="display:none" -->
     <!--一張全新表單 -->
     <keep-alive>
-        <div class="popup " v-show="seenNew" >
-            <div class="popup-head font-20">
-                <div class="news-no">
-                    <span>公告編號</span>
-                    <span></span>
+        <form method="post" id="addNewsForm" enctype="multipart/form-data">
+            <div class="popup " v-show="seenNew" >
+                <div class="popup-head font-20">
+                    <div class="news-no">
+                        <span>公告編號</span>
+                        <span></span>
+                    </div>
+                    <div class="on-date">
+                        <span class="date">發布時間</span>
+                        <span class="date"></span>
+                        <input type="text" name="news_time">
+                    </div>
+                    <div class="last-edit-date">
+                        <span class="date">最後更新</span>
+                        <span class="date"></span>
+                        <input type="text" name="news_last_edit">
+                    </div>
                 </div>
-                <div class="on-date">
-                    <span class="date">發布時間</span>
-                    <span class="date"></span>
-                </div>
-                <div class="last-edit-date">
-                    <span class="date">最後更新</span>
-                    <span class="date"></span>
+                <div class="popup-content font-18">
+                    <div class="popup-data">
+                        <input type="text" name="news_status">
+                        <label for="">狀態(必填)
+                            <select  id="">
+                                <option value="draft">草稿</option>
+                                <option value="on">上架</option>
+                                <option value="off">下架</option>
+                            </select>
+                        </label>
+                        <label for="">分類
+                            <input type="text" name="news_type">
+                            <select  id="">
+                                <option value="important">重要</option>
+                                <option value="action">活動</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="input-txt">
+                        <div class="input-title">
+                            <label for="">標題：
+                                <Input placeholder="請輸入標題" clearable style="width: 500px" name="news_title"/>
+                            </label>
+                        </div>
+                        <div class="input-des">
+                            <label for="">引文：
+                                <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px" name="news_text_start"/>
+                            </label>
+                        </div>
+                        <div class="input-des">
+                            <label for="">內文：
+                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px" name="news_text_middle"/>
+                            </label>
+                        </div>
+                        <div class="input-des">
+                            <label for="">內文：
+                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px" name="news_text_trans"/>
+                            </label>
+                        </div>
+                        <div class="input-des">
+                            <label for="">結尾：
+                                <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px" name="news_text_end"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-pic">
+                        <label class="test" for="">插入圖片：
+                            <input type="file">
+                        </label>
+                    </div>
+                    <div class="input-pic-des">
+                        <label for="">圖片敘述：
+                            <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" name="news_img_des"/>
+                        </label>
+                    </div>
+                    <div class="popup-btn">
+                        <button class="btn-blue_2nd" @click="newToggle">取消</button>
+                        <button class="btn-blue" @click="addNewsData">確認</button>
+                        <!-- 確認鍵功能待補，暫放toggle -->
+                    </div>
                 </div>
             </div>
-            <div class="popup-content font-18">
-                <div class="popup-data">
-                    <label for="">狀態(必填)
-                        <select name="" id="">
-                            <option value="draft">草稿</option>
-                            <option value="on">上架</option>
-                            <option value="off">下架</option>
-                        </select>
-                    </label>
-                    <label for="">分類
-                        <select name="" id="">
-                            <option value="important">重要</option>
-                            <option value="action">活動</option>
-                            <option value="other">其他</option>
-                        </select>
-                    </label>
-                </div>
-                <div class="input-txt">
-                    <div class="input-title">
-                        <label for="">標題：
-                            <Input placeholder="請輸入標題" clearable style="width: 500px" />
-                        </label>
-                    </div>
-                    <div class="input-des">
-                        <label for="">引文：
-                            <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
-                        </label>
-                    </div>
-                    <div class="input-des">
-                        <label for="">內文：
-                            <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
-                        </label>
-                    </div>
-                    <div class="input-des">
-                        <label for="">內文：
-                            <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
-                        </label>
-                    </div>
-                    <div class="input-des">
-                        <label for="">結尾：
-                            <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
-                        </label>
-                    </div>
-                </div>
-                <div class="input-pic">
-                    <label class="test" for="">插入圖片：
-                        <input type="file">
-                    </label>
-                </div>
-                <div class="input-pic-des">
-                    <label for="">圖片敘述：
-                        <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
-                    </label>
-                </div>
-                <div class="popup-btn">
-                    <button class="btn-blue_2nd" @click="newToggle">取消</button> 
-                    <button class="btn-blue" @click="newToggle">確認</button> 
-                    <!-- 確認鍵功能待補，暫放toggle -->
-                </div>
-            </div>
-        </div>
+        </form>
     </keep-alive>
 
     <!--串聯資料用表單(上架)可繼續上架、下架，無草稿-->
@@ -600,146 +640,146 @@
             }
                 ],
                 dataOn: [
-                    {
-                        news_no: '2022001',
-                        news_time: '2022/12/01',
-                        news_last_edit:'2022/12/01',
-                        news_type: '重要',
-                        news_title: '「JS 春季行程方案」報名開始',
-                        news_text_start:'我們已經開始接受 2022 年 11 月至 2022 年 12 月發車的「JS 春季行程方案」...',
-                        news_text_middle:'此次行程與活動請見網頁詳細介紹',
-                        news_text_trans:'早鳥訂購優惠4人行響87折優惠。',
-                        news_text_end:'還在猶豫什麼呢?',
-                        news_img:'1.jpg',
-                        news_img_des:'門司港夜景',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022002',
-                        news_time: '2022/11/31',
-                        news_last_edit:'2022/11/31',
-                        news_type: '重要',
-                        news_title: '列車停駛',
-                        news_text_start:'因九州地區受台風3號 (台灣名稱 : 桃花颱風)影響，JS列車決定停駛...',
-                        news_text_middle:'目前九州鐵路有多處毀損，鐵路公司正急速修復中。',
-                        news_text_trans:'目前公司決策至12月15日前，鐵路列車停止營運。',
-                        news_text_end:'詳細退票方式，請留意註冊信箱與電話，有專人通知，造成不便，敬請見諒',
-                        news_img:'2.jpg',
-                        news_img_des:'颱風路線圖',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022003',
-                        news_time: '2022/11/15',
-                        news_last_edit:'2022/11/15',
-                        news_type: '活動',
-                        news_title: '高千穗-夜神樂',
-                        news_text_start:'高千穗知名祭典活動-夜神樂 ，將於今年的11月...',
-                        news_text_middle:'內頁預設',
-                        news_text_trans:'內頁預設',
-                        news_text_end:'內頁預設',
-                        news_img:'3.jpg',
-                        news_img_des:'國有文化資產，傳統文藝-高千穗夜神樂',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022004',
-                        news_time: '2022/08/01',
-                        news_last_edit:'2022/08/01',
-                        news_type: '其他',
-                        news_title: '新商品上市-油封鬼頭刀',
-                        news_text_start:'受大家喜愛名產-油封鬼頭刀，在JS線上商城上架囉! 線上輕鬆點選...',
-                        news_text_middle:'商品詳情與內容請建商城分頁',
-                        news_text_trans:'活動期間，享有免運優惠',
-                        news_text_end:'趕快來購買吧!',
-                        news_img:'4.jpg',
-                        news_img_des:'商品圖',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022005',
-                        news_time: '2022/06/01',
-                        news_last_edit:'2022/06/01',
-                        news_type: '活動',
-                        news_title: '行程車票票根優惠!',
-                        news_text_start:'深夜食堂，天神屋台老闆們的款待...',
-                        news_text_middle:'台灣以夜市響譽國際，但你知道日本的夜市是如何嗎?',
-                        news_text_trans:'屋台在福岡有著知名的特色，近期屋台的老闆們想讓九州屋台知名度更提升，因此推出許多的活動。',
-                        news_text_end:'JS集團響應活動，與老闆們談了優惠的合作，只要拿著行程車票的票根，就能領取屋台老闆們神秘的清冰箱料理。',
-                        news_img:'5.jpg',
-                        news_img_des:'屋台人情味',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022006',
-                        news_time: '2022/05/01',
-                        news_last_edit:'2022/05/01',
-                        news_type: '活動',
-                        news_title: '「高千穗峽谷」划船體驗報名優惠',
-                        news_text_start:'被日本政府列入「名勝」、「天然記念物」的高千穗峽谷，知名活動...',
-                        news_text_middle:'徜徉大自然，峽谷一線天的感受，宛如置身電影情節。',
-                        news_text_trans:'徐徐的涼風，清澈的流水，還有對的人。',
-                        news_text_end:'一起來享受這美好的體驗吧。',
-                        news_img:'6.jpg',
-                        news_img_des:'划船體驗',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022007',
-                        news_time: '2022/04/01',
-                        news_last_edit:'2022/04/01',
-                        news_type: '其他',
-                        news_title: '商城新品上市-福岡名產 努努雞!!',
-                        news_text_start:'受大家喜愛的博多名產-努努雞，在JS線上商城上架囉! 線上輕鬆點選...',
-                        news_text_middle:'商品詳情與內容請建商城分頁',
-                        news_text_trans:'活動期間，享有免運優惠',
-                        news_text_end:'趕快來購買吧!',
-                        news_img:'7.jpg',
-                        news_img_des:'人氣伴手禮-努努雞',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022008',
-                        news_time: '2022/03/01',
-                        news_last_edit:'2022/03/01',
-                        news_type: '其他',
-                        news_title: '行程車票票根優惠!',
-                        news_text_start:'JS旗下集團餐廳"唐寶寶"，唐戶河豚饗宴...',
-                        news_text_middle:'唐戶市場為日本河豚最大的產地，而現在也正是季節。',
-                        news_text_trans:'JS邀請您一起來享受吃起來沒什麼味道的河豚。',
-                        news_text_end:'餐廳合作優惠6折起~',
-                        news_img:'8.jpg',
-                        news_img_des:'河豚三味',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022009',
-                        news_time: '2022/02/01',
-                        news_last_edit:'2022/02/01',
-                        news_type: '活動',
-                        news_title: '訂購夏季行程，豪斯登堡門票優惠',
-                        news_text_start:'如何以最划算的價格，體驗九州行程?...',
-                        news_text_middle:'即日起訂購夏季行程，活動為期半年。',
-                        news_text_trans:'即可免費兌換豪斯登堡門票乙張。',
-                        news_text_end:'贈送門票有限，儘請從速。',
-                        news_img:'9.jpg',
-                        news_img_des:'2日優惠JS-PASS',
-                        news_status:'上架',
-                    },
-                    {
-                        news_no: '2022010',
-                        news_time: '2022/01/01',
-                        news_last_edit:'2022/01/01',
-                        news_type: '重要',
-                        news_title: '列車停駛',
-                        news_text_start:'阿蘇火山爆發，九州各地能見度低，塵埃影響...',
-                        news_text_middle:'昨日深夜，九州居民想起了50年前的恐懼。',
-                        news_text_trans:'阿蘇火山噴發，宛如龐貝惡夢。',
-                        news_text_end:'老闆叫員工擦玻璃。JS列車停駛10日',
-                        news_img:'10.jpg',
-                        news_img_des:'阿蘇火山爆發',
-                        news_status:'上架',
-                    },
+                    // {
+                    //     news_no: '2022001',
+                    //     news_time: '2022/12/01',
+                    //     news_last_edit:'2022/12/01',
+                    //     news_type: '重要',
+                    //     news_title: '「JS 春季行程方案」報名開始',
+                    //     news_text_start:'我們已經開始接受 2022 年 11 月至 2022 年 12 月發車的「JS 春季行程方案」...',
+                    //     news_text_middle:'此次行程與活動請見網頁詳細介紹',
+                    //     news_text_trans:'早鳥訂購優惠4人行響87折優惠。',
+                    //     news_text_end:'還在猶豫什麼呢?',
+                    //     news_img:'1.jpg',
+                    //     news_img_des:'門司港夜景',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022002',
+                    //     news_time: '2022/11/31',
+                    //     news_last_edit:'2022/11/31',
+                    //     news_type: '重要',
+                    //     news_title: '列車停駛',
+                    //     news_text_start:'因九州地區受台風3號 (台灣名稱 : 桃花颱風)影響，JS列車決定停駛...',
+                    //     news_text_middle:'目前九州鐵路有多處毀損，鐵路公司正急速修復中。',
+                    //     news_text_trans:'目前公司決策至12月15日前，鐵路列車停止營運。',
+                    //     news_text_end:'詳細退票方式，請留意註冊信箱與電話，有專人通知，造成不便，敬請見諒',
+                    //     news_img:'2.jpg',
+                    //     news_img_des:'颱風路線圖',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022003',
+                    //     news_time: '2022/11/15',
+                    //     news_last_edit:'2022/11/15',
+                    //     news_type: '活動',
+                    //     news_title: '高千穗-夜神樂',
+                    //     news_text_start:'高千穗知名祭典活動-夜神樂 ，將於今年的11月...',
+                    //     news_text_middle:'內頁預設',
+                    //     news_text_trans:'內頁預設',
+                    //     news_text_end:'內頁預設',
+                    //     news_img:'3.jpg',
+                    //     news_img_des:'國有文化資產，傳統文藝-高千穗夜神樂',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022004',
+                    //     news_time: '2022/08/01',
+                    //     news_last_edit:'2022/08/01',
+                    //     news_type: '其他',
+                    //     news_title: '新商品上市-油封鬼頭刀',
+                    //     news_text_start:'受大家喜愛名產-油封鬼頭刀，在JS線上商城上架囉! 線上輕鬆點選...',
+                    //     news_text_middle:'商品詳情與內容請建商城分頁',
+                    //     news_text_trans:'活動期間，享有免運優惠',
+                    //     news_text_end:'趕快來購買吧!',
+                    //     news_img:'4.jpg',
+                    //     news_img_des:'商品圖',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022005',
+                    //     news_time: '2022/06/01',
+                    //     news_last_edit:'2022/06/01',
+                    //     news_type: '活動',
+                    //     news_title: '行程車票票根優惠!',
+                    //     news_text_start:'深夜食堂，天神屋台老闆們的款待...',
+                    //     news_text_middle:'台灣以夜市響譽國際，但你知道日本的夜市是如何嗎?',
+                    //     news_text_trans:'屋台在福岡有著知名的特色，近期屋台的老闆們想讓九州屋台知名度更提升，因此推出許多的活動。',
+                    //     news_text_end:'JS集團響應活動，與老闆們談了優惠的合作，只要拿著行程車票的票根，就能領取屋台老闆們神秘的清冰箱料理。',
+                    //     news_img:'5.jpg',
+                    //     news_img_des:'屋台人情味',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022006',
+                    //     news_time: '2022/05/01',
+                    //     news_last_edit:'2022/05/01',
+                    //     news_type: '活動',
+                    //     news_title: '「高千穗峽谷」划船體驗報名優惠',
+                    //     news_text_start:'被日本政府列入「名勝」、「天然記念物」的高千穗峽谷，知名活動...',
+                    //     news_text_middle:'徜徉大自然，峽谷一線天的感受，宛如置身電影情節。',
+                    //     news_text_trans:'徐徐的涼風，清澈的流水，還有對的人。',
+                    //     news_text_end:'一起來享受這美好的體驗吧。',
+                    //     news_img:'6.jpg',
+                    //     news_img_des:'划船體驗',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022007',
+                    //     news_time: '2022/04/01',
+                    //     news_last_edit:'2022/04/01',
+                    //     news_type: '其他',
+                    //     news_title: '商城新品上市-福岡名產 努努雞!!',
+                    //     news_text_start:'受大家喜愛的博多名產-努努雞，在JS線上商城上架囉! 線上輕鬆點選...',
+                    //     news_text_middle:'商品詳情與內容請建商城分頁',
+                    //     news_text_trans:'活動期間，享有免運優惠',
+                    //     news_text_end:'趕快來購買吧!',
+                    //     news_img:'7.jpg',
+                    //     news_img_des:'人氣伴手禮-努努雞',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022008',
+                    //     news_time: '2022/03/01',
+                    //     news_last_edit:'2022/03/01',
+                    //     news_type: '其他',
+                    //     news_title: '行程車票票根優惠!',
+                    //     news_text_start:'JS旗下集團餐廳"唐寶寶"，唐戶河豚饗宴...',
+                    //     news_text_middle:'唐戶市場為日本河豚最大的產地，而現在也正是季節。',
+                    //     news_text_trans:'JS邀請您一起來享受吃起來沒什麼味道的河豚。',
+                    //     news_text_end:'餐廳合作優惠6折起~',
+                    //     news_img:'8.jpg',
+                    //     news_img_des:'河豚三味',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022009',
+                    //     news_time: '2022/02/01',
+                    //     news_last_edit:'2022/02/01',
+                    //     news_type: '活動',
+                    //     news_title: '訂購夏季行程，豪斯登堡門票優惠',
+                    //     news_text_start:'如何以最划算的價格，體驗九州行程?...',
+                    //     news_text_middle:'即日起訂購夏季行程，活動為期半年。',
+                    //     news_text_trans:'即可免費兌換豪斯登堡門票乙張。',
+                    //     news_text_end:'贈送門票有限，儘請從速。',
+                    //     news_img:'9.jpg',
+                    //     news_img_des:'2日優惠JS-PASS',
+                    //     news_status:'上架',
+                    // },
+                    // {
+                    //     news_no: '2022010',
+                    //     news_time: '2022/01/01',
+                    //     news_last_edit:'2022/01/01',
+                    //     news_type: '重要',
+                    //     news_title: '列車停駛',
+                    //     news_text_start:'阿蘇火山爆發，九州各地能見度低，塵埃影響...',
+                    //     news_text_middle:'昨日深夜，九州居民想起了50年前的恐懼。',
+                    //     news_text_trans:'阿蘇火山噴發，宛如龐貝惡夢。',
+                    //     news_text_end:'老闆叫員工擦玻璃。JS列車停駛10日',
+                    //     news_img:'10.jpg',
+                    //     news_img_des:'阿蘇火山爆發',
+                    //     news_status:'上架',
+                    // },
                 ],
                 dataDraft: [
                     {
@@ -849,6 +889,46 @@
 
             },
             methods: {
+            // 測試本地資料庫 fetch
+            // getFaqData(){
+            //     fetch('http://localhost/list.php')
+            //     .then(res=>res.json())
+            //     .then(json=>{
+            //         console.log(4);
+            //         console.log(this);
+            //         this.dataOn = json;
+            //     })
+            // },
+            // XML方法
+            getProducts(){
+			//取得商品資料
+			let xhr = new XMLHttpRequest();
+                console.log(1);
+                console.log(this);
+                let qqq = this;
+			xhr.onload = function(){
+                console.log(2);
+                console.log(this);
+				if(xhr.status == 200){ //OK
+					qqq.dataOn = JSON.parse(xhr.responseText);
+                    console.log(3);
+                    console.log(this);
+				}
+			}
+			xhr.open("get",'http://localhost/list.php', true);
+			xhr.send(null);
+		    },
+            addNewsData(){
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function(){
+                let result = JSON.parse(xhr.responseText);
+                alert(result.msg);
+                // document.getElementById("btnReset").click();
+                // $id("btnReset").click();
+            }
+            xhr.open("post", "http://localhost/news_insert.php", true);
+            xhr.send(new FormData(document.getElementById("addNewsForm")));
+            },
             newToggle(){ //新表單
                 this.seenNew = !this.seenNew
             },
@@ -881,7 +961,13 @@
             activeOffData(){
                 return this.dataOff.find(v=> v.news_no === this.activeIndex) ?? {}
             }
-        }
+        },
+        created(){
+		    // this.getFaqData();
+        },
+        mounted(){
+        this.getProducts();
+    },
     }
 </script>
 
