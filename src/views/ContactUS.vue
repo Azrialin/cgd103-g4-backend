@@ -6,14 +6,40 @@
       :data="data1"
       border
     >
-      <template :slot-scope="props" #table-row>
-        <Button @click="open()">更多資訊</Button>
+      <!-- 意見表編號 -->
+      <template #opinion_no="{ row, index }">
+        <Input type="text" v-if="editIndex === index" />
+        <span v-else>{{ row.opinion_no }}</span>
+      </template>
+      <!-- 填寫日期 -->
+      <template #order_date="{ row, index }">
+        <Input type="text" v-if="editIndex === index" />
+        <span v-else>{{ row.order_date }}</span>
+      </template>
+      <!-- 填寫人姓名 -->
+      <template #mem_no="{ row, index }">
+        <Input type="text" v-if="editIndex === index" />
+        <span v-else>{{ row.mem_no }}</span>
+      </template>
+      <!-- 連絡電話 -->
+      <template #order_price="{ row, index }">
+        <Input type="text" v-if="editIndex === index" />
+        <span v-else>{{ row.order_price }}</span>
+      </template>
+      <!-- 信箱 -->
+      <template #payment_status="{ row, index }">
+        <Input type="text" v-if="editIndex === index" />
+        <span v-else>{{ row.payment_status }}</span>
+      </template>
+      <!-- 意見表詳情 -->
+      <template #table-row="{ row }">
+        <Button @click="editOnData(row.opinion_no)">更多資訊</Button>
       </template>
     </Table>
     <div class="morecontent" v-show="show">
       <div class="content">
         <div class="content-header">
-            <p>意見表詳情</p>
+          <p>意見表詳情</p>
         </div>
         <div class="content-text">
           <p>意見表編號：{{ opinion_no }}</p>
@@ -23,8 +49,8 @@
           <p>填寫人信箱：{{ opinion_mail }}</p>
           <p>意見詳情：{{ opinion_detail }}</p>
         </div>
-        <div class="closebtn"> 
-            <Button @click="close()">關閉</Button>
+        <div class="closebtn">
+          <Button @click="editOnData()">關閉</Button>
         </div>
       </div>
     </div>
@@ -35,6 +61,7 @@ export default {
   data() {
     return {
       show: false,
+      activeIndex: null,
       columns1: [
         {
           title: "意見表編號",
@@ -63,14 +90,13 @@ export default {
           slot: "table-row",
         },
       ],
-
       data1: [
         {
-          no: "A001",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
+          opion_no: "A001",
+          opion_filltime: "2022-12-13 18:30:00",
+          opion_name: "余昕叡",
+          opion_cellphone: "0912345678",
+          opion_email: "fishray8787@gmail.com",
         },
         {
           no: "A002",
@@ -136,46 +162,6 @@ export default {
           email: "fishray8787@gmail.com",
         },
       ],
-      columns: [
-        {
-          title: "Name",
-          key: "name",
-        },
-        {
-          title: "Age",
-          key: "age",
-        },
-        {
-          title: "Address",
-          key: "address",
-        },
-      ],
-      data: [
-        {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park",
-          date: "2016-10-03",
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park",
-          date: "2016-10-01",
-        },
-        {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park",
-          date: "2016-10-02",
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park",
-          date: "2016-10-04",
-        },
-      ],
     };
   },
   methods: {
@@ -187,24 +173,12 @@ export default {
       }
       return "";
     },
-    open() {
-      let that = this;
-      that.show = true;
+    editOnData(no) {
+      this.show = !this.show;
+      this.activeIndex = no;
     },
-    close() {
-      let that = this;
-      that.show = false;
-    },
-    handleBeforeChange() {
-      return new Promise((resolve) => {
-        this.$Modal.confirm({
-          title: "切换确认",
-          content: "您确认要切换开关状态吗？",
-          onOk: () => {
-            resolve();
-          },
-        });
-      });
+    activeData() {
+      return this.data1.find((v) => v.order_no === this.activeIndex) ?? {};
     },
   },
 };
@@ -238,7 +212,7 @@ export default {
       height: 80px;
       background-color: #2d3740;
       line-height: 80px;
-      p{
+      p {
         font-size: 32px;
         font-weight: 900;
         color: #fff;
@@ -256,9 +230,9 @@ export default {
         flex-wrap: wrap;
       }
     }
-    .closebtn{
-        padding: 60px 200px;
-        text-align: end;
+    .closebtn {
+      padding: 60px 200px;
+      text-align: end;
     }
   }
 }
