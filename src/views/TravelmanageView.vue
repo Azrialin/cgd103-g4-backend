@@ -95,7 +95,7 @@
                         </Table>
                     </TabPane>
                     <TabPane label="方案A" >
-                        <Table stripe border :columns="others" :data="dataA" >
+                        <Table stripe border :columns="others" :data="dataB" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
@@ -196,7 +196,7 @@
                                 <span v-else>{{ row.news_session }}</span>
                             </template>
                             <!-- 分類 -->
-                            <template #news_class="{ row, index }">
+                            <template #news_class="{ row }">
                                 <Button @click="editOnData(row.news_no)">編輯</Button>
                             </template>
                             <!-- 標題 -->
@@ -470,7 +470,7 @@
                         news_time: '2022/11/25',
                         news_session:'2352',
                         news_class: '火車佐便當',
-                        news_title: '20',
+                        news_title: '10',
                         news_status:'2022/12/27',
                         news_price:'699',
                         news_number:'2022/12/27',
@@ -486,11 +486,11 @@
                         news_number:'2022/12/27',
                     },
                     {
-                        news_no: 'A1100008',
+                        news_no: 'A1100009',
                         news_time: '2022/11/26',
                         news_session:'2352',
                         news_class: '火車佐便當',
-                        news_title: '20',
+                        news_title: '40',
                         news_status:'2022/12/27',
                         news_price:'699',
                         news_number:'2022/12/27',
@@ -565,9 +565,6 @@
                 }
             },
             computed: {
-                activeData() {
-                    return this.dataA.find((c) => c.news_no === this.activeIndex) ?? {};
-                },
                 activeData() {
                     return this.dataA.find((v) => v.news_no === this.activeIndex) ?? {};
                 },
