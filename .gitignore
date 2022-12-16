@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
 /dist
-
+/public/php
+/src/components/Faq
 
 # local env files
 .env.local
