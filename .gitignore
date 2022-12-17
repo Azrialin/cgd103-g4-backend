@@ -3,6 +3,8 @@ node_modules
 /dist
 /public/php
 /src/components/Faq
+#php
+phpfiles
 
 # local env files
 .env.local
