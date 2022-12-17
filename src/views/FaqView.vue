@@ -76,14 +76,14 @@
                 <!-- 編輯 -->
                 <template #edit="{ row }">
                     <div class="btn-box">
-                        <span class="icon material-symbols-outlined" @click="toggleEditForm(row.faq_no)">edit_square</span>
+                        <span class="icon material-symbols-outlined" @click="editForm(row.faq_no)">edit_square</span>
                     </div>
                 </template>
                 <!-- 刪除 -->
-                <template #delete>
+                <template #delete="{ row }">
                     <span class="icon material-symbols-outlined"
                         style="font-size:26px; margin-top: 5px;"
-                        @click="show_DelAlert=!show_DelAlert"
+                        @click="delCheck(row.faq_no)"
                     >delete
                     </span>
                 </template>
@@ -273,7 +273,7 @@
                     </Button>
                     <Button class="btn-danger"
                         long :loading="alert_Loading"
-                        @click="del(index)">刪除
+                        @click="delFaqData(index)">刪除
                     </Button>
                 </div>
             </div>
@@ -441,8 +441,9 @@ export default {
             newFaq_status: 1,
 // ----- 表單：修改資料 ------
             editIndex: -1,
-            editingNo: '',  // 正在修改的資料編號
+            editingNo: '',  // 在修改的資料編號
             editingFaq: [], // 要回傳的陣列
+            deleteNo: '',   // 要刪除的資料編號
 // ----- 表單：下拉選單 ------
             selectList: [
                 { text: '會員問題', },
@@ -461,6 +462,57 @@ export default {
 
     },
     methods: {
+// ----- 分頁切換 ------
+        clickAll(e){
+            this.activeList = this.faqList;
+            e.target.classList.add('on');
+            e.target.parentNode.childNodes[2].classList.remove('on');
+            e.target.parentNode.childNodes[3].classList.remove('on');
+            e.target.parentNode.childNodes[4].classList.remove('on');
+        },
+        changeTab(tab){
+            this.activeCategory = tab;
+            this.activeList = this.faqList.filter(item => {
+                return item.faq_type === tab.faq_type;
+            });
+            let tabAll = document.getElementById("tabAll");
+            tabAll.classList.remove('on');
+        },
+// ----- 狀態切換 ------
+        changeStatus(status){
+            status
+            ? this.$Message.info('狀態：顯示')
+            : this.$Message.info('狀態：隱藏');
+        },
+// ----- 單選/多選事件 ------
+        onSelect(index){
+            console.log(index);
+        },
+// ----- 全選事件 ------
+        onSelectAll(index){
+            console.log(index);
+        },
+// ----- 表單：編輯 ------
+        editForm(edit){
+            this.editingNo = edit;
+            this.show_EditForm = !this.show_EditForm;
+            this.editingFaq = this.activeList.find(v=> v.faq_no === this.editingNo) ?? [];
+        },
+// ----- 彈窗：關閉 ------
+        cancel(){
+            this.alert_Loading = true;
+            setTimeout(() => {
+                this.show_CheckAlert = false;
+                this.show_NewForm = false;
+                this.show_EditForm = false;
+                this.alert_Loading = false;
+            }, 200);
+        },
+// ----- 彈窗：刪除確認 ------
+        delCheck(del){
+            this.deleteNo = del;
+            this.show_DelAlert=!this.show_DelAlert;
+        },
 // ----- 撈資料 ------ XML
         // getFaqData_XML(){
         //     let faqVue = this;
@@ -509,8 +561,9 @@ export default {
                     this.alert_Loading = false;
                     this.show_NewForm = false;
                     this.$Message.success(result.msg);
-                }, 800);
+                }, 600);
             })
+            window.location.reload();
         },
 // ----- 測試修改資料 ------ XML(不能用)
         // editFaqData(){
@@ -542,62 +595,27 @@ export default {
                     this.alert_Loading = false;
                     this.show_EditForm = false;
                     this.$Message.success(result.msg);
-                }, 800);
+                }, 600);
             })
         },
-        // del(index){
-        //     this.activeList.splice(index, 1);
-        //     this.alert_Loading = true;
-        //     setTimeout(() => {
-        //         this.show_DelAlert = false;
-        //         this.alert_Loading = false;
-        //         this.$Message.success('已成功刪除一筆常見問題');
-        //     }, 200);
-        // },
-        cancel(){
-            this.alert_Loading = true;
-            setTimeout(() => {
-                this.show_CheckAlert = false;
-                this.show_NewForm = false;
-                this.show_EditForm = false;
-                this.alert_Loading = false;
-            }, 200);
-        },
-        toggleEditForm(edit){
-            this.editingNo = edit;
-            this.show_EditForm = !this.show_EditForm;
-            this.editingFaq = this.activeList.find(v=> v.faq_no === this.editingNo) ?? [];
-            console.log(this.editingFaq);
-        },
-// ----- 分頁換頁 ------
-        clickAll(e){
-            // console.log(this.faqList);
-            // console.log(this.activeList);
-            // showAll = true;
-            this.activeList = this.faqList;
-            e.target.classList.add('on');
-            e.target.parentNode.childNodes[2].classList.remove('on');
-            e.target.parentNode.childNodes[3].classList.remove('on');
-            e.target.parentNode.childNodes[4].classList.remove('on');
-        },
-        changeTab(tab){
-            this.activeCategory = tab;
-            this.activeList = this.faqList.filter(item => {
-                return item.faq_type === tab.faq_type;
-            });
-            let tabAll = document.getElementById("tabAll");
-            tabAll.classList.remove('on');
-        },
-        changeStatus(status){
-            status
-            ? this.$Message.info('狀態：顯示')
-            : this.$Message.info('狀態：隱藏');
-        },
-        onSelect(index){
-            console.log(index);
-        },
-        onSelectAll(index){
-            console.log(index);
+// ----- 刪除資料 ------ fetch
+        delFaqData(){
+            // this.activeList.splice(index, 1);
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/deleteFaq.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                faq_no:this.deleteNo,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                // console.log(result)
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.alert_Loading = false;
+                    this.show_DelAlert = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+            })
+            window.location.reload();
         },
     },
     created(){
