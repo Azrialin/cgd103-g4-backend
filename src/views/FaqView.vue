@@ -1,5 +1,4 @@
 <!-- 問題
-    4. 刪除資料
     6. 多選的 SQL 指令
     7. 各個彈窗寫成 component
     8. 進入頁面預設打開"全部"
@@ -16,9 +15,9 @@
 		<main>
 <!-- 按鈕 -->
 			<div class="btns">
-				<button class="btn-blue_2nd">顯示/隱藏</button>
+				<button class="btn-blue_2nd" @click="changeAll">顯示/隱藏</button>
 				<button class="btn-blue" @click="show_NewForm = !show_NewForm">新增</button>
-				<button class="btn-blue">刪除</button>
+				<button class="btn-blue" @click="deleteAll">刪除</button>
 			</div>
 <!-- 分頁標籤 -->
             <ul class="tabs">
@@ -108,11 +107,11 @@
                                 placeholder="請選擇"
                                 style="width: 120px"
                             >
-                                <Option v-for="selectItem in selectList"
-                                    :value="selectItem.text"
-                                    :key="selectItem.text"
+                                <Option v-for="dropDownItem in dropDownList"
+                                    :value="dropDownItem.text"
+                                    :key="dropDownItem.text"
                                 >
-                                    {{selectItem.text}}
+                                    {{dropDownItem.text}}
                                 </Option>
                             </Select>
                             <!-- 狀態開關 -->
@@ -193,11 +192,11 @@
                                 placeholder="請選擇"
                                 style="width: 120px"
                             >
-                                <Option v-for="selectItem in selectList"
-                                    :value="selectItem.text"
-                                    :key="selectItem.text"
+                                <Option v-for="dropDownItem in dropDownList"
+                                    :value="dropDownItem.text"
+                                    :key="dropDownItem.text"
                                 >
-                                    {{selectItem.text}}
+                                    {{dropDownItem.text}}
                                 </Option>
                             </Select>
                             <!-- 狀態開關 -->
@@ -304,14 +303,15 @@
 </template>
 <script>
 import faq from '@/assets/js/faq.js'
-// import select from '@/components/select.vue'
 
 export default {
     components: {
-        // select,
+
     },
     data(){
         return {
+            selectAll: 0,
+            selectList: [],
 // ----- 分頁 ------
             activeCategory: '',
             activeList: [],
@@ -324,6 +324,7 @@ export default {
             columns: [
                 {
                     type: 'selection',
+                    name: 'fruit',
                     width: 60,
                     align: 'center'
                 },
@@ -445,7 +446,7 @@ export default {
             editingFaq: [], // 要回傳的陣列
             deleteNo: '',   // 要刪除的資料編號
 // ----- 表單：下拉選單 ------
-            selectList: [
+            dropDownList: [
                 { text: '會員問題', },
                 { text: '行程問題', },
                 { text: '商品問題', },
@@ -486,11 +487,58 @@ export default {
         },
 // ----- 單選/多選事件 ------
         onSelect(index){
-            console.log(index);
+            // console.log(index);
+            this.selectList=[];
+            for(let i=0; i<index.length; i++){
+                if( this.selectList.includes(index[i].faq_no) == 0 )
+                    this.selectList.push(index[i].faq_no);
+            }
+            console.log(this.selectList);
         },
 // ----- 全選事件 ------
         onSelectAll(index){
-            console.log(index);
+            if(this.selectAll == 0){
+                for(let i=0; i<index.length; i++){
+                    if( this.selectList.includes(index[i].faq_no) == 0 )
+                        this.selectList.push(index[i].faq_no);
+                }
+                console.log(this.selectList);
+            }else{
+                this.selectList=[];
+                console.log(this.selectList);
+            }
+            // this.selectAll=!this.selectAll;
+            // console.log(this.selectAll);
+            // switch (this.selectAll) {
+            // case 1:
+            //     this.selectList='1';
+            //     console.log(this.selectAll);
+            //     break;
+            // case 0:
+            //     for(let i=0; i<index.length; i++){
+            //         if( this.selectList.includes(index[i].faq_no) == 0 )
+            //             this.selectList.push(index[i].faq_no);
+            //     };	
+            //     console.log(this.selectAll);
+            //     break;
+            // }
+            // this.selectAll=!this.selectAll;
+
+
+            // for(let i=0; i<index.length; i++){
+            //     if( this.selectList.includes(index[i].faq_no) == 0 )
+            //         this.selectList.push(index[i].faq_no);
+            // }
+            // console.log(this.selectAll);
+
+
+            // console.log(this.selectList);
+        },
+        deleteAll(){
+            console.log(this.selectList);
+        },
+        changeAll(){
+            console.log(this.selectList);
         },
 // ----- 表單：編輯 ------
         editForm(edit){
@@ -562,8 +610,10 @@ export default {
                     this.show_NewForm = false;
                     this.$Message.success(result.msg);
                 }, 600);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             })
-            window.location.reload();
         },
 // ----- 測試修改資料 ------ XML(不能用)
         // editFaqData(){
@@ -614,8 +664,10 @@ export default {
                     this.show_DelAlert = false;
                     this.$Message.success(result.msg);
                 }, 600);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             })
-            window.location.reload();
         },
     },
     created(){
