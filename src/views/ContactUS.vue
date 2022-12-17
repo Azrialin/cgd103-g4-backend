@@ -7,29 +7,29 @@
       border
     >
       <!-- 意見表編號 -->
-      <template #opinion_no="{ row, index }">
+      <template #opinion_no="{row,index}">
         <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.opinion_no }}</span>
+        <span v-else>{{ row.opinion_no}}</span>
       </template>
       <!-- 填寫日期 -->
-      <template #order_date="{ row, index }">
+      <template #opinion_date="{ row,index}">
         <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.order_date }}</span>
+        <span v-else>{{ row.opinion_filltime}}</span>
       </template>
       <!-- 填寫人姓名 -->
-      <template #mem_no="{ row, index }">
+      <template #opinion_name="{ row,index}">
         <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.mem_no }}</span>
+        <span v-else>{{ row.opinion_name }}</span>
       </template>
       <!-- 連絡電話 -->
-      <template #order_price="{ row, index }">
+      <template #opinion_num="{ row,index}">
         <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.order_price }}</span>
+        <span v-else>{{ row.opinion_cellphone}}</span>
       </template>
       <!-- 信箱 -->
-      <template #payment_status="{ row, index }">
+      <template #opinion_mail="{ row,index}">
         <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.payment_status }}</span>
+        <span v-else>{{ row.opinion_email }}</span>
       </template>
       <!-- 意見表詳情 -->
       <template #table-row="{ row }">
@@ -42,12 +42,12 @@
           <p>意見表詳情</p>
         </div>
         <div class="content-text">
-          <p>意見表編號：{{ opinion_no }}</p>
-          <p>填寫日期：{{ opinion_date }}</p>
-          <p>填寫人名字：{{ opinion_name }}</p>
-          <p>填寫人電話：{{ opinion_num }}</p>
-          <p>填寫人信箱：{{ opinion_mail }}</p>
-          <p>意見詳情：{{ opinion_detail }}</p>
+          <p>意見表編號：{{ activeData.opinion_no }}</p>
+          <p>填寫日期：{{ activeData.opinion_filltime }}</p>
+          <p>填寫人名字：{{ activeData.opinion_name }}</p>
+          <p>填寫人電話：{{ activeData.opinion_cellphone }}</p>
+          <p>填寫人信箱：{{ activeData.opinion_email }}</p>
+          <p>意見詳情：{{ activeData.opinion_detail }}</p>
         </div>
         <div class="closebtn">
           <Button @click="editOnData()">關閉</Button>
@@ -65,101 +65,45 @@ export default {
       columns1: [
         {
           title: "意見表編號",
-          key: "no",
           width: 120,
+          slot: "opinion_no",
         },
         {
           title: "填寫時間",
-          key: "filltime",
+          slot: "opinion_date",
         },
         {
           title: "填寫人姓名",
-          key: "name",
+          slot: "opinion_name",
         },
         {
           title: "連絡電話",
-          key: "cellphone",
+          slot: "opinion_num",
         },
         {
           title: "信箱",
-          key: "email",
+          slot: "opinion_mail",
         },
         {
           title: "意見表詳情",
-          key: "content",
           slot: "table-row",
         },
       ],
       data1: [
         {
-          opion_no: "A001",
-          opion_filltime: "2022-12-13 18:30:00",
-          opion_name: "余昕叡",
-          opion_cellphone: "0912345678",
-          opion_email: "fishray8787@gmail.com",
+          opinion_no: "A001",
+          opinion_filltime: "2022-12-13 18:30:00",
+          opinion_name: "余昕叡",
+          opinion_cellphone: "0912345678",
+          opinion_email: "fishray8787@gmail.com",
+          opinion_content:"1111111111111111111111111111"
         },
         {
-          no: "A002",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A003",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A004",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A005",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A007",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A008",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A009",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A010",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
-        },
-        {
-          no: "A011",
-          filltime: "2022-12-13 18:30:00",
-          name: "余昕叡",
-          cellphone: "0912345678",
-          email: "fishray8787@gmail.com",
+          opinion_no: "A002",
+          opinion_filltime: "2022-12-15 18:30:00",
+          opinion_name: "曾筱筑",
+          opinion_cellphone: "0912345678",
+          opinion_email: "vivi8787@gmail.com",
         },
       ],
     };
@@ -177,10 +121,12 @@ export default {
       this.show = !this.show;
       this.activeIndex = no;
     },
-    activeData() {
-      return this.data1.find((v) => v.order_no === this.activeIndex) ?? {};
-    },
   },
+  computed: {
+    activeData() {
+      return this.data1.find((v) => v.opinion_no === this.activeIndex) ?? {};
+    },
+  },  
 };
 </script>
 
