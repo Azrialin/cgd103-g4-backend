@@ -17,7 +17,7 @@
 			<div class="btns">
 				<button class="btn-blue_2nd" @click="changeAll">顯示/隱藏</button>
 				<button class="btn-blue" @click="show_NewForm = !show_NewForm">新增</button>
-				<button class="btn-blue" @click="deleteAll">刪除</button>
+				<button class="btn-blue" @click="massDelete">刪除</button>
 			</div>
 <!-- 分頁標籤 -->
             <ul class="tabs">
@@ -66,7 +66,7 @@
                         :false-value = 0
                         true-color = "#6C9255"
                         false-color = "#E6E6E6"
-                        @click="changeStatus(row.faq_status)"
+                        @click="changeStatus(row)"
                     >
                         <template #open><span>ON</span></template>
                         <template #close><span>OFF</span></template>
@@ -310,8 +310,10 @@ export default {
     },
     data(){
         return {
-            selectAll: 0,
-            selectList: [],
+// ----- 表格：選取 ------
+            deleteNo: '',   // 要刪除的資料編號(單筆)
+            selectAll: false,   // 是否全選
+            selectList: [], // 要批量動作的資料編號(陣列)
 // ----- 分頁 ------
             activeCategory: '',
             activeList: [],
@@ -444,7 +446,6 @@ export default {
             editIndex: -1,
             editingNo: '',  // 在修改的資料編號
             editingFaq: [], // 要回傳的陣列
-            deleteNo: '',   // 要刪除的資料編號
 // ----- 表單：下拉選單 ------
             dropDownList: [
                 { text: '會員問題', },
@@ -478,12 +479,6 @@ export default {
             });
             let tabAll = document.getElementById("tabAll");
             tabAll.classList.remove('on');
-        },
-// ----- 狀態切換 ------
-        changeStatus(status){
-            status
-            ? this.$Message.info('狀態：顯示')
-            : this.$Message.info('狀態：隱藏');
         },
 // ----- 單選/多選事件 ------
         onSelect(index){
@@ -534,19 +529,13 @@ export default {
 
             // console.log(this.selectList);
         },
-        deleteAll(){
-            console.log(this.selectList);
-        },
-        changeAll(){
-            console.log(this.selectList);
-        },
 // ----- 表單：編輯 ------
         editForm(edit){
             this.editingNo = edit;
             this.show_EditForm = !this.show_EditForm;
             this.editingFaq = this.activeList.find(v=> v.faq_no === this.editingNo) ?? [];
         },
-// ----- 彈窗：關閉 ------
+// ----- 關閉彈窗(取消) ------
         cancel(){
             this.alert_Loading = true;
             setTimeout(() => {
@@ -555,11 +544,6 @@ export default {
                 this.show_EditForm = false;
                 this.alert_Loading = false;
             }, 200);
-        },
-// ----- 彈窗：刪除確認 ------
-        delCheck(del){
-            this.deleteNo = del;
-            this.show_DelAlert=!this.show_DelAlert;
         },
 // ----- 撈資料 ------ XML
         // getFaqData_XML(){
@@ -627,7 +611,7 @@ export default {
         //     xhr.open("post", "http://localhost/CGD103_G4_back/public/php/updateFaq.php", true);
         //     xhr.send(new FormData(document.getElementById("editForm")));
         // },
-// ----- 修改資料 ------ fetch
+// ----- 單筆修改資料 ------ fetch
         editFaqData(){
             const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/updateFaq.php");
             fetch(myUrl,{ method:'POST', body:new URLSearchParams({
@@ -648,7 +632,40 @@ export default {
                 }, 600);
             })
         },
-// ----- 刪除資料 ------ fetch
+// ----- 單筆狀態切換 ------
+        changeStatus(row){
+            // console.log(row.faq_no);
+            // console.log(row.faq_status);
+
+            row.faq_status
+            ? this.$Message.info('狀態：顯示')
+            : this.$Message.info('狀態：隱藏');
+
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/changeFaqState.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                faq_no:row.faq_no,
+                faq_status:row.faq_status,
+            })})
+            .then((res) => res.json())
+            // .then((result)=> {
+            //     // console.log(result)
+            //     this.alert_Loading = true;
+            //     setTimeout(() => {
+            //         this.alert_Loading = false;
+            //         this.$Message.success(result.msg);
+            //     }, 600);
+            // })
+        },
+// ----- 批量狀態切換 ------
+        massChangeStatus(){
+            console.log(this.selectList);
+        },
+// ----- 彈窗：刪除確認 ------
+        delCheck(del){
+            this.deleteNo = del;
+            this.show_DelAlert=!this.show_DelAlert;
+        },
+// ----- 單筆刪除資料 ------ fetch
         delFaqData(){
             // this.activeList.splice(index, 1);
             const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/deleteFaq.php");
@@ -669,6 +686,27 @@ export default {
                 }, 1000);
             })
         },
+// ----- 批量刪除資料 ------ fetch
+        massDelete(){
+            console.log(this.selectList);
+            console.log(this.selectList.length);
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/massDeleteFaq.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                items: this.selectList,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                console.log(result)
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.alert_Loading = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            })
+        }
     },
     created(){
 		this.getFaqData_Fetch();
