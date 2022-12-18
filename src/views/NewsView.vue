@@ -57,8 +57,8 @@
 -->
 <!-- 
 目的: 新增資料    
-1. 新增資料function addNewsData
-        addNewsData(){
+1. 新增資料function addFaqData
+        addFaqData(){
             let xhr = new XMLHttpRequest();
             xhr.onload = function(){
                 let result = JSON.parse(xhr.responseText);
@@ -69,9 +69,8 @@
             xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faq_insert.php", true);
             xhr.send(new FormData(document.getElementById("myForm")));
         },
-2. html Form夾要傳送的資料範圍，給抓取的ID、method(post)、enctype
-3. 綁定送出按鈕 click="addNewsData"
-4.有兩個新增資料的方法 project_books_formData(HTML5) 1.js(prod_insert.html) 2.php(此次用的方法) prod_insert.php(改成news_insert.php)
+2. html Form夾要傳送的資料範圍
+3.有兩個新增資料的方法 project_books_formData(HTML5) 1.js(prod_insert.html) 2.php(此次用的方法) prod_insert.php
 
  -->
     <div class="backstage-news" >
@@ -207,10 +206,6 @@
                     </TabPane>
                 </Tabs>
             </div>
-            <!-- <div class="btn-bottom"> 目前用卷軸去顯示所有的資料
-                <button class="font-18">上一頁</button>
-                <button class="font-18">下一頁</button>
-            </div> -->
         </div>
     </div>
     <!-- style="display:none" -->
@@ -226,27 +221,23 @@
                     <div class="on-date">
                         <span class="date">發布時間</span>
                         <span class="date"></span>
-                        <input type="text" name="news_time">
                     </div>
                     <div class="last-edit-date">
                         <span class="date">最後更新</span>
                         <span class="date"></span>
-                        <input type="text" name="news_last_edit">
                     </div>
                 </div>
                 <div class="popup-content font-18">
                     <div class="popup-data">
-                        <input type="text" name="news_status">
                         <label for="">狀態(必填)
-                            <select  id="">
+                            <select name="" id="">
                                 <option value="draft">草稿</option>
                                 <option value="on">上架</option>
                                 <option value="off">下架</option>
                             </select>
                         </label>
                         <label for="">分類
-                            <input type="text" name="news_type">
-                            <select  id="">
+                            <select name="" id="">
                                 <option value="important">重要</option>
                                 <option value="action">活動</option>
                                 <option value="other">其他</option>
@@ -256,27 +247,27 @@
                     <div class="input-txt">
                         <div class="input-title">
                             <label for="">標題：
-                                <Input placeholder="請輸入標題" clearable style="width: 500px" name="news_title"/>
+                                <Input placeholder="請輸入標題" clearable style="width: 500px" />
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">引文：
-                                <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px" name="news_text_start"/>
+                                <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">內文：
-                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px" name="news_text_middle"/>
+                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">內文：
-                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px" name="news_text_trans"/>
+                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">結尾：
-                                <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px" name="news_text_end"/>
+                                <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                             </label>
                         </div>
                     </div>
@@ -287,12 +278,12 @@
                     </div>
                     <div class="input-pic-des">
                         <label for="">圖片敘述：
-                            <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" name="news_img_des"/>
+                            <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                         </label>
                     </div>
                     <div class="popup-btn">
                         <button class="btn-blue_2nd" @click="newToggle">取消</button>
-                        <button class="btn-blue" @click="addNewsData">確認</button>
+                        <button class="btn-blue" @click="newToggle">確認</button>
                         <!-- 確認鍵功能待補，暫放toggle -->
                     </div>
                 </div>
@@ -918,7 +909,7 @@
 			xhr.open("get",'http://localhost/list.php', true);
 			xhr.send(null);
 		    },
-            addNewsData(){
+            addFaqData(){
             let xhr = new XMLHttpRequest();
             xhr.onload = function(){
                 let result = JSON.parse(xhr.responseText);
@@ -926,7 +917,7 @@
                 // document.getElementById("btnReset").click();
                 // $id("btnReset").click();
             }
-            xhr.open("post", "http://localhost/news_insert.php", true);
+            xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faq_insert.php", true);
             xhr.send(new FormData(document.getElementById("addNewsForm")));
             },
             newToggle(){ //新表單
