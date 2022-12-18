@@ -1,9 +1,9 @@
 <!-- 問題
-    6. 多選的 SQL 指令
     7. 各個彈窗寫成 component
     8. 進入頁面預設打開"全部"
     9. 新增/編輯資料時，若欄位為空則不能送出
     10.分頁優化寫法
+    11.輸入框剩餘字數
 -->
 <!-- 小抄
     摺疊快速鍵 Ctrl K 012345
@@ -311,9 +311,9 @@ export default {
     data(){
         return {
 // ----- 表格：選取 ------
-            deleteNo: '',   // 要刪除的資料編號(單筆)
-            selectAll: false,   // 是否全選
-            selectList: [], // 要批量動作的資料編號(陣列)
+            deleteNo: '',     // 要刪除的資料編號(單筆)
+            selectAll: false, // 是否全選
+            selectList: [],   // 要批量動作的資料編號(陣列)
 // ----- 分頁 ------
             activeCategory: '',
             activeList: [],
@@ -482,15 +482,13 @@ export default {
         },
 // ----- 單選/多選事件 ------
         onSelect(index){
-            // console.log(index);
             this.selectList=[];
             for(let i=0; i<index.length; i++){
                 if( this.selectList.includes(index[i].faq_no) == 0 )
                     this.selectList.push(index[i].faq_no);
             }
-            console.log(this.selectList);
         },
-// ----- 全選事件 ------
+// ----- 全選事件 ------修改中
         onSelectAll(index){
             if(this.selectAll == 0){
                 for(let i=0; i<index.length; i++){
@@ -587,7 +585,6 @@ export default {
             })})
             .then((res) => res.json())
             .then((result)=> {
-                // console.log(result)
                 this.alert_Loading = true;
                 setTimeout(() => {
                     this.alert_Loading = false;
@@ -623,7 +620,6 @@ export default {
             })})
             .then((res) => res.json())
             .then((result)=> {
-                // console.log(result)
                 this.alert_Loading = true;
                 setTimeout(() => {
                     this.alert_Loading = false;
@@ -634,9 +630,6 @@ export default {
         },
 // ----- 單筆狀態切換 ------
         changeStatus(row){
-            // console.log(row.faq_no);
-            // console.log(row.faq_status);
-
             row.faq_status
             ? this.$Message.info('狀態：顯示')
             : this.$Message.info('狀態：隱藏');
@@ -674,7 +667,6 @@ export default {
             })})
             .then((res) => res.json())
             .then((result)=> {
-                // console.log(result)
                 this.alert_Loading = true;
                 setTimeout(() => {
                     this.alert_Loading = false;
@@ -688,8 +680,6 @@ export default {
         },
 // ----- 批量刪除資料 ------ fetch
         massDelete(){
-            console.log(this.selectList);
-            console.log(this.selectList.length);
             const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/massDeleteFaq.php");
             fetch(myUrl,{ method:'POST', body:new URLSearchParams({
                 items: this.selectList,
