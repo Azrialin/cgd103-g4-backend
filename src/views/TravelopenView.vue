@@ -1,4 +1,5 @@
 <template>
+<form id="newForm" method="post" enctype="multipart/form-data">
     <div class="backstage-news" >
         <div class="container">
             <div class="content">
@@ -9,53 +10,57 @@
                 <div class="type travelcode">
                     <p class="nname">行程方案 :</p>
                     <div class="choose">
-                        <select class="choosein" v-model="selected">
+                        <select class="choosein" name="package_no" v-model="packageno">
                             <option value="" disabled>-請選擇-</option>
-                            <option>方案A</option>
-                            <option>方案B</option>
-                            <option>方案C</option>
-                            <option>方案D</option>
+                            <option value="方案A">方案A</option>
+                            <option value="方案B">方案B</option>
+                            <option value="方案C">方案C</option>
+                            <option value="方案D">方案D</option>
                         </select>
                     </div>
                 </div>
                 
                 <div class="type travelcode">
                     <p class="nname">出發日期 :</p>
-                    <Space size="large" wrap>
+                    <Input type="date" name="departure_date" style="width: 300px" v-model="departuredate"/>
+                    <!-- <Space size="large" wrap>
                         <DatePicker type="date" placeholder="Select date" style="width: 300px" />
-                    </Space>
+                    </Space> -->
                 </div>
                 
                 <div class="type travelcode">
                     <p class="nname">開放報名日期 :</p>
-                    <Space size="large" wrap>
+                    <Input type="date" name="registration_date" style="width: 300px" v-model="registrationdate"/>
+                    <!-- <Space size="large" wrap>
                         <DatePicker type="date" placeholder="Select date" style="width: 300px" />
-                    </Space>
+                    </Space> -->
                 </div>
                 
                 <div class="type travelcode">
                     <p class="nname">截止日期 :</p>
-                    <Space size="large" wrap>
+                    <Input type="date" name="closing_date" style="width: 300px" v-model="closingdate"/>
+                    <!-- <Space size="large" wrap>
                         <DatePicker type="date" placeholder="Select date" style="width: 300px" />
-                    </Space>
+                    </Space> -->
                 </div>
                 
                 <div class="type travelcode">
                     <p class="nname">人數上限 :</p>
-                    <Input class="succe" type="text" v-model="value" style="width: 300px" />
+                    <Input class="succe" type="text" name="max_attendees" style="width: 300px" v-model="maxattendees" />
                 </div>
                 
                 <div class="type travelcode">
                     <p class="nname">價格 / 人 :</p>
-                    <Input class="succe" type="text" v-model="value2" style="width: 300px" />
+                    <Input class="succe" type="text" name="package_price" style="width: 300px" v-model="packageprice" />
                 </div>
                 <div class="delcan">
                     <div class="shure">取消</div>
-                    <div class="shure">確認</div>
+                    <div class="shure" @click="addData">確認</div>
                 </div>
             </div>
         </div>
     </div>
+</form>
 </template>
 <script>
     export default {
@@ -64,8 +69,31 @@
                 selected:"",
                 value:"",
                 value2:"",
+                packageno:"",
+                departuredate:"",
+                packageprice:"",
+                maxattendees:"",
+                registrationdate:"",
+                closingdate:"",
             }
-        }
+        },
+        methods:{
+            addData(){
+                const myURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setopen.php');
+                fetch(myURL,{method:'POST',body: new URLSearchParams({
+                    package_no:this.packageno,
+                    departure_date:this.departuredate,
+                    package_price:this.packageprice,
+                    max_attendees:this.maxattendees,
+                    registration_date:this.registrationdate,
+                    closing_date:this.closingdate,
+                })})
+                .then((res)=>res.json())
+                .then((result)=>{
+                    console.log(result);
+                })
+            },
+        },
     }
 </script>
 

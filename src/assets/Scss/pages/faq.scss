@@ -1,17 +1,17 @@
 @import "../base/font.scss";
 @import "../components/btn.scss";
 .FAQ{
-    .icon{
-        cursor: pointer;
-        &:hover{
-            color: $clr_blue_L3;
-        }
-    }
     main{
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        // min-height: calc(100vh - 210px);
+        .icon{
+            cursor: pointer;
+            &:hover{
+                color: $clr_blue_L3;
+            }
+        }
+        // 按鈕
         .btns{
             text-align: end;
             button{
@@ -20,291 +20,200 @@
                 }
             }
         }
+        // 分頁
         .tabs{
+            $lineClr: #DCDEE2;
+            $inactiveClr: #f8f8f9;
+            $hvrClr: #2d8cf0;
+            position: relative;
+            border-bottom: 1px solid $lineClr;
+            margin-bottom: 15px;
+            text-align: start;
             flex-grow: 1;
-            .scrollBar{
-                height: 425px;
-                overflow-y: scroll;
-                &::-webkit-scrollbar-track{
-                    background-color: $clr_blue_L3;
-                }
-                &::-webkit-scrollbar{
-                    width: 6px;
-                }
-                &::-webkit-scrollbar-thumb{
-                    background-color: $clr_blue_L2;
-                    border-radius: 4px;
-                }
-            }
-        }
-        .alert-mask{
-            position: absolute;
-            z-index: 10;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: table;
-            background-color: rgba(0, 0, 0, 0.3);
-            transition: opacity .3s ease;
-        }
-        .alert-container{
-            display: table-cell;
-            vertical-align: middle;
-        }
-        .alert-body{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            left: calc(50% - 150px);
-            transform: translate(-50%, -50%);
-            width: fit-content;
-            margin: auto;
-            padding: 30px 80px;
-            border-radius: 10px;
-            background-color: #fff;
-            p{
-                text-align: center;
-                margin-bottom: 10px;
-                &:first-child{
-                    margin-bottom: 5px;
-                    span{
-                        vertical-align: top;
-                    }
-                }
-            }
-            Button+Button{
-                margin-left: 30px;
-            }
-        }
-    }
-
-    // 假的分頁
-    .tabs{
-        $lineClr: #DCDEE2;
-        $inactiveClr: #f8f8f9;
-        $hvrClr: #2d8cf0;
-        position: relative;
-        border-bottom: 1px solid $lineClr;
-        margin-bottom: 15px;
-        text-align: start;
-        .tab{
-            cursor: pointer;
-            position: relative;
-            top: 1px;
-            display: inline-block;
-            margin-left: 4px;
-            height: 31px;
-            background: $inactiveClr;
-            color: $clr_gray_L1;
-            border: 1px solid $lineClr;
-            border-radius: 5px 5px 0px 0px;
-            padding: 5px 14px;
-            transition: 0.3s;
-            &:hover{
-                color: $hvrClr;
-                transition: 0.3s;
-            }
-            &:active{
-                background:#fff;
-                color: $hvrClr;
-            }
-            &:focus-visible{
-                border-radius: 8px;
-            }
-            &:focus:not(:focus-visible){
-                outline: none;
-            }
-        }
-        .tab.on{
-            background:#fff;
-            border-bottom: 1px solid #fff;
-            color: $hvrClr;
-        }
-    }
-
-    // 新增表單
-    .faq_form{
-        position: relative;
-        left: -150px;
-        width: fit-content;
-        margin: auto;
-        background: $clr_blue_L2;
-        .form-head{
-            position: relative;
-            background: $clr_blue_L0;
-            color: $clr_gray_L5;
-            padding: 10px;
-            display: flex;
-            justify-content: flex-end;
-            p{
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-            span{
+            .tab{
                 cursor: pointer;
+                position: relative;
+                top: 1px;
+                display: inline-block;
+                margin-left: 4px;
+                height: 31px;
+                background: $inactiveClr;
+                color: $clr_gray_L1;
+                border: 1px solid $lineClr;
+                border-radius: 5px 5px 0px 0px;
+                padding: 5px 14px;
                 transition: 0.3s;
                 &:hover{
-                    color: $clr_blue_L3;
+                    color: $hvrClr;
                     transition: 0.3s;
+                }
+                &:active{
+                    background:#fff;
+                    color: $hvrClr;
+                }
+                &:focus-visible{
+                    border-radius: 8px;
+                }
+                &:focus:not(:focus-visible){
+                    outline: none;
+                }
+            }
+            .tab.on{
+                background:#fff;
+                border-bottom: 1px solid #fff;
+                color: $hvrClr;
+            }
+        }
+    }
+    // 彈窗
+    .alert-mask{
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        transition: opacity .3s ease;
+        .alert-container{
+            position: absolute;
+            top: 50vh;
+            // left: 50%;
+            left: calc(50% - 150px);
+            transform: translate(-50%, -50%);
+            // 彈窗>確認彈窗
+            .faq-check{
+                width: fit-content;
+                padding: 30px 80px;
+                border-radius: 10px;
+                background-color: #fff;
+                p{
+                    text-align: center;
+                    margin-bottom: 10px;
+                    &:first-child{
+                        margin-bottom: 5px;
+                        span{
+                            vertical-align: top;
+                        }
+                    }
+                }
+                Button+Button{
+                    margin-left: 30px;
                 }
             }
         }
-        .form-body{
-            padding: 40px;
-            >div:not(:last-child){
-                margin-bottom: 30px;
-            }
-            >div:nth-of-type(1){
+        // 彈窗>表單
+        .faq-form{
+            width: fit-content;
+            background: $clr_blue_L2;
+            .form-head{
+                position: relative;
+                background: $clr_blue_L0;
+                color: $clr_gray_L5;
+                padding: 10px;
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                >p{
-                    color: $clr_gray_L5;
-                    vertical-align: bottom;
-                    &:not(:first-child){
-                        margin-left: 30px;
+                justify-content: flex-end;
+                p{
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+                span{
+                    cursor: pointer;
+                    transition: 0.3s;
+                    &:hover{
+                        color: $clr_blue_L3;
+                        transition: 0.3s;
                     }
-                    &:nth-of-type(3){
+                }
+            }
+            .form-body{
+                padding: 40px;
+                >div:not(:last-child){
+                    margin-bottom: 30px;
+                }
+                // 彈窗>表單>上面那排
+                >div:nth-of-type(1){
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    >p{
+                        color: $clr_gray_L5;
+                        vertical-align: bottom;
+                        &:not(:first-child){
+                            margin-left: 30px;
+                        }
+                        &:nth-of-type(3){
+                            color: $clr_blue_L3;
+                        }
+                    }
+                }
+                // 彈窗>表單>輸入框
+                >div:nth-of-type(2), >div:nth-of-type(3){
+                    display: flex;
+                    p{
+                        color: $clr_gray_L5;
+                        white-space: nowrap;
+                    }
+                    textarea{
+                        resize: none ;
+                        width: 100%;
+                        flex-grow: 1;
+                        position: relative;
+                        justify-content: center;
+                        border: 1px solid #dcdee2;
+                        border-radius: 4px;
+                        background: #fff;
+                        padding: 5px;
+                        transition: 0.3s;
+                        &:hover{
+                            border-color: #57a3f3;
+                            transition: 0.3s;
+                        }
+                        &:focus{
+                            outline: none;
+                            border-color: #57a3f3;
+                            -webkit-box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
+                            box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
+                            transition: 0.3s;
+                        }
+                        &::placeholder{
+                            color: #C5C8CE;
+                        }
+                        // span{
+                        //     position: absolute;
+                        // }
+                    }
+                }
+                // 彈窗>表單>按鈕
+                >div:nth-of-type(4){
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    button:nth-of-type(2){
+                        margin-left: 40px;
+                    }
+                    p{
+                        flex-grow: 1;
                         color: $clr_blue_L3;
                     }
                 }
             }
-            >div:nth-of-type(2), >div:nth-of-type(3){
-                display: flex;
-                p{
-                    color: $clr_gray_L5;
-                    white-space: nowrap;
-                }
-                textarea{
-                    resize: none ;
-                    width: 100%;
-                    flex-grow: 1;
-                    position: relative;
-                    $dropDownTrs: 0.5s;
-                    $dropDownTxtClr: #515a6e;
-                    $dropDownTxtClr: #C5C8CE;
-                    $dropDownClr_L1: #2d8cf0;
-                    $dropDownClr_L2: #57a3f3;
-                    justify-content: center;
-                    border: 1px solid #dcdee2;
-                    border-radius: 4px;
-                    background: #fff;
-                    padding: 5px;
-                    transition: 0.3s;
-                    &:hover{
-                        border-color: $dropDownClr_L2;
-                        transition: 0.3s;
-                    }
-                    &:focus{
-                        outline: none;
-                        border-color: $dropDownClr_L2;
-                        -webkit-box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
-                        box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
-                        transition: 0.3s;
-                    }
-                    &::placeholder{
-                        color: $dropDownTxtClr;
-                    }
-                    span{
-                        // position: absolute;
-                    }
-                }
-            }
-            >div:nth-of-type(4){
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                button:nth-of-type(2){
-                    margin-left: 40px;
-                }
-                p{
-                    flex-grow: 1;
-                    color: $clr_blue_L3;
-                }
-            }
         }
-    }
-
-    // 下拉選單
-    .dropDown{
-        $dropDownTrs: 0.5s;
-        $dropDownTxtClr: #515a6e;
-        $dropDownClr_L1: #2d8cf0;
-        $dropDownClr_L2: #57a3f3;
-        position: relative;
-        width: fit-content;
-        display: inline-block;
-        .dropdown-select{
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            min-width: fit-content;
-            border: 1px solid #dcdee2;
-            border-radius: 4px;
-            background: #fff;
-            color: $dropDownTxtClr;
-            margin-bottom: -5px;
-            padding: 3px 10px 3px 15px;
-            text-align: center;
-            transition: 0.3s;
-            &:hover{
-                color: $dropDownClr_L1;
-                border-color: $dropDownClr_L2;
-                transition: 0.3s;
-            }
-            p{
-                padding-top: 3px;
-            }
-            .Icon{
-                transition: 0.3s;
-            }
-        }
-        .dropdown-select.on{
-            border-color: $dropDownClr_L2;
-            -webkit-box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
-            box-shadow: 0 0 0 2px rgb(45 140 240 / 20%);
-            transition: 0.3s;
-            .Icon{
-                transform: rotate(180deg);
-                transition: 0.3s;
-            }
-        }
-        .dropdown-list{
-            position: absolute;
-            z-index: 100;
-            left: -100vw;
-            min-width: fit-content;
-            box-sizing: border-box;
-            margin: 5px 0;
-            padding: 5px 0;
-            background-color: #fff;
-            color: $dropDownTxtClr;
-            border-radius: 4px;
-            box-shadow: 0 1px 6px rgb(0 0 0 / 20%);
-            opacity: 0;
-            transition: opacity $dropDownTrs, left 0s $dropDownTrs;
-            .dropdown-item{
-                cursor: pointer;
-                text-align: center;
-                padding: 6px 15px;
-                color: $dropDownTxtClr;
-                white-space: nowrap;
-                list-style: none;
-                &:hover{
-                    background: $clr_blue_L4;
-                }
-                &:active{
-                    color: $dropDownClr_L1;
-                }
-            }
-        }
-        .dropdown-list.show{
-            position: absolute;
-            left: 0;
-            opacity: 1;
-            transition: opacity $dropDownTrs;
-        }
-    }
+    }    
 }
+
+// .scrollBar{
+//     height: 425px;
+//     overflow-y: scroll;
+//     &::-webkit-scrollbar-track{
+//         background-color: $clr_blue_L3;
+//     }
+//     &::-webkit-scrollbar{
+//         width: 6px;
+//     }
+//     &::-webkit-scrollbar-thumb{
+//         background-color: $clr_blue_L2;
+//         border-radius: 4px;
+//     }
+// }
