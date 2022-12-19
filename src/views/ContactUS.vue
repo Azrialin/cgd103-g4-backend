@@ -3,51 +3,46 @@
     <Table
       :row-class-name="rowClassName"
       :columns="columns1"
-      :data="data1"
+      :data="result"
       border
     >
       <!-- 意見表編號 -->
-      <template #opinion_no="{row,index}">
-        <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.opinion_no}}</span>
+      <template #opinion_no="{ row }">
+        <span>{{ row.opinion_no }}</span>
       </template>
       <!-- 填寫日期 -->
-      <template #opinion_date="{ row,index}">
-        <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.opinion_filltime}}</span>
+      <template #opinion_date="{ row }">
+        <span>{{ row.opinion_date }}</span>
       </template>
       <!-- 填寫人姓名 -->
-      <template #opinion_name="{ row,index}">
-        <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.opinion_name }}</span>
+      <template #opinion_name="{ row }">
+        <span>{{ row.opinion_name }}</span>
       </template>
       <!-- 連絡電話 -->
-      <template #opinion_num="{ row,index}">
-        <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.opinion_cellphone}}</span>
+      <template #opinion_num="{ row }">
+        <span>{{ row.opinion_tel }}</span>
       </template>
       <!-- 信箱 -->
-      <template #opinion_mail="{ row,index}">
-        <Input type="text" v-if="editIndex === index" />
-        <span v-else>{{ row.opinion_email }}</span>
+      <template #opinion_mail="{ row }">
+        <span>{{ row.opinion_mail }}</span>
       </template>
       <!-- 意見表詳情 -->
       <template #table-row="{ row }">
         <Button @click="editOnData(row.opinion_no)">更多資訊</Button>
       </template>
     </Table>
-    <div class="morecontent" v-show="show">
+    <div class="morecontent" v-show="show" :result="result">
       <div class="content">
         <div class="content-header">
           <p>意見表詳情</p>
         </div>
         <div class="content-text">
           <p>意見表編號：{{ activeData.opinion_no }}</p>
-          <p>填寫日期：{{ activeData.opinion_filltime }}</p>
+          <p>填寫日期：{{ activeData.opinion_date }}</p>
           <p>填寫人名字：{{ activeData.opinion_name }}</p>
-          <p>填寫人電話：{{ activeData.opinion_cellphone }}</p>
-          <p>填寫人信箱：{{ activeData.opinion_email }}</p>
-          <p>意見詳情：{{ activeData.opinion_detail }}</p>
+          <p>填寫人電話：{{ activeData.opinion_tel }}</p>
+          <p>填寫人信箱：{{ activeData.opinion_mail }}</p>
+          <p>填寫內容：{{}}</p>
         </div>
         <div class="closebtn">
           <Button @click="editOnData()">關閉</Button>
@@ -57,9 +52,13 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+const result = [];
 export default {
   data() {
     return {
+      result: [],
+      contact: "",
       show: false,
       activeIndex: null,
       columns1: [
@@ -89,24 +88,19 @@ export default {
           slot: "table-row",
         },
       ],
-      data1: [
-        {
-          opinion_no: "A001",
-          opinion_filltime: "2022-12-13 18:30:00",
-          opinion_name: "余昕叡",
-          opinion_cellphone: "0912345678",
-          opinion_email: "fishray8787@gmail.com",
-          opinion_content:"1111111111111111111111111111"
-        },
-        {
-          opinion_no: "A002",
-          opinion_filltime: "2022-12-15 18:30:00",
-          opinion_name: "曾筱筑",
-          opinion_cellphone: "0912345678",
-          opinion_email: "vivi8787@gmail.com",
-        },
-      ],
     };
+  },
+  created() {
+    this.getData();
+    // axios
+    //   .post("http://localhost/cgd103-g4-backend/public/phpfiles/getProducts.php")
+    //   .then((response) => {
+    //     console.log(response.data.opinion_no);
+    //     return res
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   },
   methods: {
     rowClassName(row, index) {
@@ -121,12 +115,26 @@ export default {
       this.show = !this.show;
       this.activeIndex = no;
     },
+    getData() {
+      this.result = result;
+      fetch(
+        "http://localhost/CGD103-G4-BACKEND/public/phpfiles/getProducts.php"
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          this.result = json;
+          console.log(this.result);
+        });
+    },
+    saveData() {
+      console.log(this.result);
+    },
   },
   computed: {
     activeData() {
-      return this.data1.find((v) => v.opinion_no === this.activeIndex) ?? {};
+      return this.result.find((v) => v.opinion_no === this.activeIndex) ?? {};
     },
-  },  
+  },
 };
 </script>
 
