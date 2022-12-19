@@ -1,11 +1,9 @@
 <!-- 問題
-    2. 假的下拉選單取資料
-    3. 假的下拉選單及狀態切換開關，要怎麼回傳值
-    4. 修改資料/刪除資料
-    5. 編輯時，表單對應資料顯示
-    6. 多選
     7. 各個彈窗寫成 component
     8. 進入頁面預設打開"全部"
+    9. 新增/編輯資料時，若欄位為空則不能送出
+    10.分頁優化寫法
+    11.輸入框剩餘字數
 -->
 <!-- 小抄
     摺疊快速鍵 Ctrl K 012345
@@ -17,9 +15,9 @@
 		<main>
 <!-- 按鈕 -->
 			<div class="btns">
-				<button class="btn-blue_2nd">顯示/隱藏</button>
-				<button class="btn-blue" @click="ShowNewForm = true">新增</button>
-				<button class="btn-blue">刪除</button>
+				<button class="btn-blue_2nd" @click="changeAll">顯示/隱藏</button>
+				<button class="btn-blue" @click="show_NewForm = !show_NewForm">新增</button>
+				<button class="btn-blue" @click="massDelete">刪除</button>
 			</div>
 <!-- 分頁標籤 -->
             <ul class="tabs">
@@ -40,39 +38,35 @@
                 @on-select="onSelect"
                 @on-select-all="onSelectAll"
             >
-                <!-- 多選 -->
-                <!-- <template #check="{ row, index }">
-                    <Input type="text" v-if="editIndex === index"
-                    @on-select="onSelect"/>
-                    <span v-else >{{ row.check }}</span>
-                </template> -->
                 <!-- 編號 -->
                 <template #faq_no="{ row, index }">
-                    <Input type="text"  v-if="editIndex === index" />
+                    <Input type="text"  v-if="editIndex === index"/>
                     <span v-else>{{ row.faq_no }}</span>
                 </template>
                 <!-- 分類 -->
                 <template #faq_type="{ row, index }">
-                    <Input type="text"  v-if="editIndex === index" />
+                    <Input type="text"  v-if="editIndex === index"/>
                     <span v-else>{{ (row.faq_type) }}</span>
                 </template>
                 <!-- 問題 -->
                 <template #faq_q="{ row, index }" >
-                    <Input type="text"  v-if="editIndex === index" />
+                    <Input type="text"  v-if="editIndex === index"/>
                     <span v-else >{{ row.faq_q }}</span>
                 </template>
                 <!-- 回答 -->
                 <template #faq_a="{ row, index }" >
-                    <Input type="text"  v-if="editIndex === index" />
+                    <Input type="text"  v-if="editIndex === index"/>
                     <span v-else >{{ row.faq_a }}</span>
                 </template>
                 <!-- 狀態 -->
-                <template #faq_State="{ row, index }" >
+                <template #faq_state="{ row }" >
                     <Switch size="large"
-                        :v-model="stateValue"
-                        @on-change="changeStatus(index)"
-                        true-color="#6C9255"
-                        false-color="#E6E6E6"
+                        v-model="row.faq_status"
+                        :true-value = 1
+                        :false-value = 0
+                        true-color = "#6C9255"
+                        false-color = "#E6E6E6"
+                        @click="changeStatus(row)"
                     >
                         <template #open><span>ON</span></template>
                         <template #close><span>OFF</span></template>
@@ -81,71 +75,54 @@
                 <!-- 編輯 -->
                 <template #edit="{ row }">
                     <div class="btn-box">
-                        <span class="icon material-symbols-outlined" @click="toggleEditForm(row.faq_no)">edit_square</span>
+                        <span class="icon material-symbols-outlined" @click="editForm(row.faq_no)">edit_square</span>
                     </div>
                 </template>
                 <!-- 刪除 -->
-                <template #delete>
+                <template #delete="{ row }">
                     <span class="icon material-symbols-outlined"
-                    style="font-size:26px; margin-top: 5px;"
-                    @click="ShowDelAlert = true">delete</span>
+                        style="font-size:26px; margin-top: 5px;"
+                        @click="delCheck(row.faq_no)"
+                    >delete
+                    </span>
                 </template>
             </Table>
 		</main>
 <!-- 新增表單 -->
         <form id="newForm" method="post" enctype="multipart/form-data">
-            <div class="alert-mask" :style="NewForm">
+            <div class="alert-mask" v-show="show_NewForm">
                 <div class="alert-container faq-form">
                     <!-- 標題 -->
                     <div class="form-head">
                         <p class="font-20">新增 FAQ</p>
-                        <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
+                        <span class="material-symbols-outlined" @click="show_CheckAlert=!show_CheckAlert">close</span>
                     </div>
                     <!-- 內容 -->
                     <div class="form-body">
-                        <!-- 選單還不能用，先放個測試欄位 -->
-                        <select name="faq_type" id="">
-                            <option value="會員問題">會員問題</option>
-                            <option value="行程問題">行程問題</option>
-                            <option value="商品問題">商品問題</option>
-                        </select>
-                        <select name="faq_status" id="">
-                            <option value="1">顯示</option>
-                            <option value="0">隱藏</option>
-                        </select>
                         <div>
-                            <p class="font-16">＊類別：</p>
                             <!-- 下拉選單 -->
-                            <!-- <Dropdown
-                                :dropdownWidth="dropdownWidth"
-                                :activeTxt="activeTxt"
-                                :dropDownList="dropDownList"
-                            /> -->
-                            <div class="dropDown">
-                                <div class="dropdown-select font-16"
-                                    :style="{ width: dropdownWidth }"
-                                    :class="{'on':toggle}"
-                                    @click="toggle=!toggle"
+                            <p class="font-16">＊類別：</p>
+                            <Select name="faq_type"
+                                v-model="newFaq_type"
+                                placeholder="請選擇"
+                                style="width: 120px"
+                            >
+                                <Option v-for="dropDownItem in dropDownList"
+                                    :value="dropDownItem.text"
+                                    :key="dropDownItem.text"
                                 >
-                                    <p>{{activeTxt}}</p>
-                                    <span class="Icon material-symbols-outlined">expand_more</span>
-                                </div>
-                                <ul class="dropdown-list" :class="{'show':toggle}">
-                                    <li class="dropdown-item font-16"
-                                        :style="{ width: dropdownWidth }"
-                                        v-for="(dropDownItem, index) in dropDownList"
-                                        :key="dropDownItem"
-                                        @click.self="changeSelect(index)"
-                                    >
-                                        {{dropDownItem.text}}
-                                    </li>
-                                </ul>
-                            </div>
+                                    {{dropDownItem.text}}
+                                </Option>
+                            </Select>
                             <!-- 狀態開關 -->
                             <p class="font-16">＊狀態：</p>
                             <Switch size="large"
-                                true-color="#6C9255"
-                                false-color="#E6E6E6"
+                                name="faq_status"
+                                v-model="newFaq_status"
+                                :true-value = 1
+                                :false-value = 0
+                                true-color = "#6C9255"
+                                false-color = "#E6E6E6"
                             >
                                 <template #open><span>ON</span></template>
                                 <template #close><span>OFF</span></template>
@@ -157,12 +134,97 @@
                         <div>
                             <p class="font-16">＊問題：</p>
                             <textarea name="faq_q"
+                                v-model="newFaq_q"
                                 showCount
                                 class="font-16"
                                 rows="3"
                                 maxlength="100"
-                                v-model="value1"
-                                placeholder="Enter something..."
+                                placeholder="請輸入問題"
+                            >
+                            </textarea>
+                        </div>
+                        <div>
+                            <p class="font-16">＊回答：</p>
+                            <textarea name="faq_a"
+                                v-model="newFaq_a"
+                                showCount
+                                class="font-16"
+                                rows="10"
+                                maxlength="100"
+                                placeholder="請輸入回答"
+                            >
+                            </textarea>
+                        </div>
+                        <!-- <span class="ivu-input-word-count">0/100</span> -->
+                        <!-- <Space class="inputs">
+                            <Input class="input question"
+                                v-model="newFaq_q" maxlength="100"
+                                show-word-limit placeholder="Enter something..."
+                                style="width: 200px"/>
+                        </Space> -->
+                        <!-- 按鈕 -->
+                        <div>
+                            <p class="font-16">＊為必填／必選項目</p>
+                            <button type="button" class="btn-blue_2nd" @click="show_CheckAlert=!show_CheckAlert">取消</button>
+                            <button type="button" class="btn-blue" @click="addFaqData">新增</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+<!-- 編輯表單 -->
+        <form id="editForm" method="post" enctype="multipart/form-data">
+            <div class="alert-mask" v-show="show_EditForm">
+                <div class="alert-container faq-form">
+                    <!-- 標題 -->
+                    <div class="form-head">
+                        <p class="font-20">編輯 FAQ</p>
+                        <span class="material-symbols-outlined" @click="show_CheckAlert=!show_CheckAlert">close</span>
+                    </div>
+                    <!-- 內容 -->
+                    <div class="form-body">
+                        <!-- 上面那排 -->
+                        <div>
+                            <p class="font-16">＊類別：</p>
+                            <!-- 下拉選單 -->
+                            <Select name="faq_type"
+                                v-model="editingFaq.faq_type"
+                                placeholder="請選擇"
+                                style="width: 120px"
+                            >
+                                <Option v-for="dropDownItem in dropDownList"
+                                    :value="dropDownItem.text"
+                                    :key="dropDownItem.text"
+                                >
+                                    {{dropDownItem.text}}
+                                </Option>
+                            </Select>
+                            <!-- 狀態開關 -->
+                            <p class="font-16">＊狀態：</p>
+                            <Switch size="large"
+                                name="faq_status"
+                                v-model="editingFaq.faq_status"
+                                :true-value = 1
+                                :false-value = 0
+                                true-color = "#6C9255"
+                                false-color = "#E6E6E6"
+                            >
+                                <template #open><span>ON</span></template>
+                                <template #close><span>OFF</span></template>
+                            </Switch>
+                            <!-- 編號 -->
+                            <p class="font-16">編號：{{editingFaq.faq_no}}</p>
+                        </div>
+                        <!-- 輸入框 -->
+                        <div>
+                            <p class="font-16">＊問題：</p>
+                            <textarea name="faq_q"
+                                showCount
+                                class="font-16"
+                                rows="3"
+                                maxlength="100"
+                                v-model="editingFaq.faq_q"
+                                placeholder="請輸入問題"
                             >
                             </textarea>
                         </div>
@@ -173,149 +235,65 @@
                                 class="font-16"
                                 rows="10"
                                 maxlength="100"
-                                v-model="value2"
-                                placeholder="Enter something..."
-                            >
-                            </textarea>
-                        </div>
-                        <!-- <span class="ivu-input-word-count">0/100</span> -->
-                        <!-- <Space class="inputs">
-                            <Input class="input question"
-                                v-model="value1" maxlength="100"
-                                show-word-limit placeholder="Enter something..."
-                                style="width: 200px"/>
-                        </Space> -->
-                        <!-- 按鈕 -->
-                        <div>
-                            <p class="font-16">＊為必填／必選項目</p>
-                            <button type="button" class="btn-blue_2nd" @click="ShowCheckAlert = true">取消</button>
-                            <button type="button" class="btn-blue" @click="addFaqData">新增</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-<!-- 編輯表單 -->
-        <form id="editForm" method="post" enctype="multipart/form-data">
-            <div class="alert-mask" :style="EditForm">
-                <div class="alert-container faq-form">
-                    <!-- 標題 -->
-                    <div class="form-head">
-                        <p class="font-20">編輯 FAQ</p>
-                        <span class="material-symbols-outlined" @click="ShowCheckAlert = true">close</span>
-                    </div>
-                    <!-- 內容 -->
-                    <div class="form-body">
-                        <!-- 上面那排 -->
-                        <div>
-                            <p class="font-16">＊類別：</p>
-                            <!-- 下拉選單 -->
-                            <!-- <Dropdown
-                                :dropdownWidth="dropdownWidth"
-                                :activeTxt="activeTxt"
-                                :dropDownList="dropDownList"
-                            /> -->
-                            <div class="dropDown">
-                                <div class="dropdown-select font-16"
-                                    :style="{ width: dropdownWidth }"
-                                    :class="toggle?'on':''"
-                                    @click="toggle=!toggle"
+                                v-model="editingFaq.faq_a"
+                                placeholder="請輸入回答"
                                 >
-                                    <p>{{activeTxt}}</p>
-                                    <span class="Icon material-symbols-outlined">expand_more</span>
-                                </div>
-                                <ul class="dropdown-list" :class="toggle?'show':''">
-                                    <li class="dropdown-item font-16"
-                                        :style="{ width: dropdownWidth }"
-                                        v-for="(dropDownItem, index) in dropDownList"
-                                        :key="index"
-                                        @click.self="changeSelect(index)"
-                                    >
-                                        {{dropDownItem.text}}
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- 狀態開關 -->
-                            <p class="font-16">＊狀態：</p>
-                            <Switch size="large"
-                                true-color="#6C9255"
-                                false-color="#E6E6E6"
-                            >
-                                <template #open><span>ON</span></template>
-                                <template #close><span>OFF</span></template>
-                            </Switch>
-                            <!-- 編號 -->
-                            <!-- <p class="font-16">編號：{{activeList.faq_no}}</p> -->
-                            <p class="font-16">編號：{{activeDraftData.faq_no}}</p>
-                        </div>
-                        <!-- 輸入框 -->
-                        <div>
-                            <p class="font-16">＊問題：</p>
-                            <textarea
-                                showCount
-                                class="font-16"
-                                rows="3"
-                                maxlength="100"
-                                v-model="value1"
-                                placeholder="Enter something..."
-                            >
-                            </textarea>
-                        </div>
-                        <div>
-                            <p class="font-16">＊回答：</p>
-                            <textarea
-                                showCount
-                                class="font-16"
-                                rows="10"
-                                maxlength="100"
-                                v-model="value2"
-                                placeholder="Enter something..."
-                            >
                             </textarea>
                         </div>
                         <!-- <span class="ivu-input-word-count">0/100</span> -->
                         <!-- <Space class="inputs">
                             <Input class="input question"
-                                v-model="value1" maxlength="100"
+                            v-model="newFaq_q" maxlength="100"
                                 show-word-limit placeholder="Enter something..."
                                 style="width: 200px"/>
                         </Space> -->
                         <!-- 按鈕 -->
                         <div>
                             <p class="font-16">＊為必填／必選項目</p>
-                            <button type="button" class="btn-blue_2nd" @click="ShowCheckAlert = true">取消</button>
-                            <!-- <button class="btn-blue_2nd" @click.self="toggleNewForm">取消</button> -->
-                            <button type="button" class="btn-blue" @click="set">儲存</button>
+                            <button type="button" class="btn-blue_2nd" @click="show_CheckAlert=!show_CheckAlert">取消</button>
+                            <button type="button" class="btn-blue" @click="editFaqData">儲存</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
 <!-- 彈窗：刪除確認 -->
-        <div class="alert-mask" :style="DelAlert">
-            <div class="alert-container" @click.self="toggleDelAlert">
+        <div class="alert-mask" v-show="show_DelAlert">
+            <div class="alert-container" @click.self="show_DelAlert=!show_DelAlert">
                 <div class="faq-check">
                     <p class="font-16-15em">
                         <span class="icon material-symbols-outlined">error</span>
                         <span>Delete confirmation</span>
                     </p>
                     <p class="font-16-15em">確定要刪除嗎？</p>
-                    <Button class="btn-danger_2nd" long :loading="Alert_loading" @click.self="toggleDelAlert">取消</Button>
-                    <Button class="btn-danger" long :loading="Alert_loading" @click="del(index)">刪除</Button>
+                    <Button class="btn-danger_2nd"
+                        long :loading="alert_Loading"
+                        @click.self="show_DelAlert=!show_DelAlert">取消
+                    </Button>
+                    <Button class="btn-danger"
+                        long :loading="alert_Loading"
+                        @click="delFaqData(index)">刪除
+                    </Button>
                 </div>
             </div>
         </div>
 <!-- 彈窗：取消確認 -->
-        <div class="alert-mask" :style="CheckAlert">
-            <div class="alert-container" @click.self="toggleCheckAlert">
+        <div class="alert-mask" v-show="show_CheckAlert">
+            <div class="alert-container" @click.self="show_CheckAlert=!show_CheckAlert">
                 <div class="faq-check">
                     <p class="font-16-15em">
                         <span class="icon material-symbols-outlined">error</span>
                         <span>Cancel confirmation</span>
                     </p>
                     <p class="font-16-15em">取消後，內容將不會儲存，請問是否取消？</p>
-                    <Button class="btn-blue_2nd" long :loading="Alert_loading" @click.self="toggleCheckAlert">繼續編輯</Button>
-                    <Button class="btn-blue" long :loading="Alert_loading" @click="cancel">確定取消</Button>
+                    <Button class="btn-blue_2nd"
+                        long :loading="alert_Loading"
+                        @click.self="show_CheckAlert=!show_CheckAlert">繼續編輯
+                    </Button>
+                    <Button class="btn-blue"
+                        long :loading="alert_Loading"
+                        @click="cancel">確定取消
+                    </Button>
                 </div>
             </div>
         </div>
@@ -325,36 +303,18 @@
 </template>
 <script>
 import faq from '@/assets/js/faq.js'
-// import Dropdown from '@/components/Dropdown.vue'
 
 export default {
     components: {
-        // Dropdown,
+
     },
     data(){
         return {
-// ----- 彈窗 ------
-            ShowDelAlert:   false,
-            ShowCheckAlert: false,
-            ShowNewForm:    false,
-            ShowEditForm:   false,
-            Alert_loading:  false,
-// ----- 下拉選單 ------
-            toggle: false,
-            dropDownList: [
-                { text: '會員問題', },
-                { text: '行程問題', },
-                { text: '商品問題', },
-            ],
-            activeTxt: '請選擇',
-            dropdownWidth: '120px',
-// ----- 狀態開關 ------
-            stateValue: 1,
-// ----- 輸入框 ------
-            value1: '',
-            value2: '',
+// ----- 表格：選取 ------
+            deleteNo: '',     // 要刪除的資料編號(單筆)
+            selectAll: false, // 是否全選
+            selectList: [],   // 要批量動作的資料編號(陣列)
 // ----- 分頁 ------
-            // showAll: true,
             activeCategory: '',
             activeList: [],
             categoryList:[
@@ -366,6 +326,7 @@ export default {
             columns: [
                 {
                     type: 'selection',
+                    name: 'fruit',
                     width: 60,
                     align: 'center'
                 },
@@ -380,30 +341,6 @@ export default {
                     slot: 'faq_type',
                     width: 120,
                     align: 'center',
-                    // filters: [
-                    //             {
-                    //                 label: '會員問題',
-                    //                 value: 1
-                    //             },
-                    //             {
-                    //                 label: '行程問題',
-                    //                 value: 2
-                    //             },
-                    //             {
-                    //                 label: '商品問題',
-                    //                 value: 3
-                    //             }
-                    //         ],
-                    //         filterMultiple: false, //https://www.iviewui.com/view-ui-plus/component/form/table#Brief_Introduction
-                    //         filterMethod (value,row) { 
-                    //             if (value === 1) {
-                    //                 return row.faq_type==='會員問題';
-                    //             } else if (value === 2) {
-                    //                 return row.faq_type==='行程問題' ;
-                    //             }else if (value === 3) {
-                    //                 return row.faq_type==='商品問題' ;
-                    //             }
-                    //         }
                 },
                 {
                     title: '問題',
@@ -417,7 +354,7 @@ export default {
                 },
                 {
                     title: '狀態',
-                    slot: 'faq_State',
+                    slot: 'faq_state',
                     width: 100,
                     align: 'center'
                 },
@@ -500,123 +437,35 @@ export default {
                 //     faq_status: 1,
                 // },
             ],
+// ----- 表單：新增資料 ------
+            newFaq_type: '',
+            newFaq_q: '',
+            newFaq_a: '',
+            newFaq_status: 1,
+// ----- 表單：修改資料 ------
             editIndex: -1,
-            activeIndex: null,
+            editingNo: '',  // 在修改的資料編號
+            editingFaq: [], // 要回傳的陣列
+// ----- 表單：下拉選單 ------
+            dropDownList: [
+                { text: '會員問題', },
+                { text: '行程問題', },
+                { text: '商品問題', },
+            ],
+// ----- 彈窗 ------
+            show_CheckAlert: false,
+            show_DelAlert:   false,
+            show_NewForm:    false,
+            show_EditForm:   false,
+            alert_Loading:   false,
         }
     },
     computed: {
-        DelAlert(){
-            return {
-                'display': this.ShowDelAlert ? '' : 'none'
-            };
-        },
-        CheckAlert(){
-            return {
-                'display': this.ShowCheckAlert ? '' : 'none'
-            };
-        },
-        NewForm(){
-            return {
-                'display': this.ShowNewForm ? '' : 'none'
-            };
-        },
-        EditForm(no){
-            // this.ShowEditForm = !this.ShowEditForm;
-            this.activeIndex = no;
-            return {
-                'display': this.ShowEditForm ? '' : 'none'
-            };
-        },
-        activeDraftData(){
-            // return this.dataDraft.find(v=> v.news_no === this.activeIndex) ?? {}
-            // return this.activeList.find(v=> v.faq_no === this.activeIndex) ?? {}
-            return this.faqList.find(v=> v.faq_no === this.activeIndex) ?? {}
-        },
+
     },
     methods: {
-// ----- 測試本地資料庫 fetch ------
-        // getFaqData_Fetch(){
-        //     fetch('http://localhost/CGD103_G4_back/public/php/getFaqData.php')
-        //     .then(res=>res.json())
-        //     .then(json=>{
-        //         this.faqList = json;
-        //     })
-		// },
-// ----- 測試本地資料庫 XML ------
-        getFaqData_XML(){
-            let faqVue = this;
-			let xhr = new XMLHttpRequest();
-			xhr.onload = ()=>{
-                if(xhr.status == 200){
-                    faqVue.faqList = JSON.parse(xhr.responseText);
-				}
-			}
-			xhr.open("get", "http://localhost/CGD103_G4_back/public/php/getFaqData_02.php", true);
-			xhr.send(null);
-		},
-// ----- 測試新增資料 ------
-        addFaqData(){
-            let xhr = new XMLHttpRequest();
-            xhr.onload = function(){
-                let result = JSON.parse(xhr.responseText);
-                alert(result.msg);
-            }
-            xhr.open("post", "http://localhost/CGD103_G4_back/public/php/insertFaq.php", true);
-            xhr.send(new FormData(document.getElementById("newForm")));
-        },
-        add(){
-            this.Alert_loading = true;
-            setTimeout(() => {
-                this.Alert_loading = false;
-                this.ShowNewForm = false;
-                this.$Message.success('已成功新增一筆常見問題');
-            }, 800);
-        },
-        set(){
-            this.Alert_loading = true;
-            setTimeout(() => {
-                this.Alert_loading = false;
-                this.ShowEditForm = false;
-                this.$Message.success('已成功編輯一筆常見問題');
-            }, 800);
-        },
-        del(index){
-            this.activeList.splice(index, 1);
-            this.Alert_loading = true;
-            setTimeout(() => {
-                this.Alert_loading = false;
-                this.ShowDelAlert = false;
-                this.$Message.success('已成功刪除一筆常見問題');
-            }, 200);
-        },
-        cancel(){
-            this.Alert_loading = true;
-            setTimeout(() => {
-                this.Alert_loading = false;
-                this.ShowCheckAlert = false;
-                this.ShowNewForm = false;
-                this.ShowEditForm = false;
-            }, 200);
-        },
-        toggleDelAlert(){
-            this.ShowDelAlert = !this.ShowDelAlert;
-        },
-        toggleCheckAlert(){
-            this.ShowCheckAlert = !this.ShowCheckAlert;
-        },
-        toggleNewForm(){
-            this.ShowNewForm = !this.ShowNewForm;
-        },
-        toggleEditForm(no){
-            this.ShowEditForm = !this.ShowEditForm;
-            this.activeIndex = no;
-        },
-// ----- 分頁換頁 ------
+// ----- 分頁切換 ------
         clickAll(e){
-            // console.log(this.faqList);
-            // console.log(this.activeList);
-            // showAll = true;
-            // console.log(showAll);
             this.activeList = this.faqList;
             e.target.classList.add('on');
             e.target.parentNode.childNodes[2].classList.remove('on');
@@ -624,67 +473,236 @@ export default {
             e.target.parentNode.childNodes[4].classList.remove('on');
         },
         changeTab(tab){
-            // showAll = false;
             this.activeCategory = tab;
             this.activeList = this.faqList.filter(item => {
                 return item.faq_type === tab.faq_type;
             });
-            // console.log(showAll);
             let tabAll = document.getElementById("tabAll");
             tabAll.classList.remove('on');
         },
-// ----- 下拉選單 ------
-        changeSelect(index){
-            this.toggle=!this.toggle;
-            this.activeTxt = this.dropDownList[index].text;
-            // this.activeTxt = this.faqList[index].faq_type;
-            // console.log(event.target.innerHTML);
-            // console.log(this);
-            // console.log(event);
-            // console.log(index);
-            // console.log(this.dropDownList);
-            // console.log(this.dropDownList[0]);
-            // console.log(this.dropDownList[index]);
-            // console.log(this.faqList);
-            // console.log(this.faqList[index].faq_type);
-        },
-        changeStatus(index){
-            // this.stateValue = this.faqList[index].faq_status;
-            // this.stateValue
-            // ? this.$Message.info('狀態：顯示')
-            // : this.$Message.info('狀態：隱藏');
-
-            if(this.stateValue){
-                this.$Message.info('狀態：顯示');
-                this.stateValue = 0;
-            }else{
-                this.$Message.info('狀態：隱藏');
-                this.stateValue = 1;
-            }
-            // console.log(this.faqList[index].faq_status);
-        },
+// ----- 單選/多選事件 ------
         onSelect(index){
-            console.log(index);
-            // 單選
-            /* this.activeList[index].faq_status = val; */
-            // this.$forceUpdate();
-            // for (let i = 0, l = this.activeList.length; i < l; i++) {
-            // if (this.activeList[i].faq_status !== val) {
-            // 	this.checkAll = false;
-            // 	return;
-            // }
-            // }
-            // this.checkAll = val;
+            this.selectList=[];
+            for(let i=0; i<index.length; i++){
+                if( this.selectList.includes(index[i].faq_no) == 0 )
+                    this.selectList.push(index[i].faq_no);
+            }
         },
+// ----- 全選事件 ------修改中
         onSelectAll(index){
-            console.log(index);
+            if(this.selectAll == 0){
+                for(let i=0; i<index.length; i++){
+                    if( this.selectList.includes(index[i].faq_no) == 0 )
+                        this.selectList.push(index[i].faq_no);
+                }
+                console.log(this.selectList);
+            }else{
+                this.selectList=[];
+                console.log(this.selectList);
+            }
+            // this.selectAll=!this.selectAll;
+            // console.log(this.selectAll);
+            // switch (this.selectAll) {
+            // case 1:
+            //     this.selectList='1';
+            //     console.log(this.selectAll);
+            //     break;
+            // case 0:
+            //     for(let i=0; i<index.length; i++){
+            //         if( this.selectList.includes(index[i].faq_no) == 0 )
+            //             this.selectList.push(index[i].faq_no);
+            //     };	
+            //     console.log(this.selectAll);
+            //     break;
+            // }
+            // this.selectAll=!this.selectAll;
+
+
+            // for(let i=0; i<index.length; i++){
+            //     if( this.selectList.includes(index[i].faq_no) == 0 )
+            //         this.selectList.push(index[i].faq_no);
+            // }
+            // console.log(this.selectAll);
+
+
+            // console.log(this.selectList);
+        },
+// ----- 表單：編輯 ------
+        editForm(edit){
+            this.editingNo = edit;
+            this.show_EditForm = !this.show_EditForm;
+            this.editingFaq = this.activeList.find(v=> v.faq_no === this.editingNo) ?? [];
+        },
+// ----- 關閉彈窗(取消) ------
+        cancel(){
+            this.alert_Loading = true;
+            setTimeout(() => {
+                this.show_CheckAlert = false;
+                this.show_NewForm = false;
+                this.show_EditForm = false;
+                this.alert_Loading = false;
+            }, 200);
+        },
+// ----- 撈資料 ------ XML
+        // getFaqData_XML(){
+        //     let faqVue = this;
+		// 	let xhr = new XMLHttpRequest();
+		// 	xhr.onload = ()=>{
+        //         if(xhr.status == 200){
+        //             faqVue.faqList = JSON.parse(xhr.responseText);
+		// 		}
+		// 	}
+		// 	xhr.open("get", "http://localhost/CGD103_G4_back/public/php/getFaqData_02.php", true);
+		// 	xhr.send(null);
+		// },
+// ----- 新增資料 ------ XML
+        // addFaqData(){
+        //     let xhr = new XMLHttpRequest();
+        //     xhr.onload = function(){
+        //         let result = JSON.parse(xhr.responseText);
+        //         alert(result.msg);
+        //     }
+        //     xhr.open("post", "http://localhost/CGD103_G4_back/public/php/insertFaq.php", true);
+        //     xhr.send(new FormData(document.getElementById("newForm")));
+        //     this.show_NewForm = false;
+        // },
+// ----- 撈資料 ------ fetch
+        getFaqData_Fetch(){
+            fetch('http://localhost/CGD103_G4_back/public/php/getFaqData.php')
+            .then(res=>res.json())
+            .then(json=>{
+                this.faqList = json;
+            })
+		},
+// ----- 新增資料 ------ fetch
+        addFaqData(){
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/insertFaq.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                faq_type:this.newFaq_type,
+                faq_q:this.newFaq_q,
+                faq_a:this.newFaq_a,
+                faq_status:this.newFaq_status,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.alert_Loading = false;
+                    this.show_NewForm = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            })
+        },
+// ----- 測試修改資料 ------ XML(不能用)
+        // editFaqData(){
+        //     console.log(this.editingFaq);
+        //     let xhr = new XMLHttpRequest();
+        //     xhr.onload = function(){
+        //         let result = JSON.parse(xhr.responseText);
+        //         console.log(result);
+        //         alert(result.msg);
+        //     }
+        //     xhr.open("post", "http://localhost/CGD103_G4_back/public/php/updateFaq.php", true);
+        //     xhr.send(new FormData(document.getElementById("editForm")));
+        // },
+// ----- 單筆修改資料 ------ fetch
+        editFaqData(){
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/updateFaq.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                faq_no:this.editingFaq.faq_no,
+                faq_type:this.editingFaq.faq_type,
+                faq_q:this.editingFaq.faq_q,
+                faq_a:this.editingFaq.faq_a,
+                faq_status:this.editingFaq.faq_status,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.alert_Loading = false;
+                    this.show_EditForm = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+            })
+        },
+// ----- 單筆狀態切換 ------
+        changeStatus(row){
+            row.faq_status
+            ? this.$Message.info('狀態：顯示')
+            : this.$Message.info('狀態：隱藏');
+
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/changeFaqState.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                faq_no:row.faq_no,
+                faq_status:row.faq_status,
+            })})
+            .then((res) => res.json())
+            // .then((result)=> {
+            //     // console.log(result)
+            //     this.alert_Loading = true;
+            //     setTimeout(() => {
+            //         this.alert_Loading = false;
+            //         this.$Message.success(result.msg);
+            //     }, 600);
+            // })
+        },
+// ----- 批量狀態切換 ------
+        massChangeStatus(){
+            console.log(this.selectList);
+        },
+// ----- 彈窗：刪除確認 ------
+        delCheck(del){
+            this.deleteNo = del;
+            this.show_DelAlert=!this.show_DelAlert;
+        },
+// ----- 單筆刪除資料 ------ fetch
+        delFaqData(){
+            // this.activeList.splice(index, 1);
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/deleteFaq.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                faq_no:this.deleteNo,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.alert_Loading = false;
+                    this.show_DelAlert = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            })
+        },
+// ----- 批量刪除資料 ------ fetch
+        massDelete(){
+            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/massDeleteFaq.php");
+            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+                items: this.selectList,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                console.log(result)
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.alert_Loading = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            })
         }
     },
     created(){
-		// this.getFaqData_Fetch();
+		this.getFaqData_Fetch();
 	},
 	mounted(){
-        this.getFaqData_XML();
+        // this.getFaqData_XML();
     },
 }
 
