@@ -416,7 +416,7 @@
                 })
             },
             addData(){
-                const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/addnew.php');
+                const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/settravel.php');
                 fetch(addURL,{ method:'post',body: new URLSearchParams({
                     package_name:this.value5,
                     package_status:this.selected,
