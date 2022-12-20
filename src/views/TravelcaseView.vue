@@ -1,45 +1,49 @@
 <template>
+
     <div class="popup" v-show="seenAdd" >
-        <div class="popup-head font-20">編輯資料</div>
-        <div class="popup-content font-18">
-          <div class="input-txt">
-              <div class="input-info">
-                  <label for="">前台區塊：
-                      <Input type="text" clearable style="width: 200px" />
-                  </label>
-              </div>
-              <div class="input-info">
-                  <label for="">方案編號：
-                      <Input type="text" clearable  style="width: 200px"/>
-                  </label>
-              </div>
-              <div class="input-info">
-                  <label for="">上架日期：
-                      <Input type="" clearable  style="width: 200px"/>
-                  </label>
-              </div>
-              <div class="input-info">
-                  <label for="">標題：
-                      <Input type="email" clearable  style="width: 200px"/>
-                  </label>
-              </div>
-              <div class="input-info">
-                  <label for="">推薦商品：
-                      <Input type="tel" clearable  style="width: 200px"/>
-                  </label>
-              </div>
-              <div class="input-info">
-                  <label for="">狀態：
-                      <Input type="tel" clearable  style="width: 200px"/>
-                  </label>
-              </div>
-          </div>
-        </div> 
-        <div class="popup-btn">
-            <!-- <Button type="primary">新增帳號</Button> -->
-            <Button @click="seenAdd=false">返回</Button>
-        </div>
+        <form action="post" enctype="multipart/form-data">
+            <div class="popup-head font-20">編輯資料</div>
+            <div class="popup-content font-18">
+            <div class="input-txt">
+                <div class="input-info">
+                    <label for="">前台區塊：
+                        <Input type="text" clearable style="width: 200px" />
+                    </label>
+                </div>
+                <div class="input-info">
+                    <label for="">方案編號：
+                        <Input type="text" clearable  style="width: 200px"/>
+                    </label>
+                </div>
+                <div class="input-info">
+                    <label for="">上架日期：
+                        <Input type="" clearable  style="width: 200px"/>
+                    </label>
+                </div>
+                <div class="input-info">
+                    <label for="">標題：
+                        <Input type="email" clearable  style="width: 200px"/>
+                    </label>
+                </div>
+                <div class="input-info">
+                    <label for="">推薦商品：
+                        <Input type="tel" clearable  style="width: 200px"/>
+                    </label>
+                </div>
+                <div class="input-info">
+                    <label for="">狀態：
+                        <Input type="tel" clearable  style="width: 200px"/>
+                    </label>
+                </div>
+            </div>
+            </div> 
+            <div class="popup-btn">
+                <!-- <Button type="primary">新增帳號</Button> -->
+                <Button @click="seenAdd=false">返回</Button>
+            </div>
+        </form>
     </div>
+
     <div class="backstage-newss" v-show="addnew" >
         <div class="container" @click.self="dbcheck">
             <div class="content">
