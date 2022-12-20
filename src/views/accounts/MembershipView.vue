@@ -1,117 +1,102 @@
 <template>
     <div class="backstage-administrator" >
-        <!-- <div class="backstage-name">
-            <div>
-                <h2 class="font-36" >帳號管理</h2>
-            </div>
-            <div class="backstage-account">
-                <span class="font-18">管理員名稱</span>
-                <span class="font-18">登出</span>
-            </div>
-        </div> -->
 
         <div class="administrator-manager">
-            <Table stripe border :columns="columns" :data="data">
-                <!-- 員工編號 -->
-                <template #staff_no="{ row, index }">
+            <Table stripe border :columns="columns" :data="result">
+                <!-- 會員編號 -->
+                <template #mem_no="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_no }}</span>
+                        <span v-else>{{ row.mem_no }}</span>
                 </template>
-                <!-- 員工帳號 -->
-                <template #staff_number="{ row, index }">
+                <!-- 會員姓名 -->
+                <template #mem_name="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_number }}</span>
+                        <span v-else>{{ row.mem_name }}</span>
                 </template>
-                <!-- 員工姓名 -->
-                <template #staff_name="{ row, index }">
+                <!-- 會員信箱 -->
+                <template #mem_email="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_name }}</span>
+                        <span v-else>{{ row.mem_email }}</span>
                 </template>
-                <!-- 員工信箱 -->
-                <template #staff_email="{ row, index }">
+                <!-- 電話號碼 -->
+                <template #mem_phone="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_email }}</span>
+                        <span v-else>{{ row.mem_phone }}</span>
                 </template>
-                <!-- 帳號狀態 -->
-                <template #staff_state="{ row, index }">
-                    <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_state }}</span>
-                </template>
-                <!-- 刪除帳號 -->
-                <!-- <template #action_error="{ row, index }">
-                    <Button type="error" size="small" @click="remove(index, row)">刪除</Button>
-                </template> -->
-                <template #action_error>
-                    <div class="cliche" @click="addToggle">查看</div>
+
+                <template #action_error="{row}">
+                    <div class="cliche" @click="addToggle(row.mem_no)">查看</div>
                 </template>
             </Table>
-            <!-- 彈窗：刪除確認 -->
+
         </div>
     </div>
     <!-- <Page :total="40" size="small" /> -->
 
     <!-- style="display:none" -->
-    <!--新增表單 -->
+    <!--詳細資料彈跳視窗 -->
     <div class="popup " v-show="seenAdd" >
         <div class="popup-head font-20">會員詳細資料</div>
         <div class="popup-content font-18">
           <div class="input-txt">
               <div class="input-info">
                   <label for="">會員編號：
-                      <Input type="text" clearable style="width: 200px" />
+                      <Input v-model="selectArray.mem_no" type="text" clearable style="width: 200px" />
                   </label>
               </div>
               <div class="input-info">
                   <label for="">會員姓名：
-                      <Input type="text" clearable  style="width: 200px"/>
+                      <Input v-model="selectArray.mem_name" type="text" clearable  style="width: 200px"/>
                   </label>
               </div>
-              <div class="input-info">
-                  <label for="">會員性別：
-                      <Input type="" clearable  style="width: 200px"/>
-                  </label>
-              </div>
+
               <div class="input-info">
                   <label for="">會員信箱：
-                      <Input type="email" clearable  style="width: 200px"/>
+                      <Input v-model="selectArray.mem_email" type="email" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">電話號碼：
-                      <Input type="tel" clearable  style="width: 200px"/>
+                      <Input v-model="selectArray.mem_phone" type="tel" clearable  style="width: 200px"/>
+                  </label>
+              </div>
+              <div class="input-info">
+                  <label for="">會員密碼：
+                      <Input v-model="selectArray.mem_psw" type="tel" clearable  style="width: 200px"/>
                   </label>
               </div>
           </div>
+          
           <div class="input-txt">
               <div class="input-info">
                   <label for="">會員國籍：
-                      <Input type="text" clearable style="width: 200px" />
+                      <Input v-model="selectArray.mem_nation" type="text" clearable style="width: 200px" />
                   </label>
               </div>
               <div class="input-info">
                   <label for="">會員地址：
-                      <Input type="text" clearable  style="width: 200px"/>
+                      <Input v-model="selectArray.mem_address" type="text" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">英文姓名：
-                      <Input type="" clearable  style="width: 200px"/>
+                      <Input v-model="selectArray.mem_e_name" type="" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">護照號碼：
-                      <Input type="email" clearable  style="width: 200px"/>
+                      <Input v-model="selectArray.mem_passport_no" type="email" clearable  style="width: 200px"/>
                   </label>
               </div>
               <div class="input-info">
                   <label for="">信用卡號：
-                      <Input type="tel" clearable  style="width: 200px"/>
+                      <Input v-model="selectArray.credit_card" type="tel" clearable  style="width: 200px"/>
                   </label>
               </div>
           </div>
         </div> 
         <div class="popup-btn">
-            <!-- <Button type="primary">新增帳號</Button> -->
+
             <Button @click="addToggle">返回</Button>
         </div>
       </div>
@@ -131,27 +116,22 @@ export default {
             columns: [
                 {
                     title: '會員編號',
-                    slot: 'staff_no',
-                    align: 'center'
-                },
-                {
-                    title: '會員性別',
-                    slot: 'staff_number',
+                    slot: 'mem_no',
                     align: 'center'
                 },
                 {
                     title: '會員姓名',
-                    slot: 'staff_name',
+                    slot: 'mem_name',
                     align: 'center'
                 },
                 {
                     title: '會員信箱',
-                    slot: 'staff_email',
+                    slot: 'mem_email',
                     align: 'center'
                 },
                 {
                     title: '電話號碼',
-                    slot: 'staff_state',
+                    slot: 'mem_phone',
                     width: 120,
                     align: 'center'
                 },
@@ -162,36 +142,11 @@ export default {
                     align: 'center'
                 }
             ],
-            data: [
-                {
-                    staff_no: '001',
-                    staff_number: '男',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com',
-                    staff_state: '0912475285'
-                },
-                {
-                    staff_no: '002',
-                    staff_number: '男',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com',
-                    staff_state: '0912475285'
-                },
-                {
-                    staff_no: '003',
-                    staff_number: '男',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com',
-                    staff_state: '0912475285'
-                },
-                {
-                    staff_no: '004',
-                    staff_number: '男',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com',
-                    staff_state: '0912475285'
-                }
-            ]
+            result: [
+
+            ],
+            selectNumber:'',
+            selectArray:[],
         }
     },
     computed: {
@@ -205,17 +160,21 @@ export default {
         show (index) {
             this.$Modal.info({
                 title: 'User Info',
-                content: `Name：${this.data[index].name}<br>Age：${this.data[index].age}<br>Address：${this.data[index].address}`
+                content: `Name：${this.result[index].name}<br>Age：${this.result[index].age}<br>Address：${this.result[index].address}`
             })
         },
         remove (index) {
-            this.data.splice(index, 1);
+            this.result.splice(index, 1);
         },
-        addToggle(){ //新表單
-            this.seenAdd = !this.seenAdd
+        addToggle(event){ //新表單
+        console.log(this);
+            this.seenAdd = !this.seenAdd;
+            this.selectNumber = event;
+            this.selectArray = this.result.find(v=>v.mem_no === this.selectNumber) ?? [];
+
         },
         del(index){
-            this.data.splice(index, 1);
+            this.result.splice(index, 1);
             this.modal_loading = true;
             setTimeout(() => {
                 this.modal_loading = false;
@@ -226,7 +185,18 @@ export default {
         toggleModal(){
             this.isShow = !this.isShow;
             console.log(this);
-        }
+        },
+        getData(){
+            fetch('http://localhost/cgd103-g4-backend/public/phpfiles/getMemberInfo.php')
+                  .then((res) => res.json())
+                  .then((json) =>{
+                    this.result = json;
+                    console.log(this.result);
+                  })
+        },
+    },
+    created(){
+         this.getData();
     }
 }
 </script>
