@@ -11,12 +11,12 @@
                     </label>
                 </div>
                 <div class="input-info">
-                    <label for="">方案編號：
+                    <label for="">活動標籤：
                         <Input type="text" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
-                    <label for="">上架日期：
+                    <label for="">價格：
                         <Input type="" clearable  style="width: 200px"/>
                     </label>
                 </div>
@@ -39,7 +39,7 @@
             </div> 
             <div class="popup-btn">
                 <!-- <Button type="primary">新增帳號</Button> -->
-                <Button @click="seenAdd=false">返回</Button>
+                <Button @click="seenAdd=false">確認</Button>
             </div>
         </form>
     </div>
@@ -49,16 +49,16 @@
         <div class="container" @click.self="dbcheck">
             <div class="content">
                 <div class="type opencode">
-                    <p class="nncode font-20">方案編號 A110000</p>
+                    <p class="nncode font-20"></p>
                 </div>
                 <div class="type travelcode">
                     <p class="nname">狀態 :</p>
                     <div class="choose">
                         <select class="choosein" name="package_status" v-model="selected">
                             <option value="" disabled>-請選擇-</option>
-                            <option value="0">上架</option>
-                            <option value="1">草稿</option>
-                            <option value="2">下架</option>
+                            <option value="上架">上架</option>
+                            <option value="草稿">草稿</option>
+                            <option value="下架">下架</option>
                         </select>
                     </div>
                 </div>
@@ -66,12 +66,12 @@
                 <div class="type travelcode">
                     <p class="nname">前台位置 :</p>
                     <div class="choose">
-                        <select class="choosein" v-model="selected2">
+                        <select class="choosein" name="package_name" v-model="selected2">
                             <option value="" disabled>-請選擇-</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
+                            <option value="方案A">方案A</option>
+                            <option value="方案B">方案B</option>
+                            <option value="方案C">方案C</option>
+                            <option value="方案D">方案D</option>
                         </select>
                     </div>
                 </div>
@@ -79,9 +79,7 @@
                 <div class="type travelcode">
                     <p class="nname">推薦特產 :</p>
                     <div class="success">
-                        <Input class="succe" type="text" v-model="value1" style="width: 300px" placeholder="第一項"/>
-                        <Input class="succe" type="text" v-model="value2" style="width: 300px" placeholder="第二項"/>
-                        <Input class="succe" type="text" v-model="value3" style="width: 300px" placeholder="第三項"/>
+                        <Input class="succe" type="text" name="package_buy" v-model="value1" style="width: 300px"/>
                     </div>
                 </div>
                 <div class="title2 font-18">方案列表區圖文設定 :</div>
@@ -91,13 +89,13 @@
                 </div>
                 <div class="type travelcode">
                     <p class="nname">副標題(必填) :</p>
-                    <Input class="succe" type="text" name="package_name" v-model="value5" style="width: 300px" />
+                    <Input class="succe" type="text" name="package_subtitle" v-model="value5" style="width: 300px" />
                 </div>
                 <div class="type travelcode">
                     <p class="nname">介紹頁內文(必填) :</p>
                     <Form :model="formItem">
                         <FormItem label="Text">
-                            <Input name="package_des" v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
+                            <Input name="package_indes" v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
                         </FormItem>
                     </Form>
                 </div>
@@ -105,7 +103,7 @@
                     <p class="nname">詳情頁內文(必填) :</p>
                     <Form :model="formItem2">
                         <FormItem label="Text">
-                            <Input name="travel_paper" v-model="formItem2.textarea2" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
+                            <Input name="package_des" v-model="formItem2.textarea2" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
                         </FormItem>
                     </Form>
                 </div>
@@ -114,10 +112,15 @@
                     <Input class="succe" type="text" name="package_price" v-model="value6" style="width: 300px" />
                 </div>
                 <div class="type travelcode">
+                    <p class="nname">標籤 :</p>
+                    <Input class="succe" type="text" name="package_tag" v-model="tager" style="width: 300px" />
+                </div>
+                <div class="type travelcode">
                     <p class="nname">插入圖片 :</p>
-                    <Upload class="succe" action="//jsonplaceholder.typicode.com/posts/">
+                    <Input class="succe" type="text" name="package_price" v-model="value3" style="width: 300px" />
+                    <!-- <Upload class="succe" action="//jsonplaceholder.typicode.com/posts/">
                         <Button icon="ios-cloud-upload-outline">Upload files</Button>
-                    </Upload>
+                    </Upload> -->
                 </div>
                 <div class="delcan">
                     <div class="shure">取消</div>
@@ -149,12 +152,12 @@
                             <!-- 最後編輯 -->
                             <template #news_session="{ row, index }">
                                 <Input type="text" v-model="editIndex_session" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_price }}</span>
+                                <span v-else>{{ row.package_name }}</span>
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row, index }">
                                 <Input type="text" v-model="editnews_class" v-if="editIndex === index" />
-                                <span v-else>{{ (row.package_des) }}</span>
+                                <span v-else>{{ (row.package_price) }}</span>
                             </template>
                             <!-- 標題 -->
                             <template #news_title="{ row, index }">
@@ -267,12 +270,12 @@
                 seenAdd:false,
                 selected:"",
                 selected2:"",
-                value:"",
-                value2:"",
+                value1:"",
                 value3:"",
                 value4:"",
                 value5:"",
                 value6:"",
+                tager:"",
                 formItem: {
                     textarea: '',
                 },
@@ -305,7 +308,7 @@
                     align: 'center'
                 },
                 {
-                    title: '推薦商品',
+                    title: '價格',
                     slot: 'news_class',
                     width: 150,
                     align: 'center'
@@ -323,40 +326,7 @@
                     align: 'center'
                 }
                 ],
-                dataOn: [
-                    // {
-                    //     news_no: 'A1100001',
-                    //     news_time: '2022/11/22',
-                    //     news_session:'A',
-                    //     news_class: '火車佐便當',
-                    //     news_title: '「高千穗峽谷」划船體驗報名優惠',
-                    //     news_status:'上架',
-                    // },
-                    // {
-                    //     news_no: 'A1100002',
-                    //     news_time: '2022/11/23',
-                    //     news_session:'B',
-                    //     news_class: '火車佐便當',
-                    //     news_title: '高千穗-夜神樂',
-                    //     news_status:'上架',
-                    // },
-                    // {
-                    //     news_no: 'A1100003',
-                    //     news_time: '2022/11/24',
-                    //     news_session:'C',
-                    //     news_class: '火車佐便當',
-                    //     news_title: '「高千穗峽谷」划船體驗報名優惠',
-                    //     news_status:'上架',
-                    // },
-                    // {
-                    //     news_no: 'A1100004',
-                    //     news_time: '2022/11/25',
-                    //     news_session:'D',
-                    //     news_class: '火車佐便當',
-                    //     news_title: '「鹿兒島沙浴」體驗活動報名',
-                    //     news_status:'上架',
-                    // },
-                ],
+                dataOn: [],
                 dataDraft: [
                     {
                         news_no: 'A1100005',
@@ -407,7 +377,7 @@
         },
         methods: {
             getData(){
-                const gege = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/gettravel.php');
+                const gege = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelcase.php');
                 fetch(gege)
                 .then((res)=>res.json())
                 .then((json)=>{
@@ -416,15 +386,19 @@
                 })
             },
             addData(){
-                const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/settravel.php');
+                const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
                 fetch(addURL,{ method:'post',body: new URLSearchParams({
-                    package_name:this.value5,
+                   
                     package_status:this.selected,
-                    package_price:this.value6,
+                    package_name:this.selected2,
+                    package_buy:this.value1,
+                    package_pic:this.value3,
                     package_title:this.value4,
-                    package_des:this.formItem.textarea,
-                    // package_pic:this.package_pic,
-                    travel_paper:this.formItem2.textarea2,
+                    package_subtitle:this.value5,
+                    package_price:this.value6,
+                    package_tag:this.tager,
+                    package_indes:this.formItem.textarea,
+                    package_des:this.formItem2.textarea2,
                 })})
                 .then((rt)=>rt.json())
                 .then((result)=>{
@@ -432,7 +406,7 @@
                 })
             },
             handleEdit (row, index) {
-                this.editnews_no = row.package_no;
+                this.editnews_no = row.package_name;
                 this.editnews_time = row.package_create_date;
                 this.editnews_title = row.package_title;
                 this.editnews_class = row.package_des;
