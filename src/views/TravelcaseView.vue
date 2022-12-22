@@ -7,39 +7,40 @@
             <div class="input-txt">
                 <div class="input-info">
                     <label for="">前台區塊：
-                        <Input type="text" clearable style="width: 200px" />
+                        <Input type="text" name="package_name" v-model="newdataOn.package_name" clearable style="width: 200px" />
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">活動標籤：
-                        <Input type="text" clearable  style="width: 200px"/>
+                        <Input type="text" name="package_tag" v-model="newdataOn.package_tag" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">價格：
-                        <Input type="" clearable  style="width: 200px"/>
+                        <Input type="" name="package_price" v-model="newdataOn.package_price" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">標題：
-                        <Input type="email" clearable  style="width: 200px"/>
+                        <Input type="email" name="package_title" v-model="newdataOn.package_title" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">推薦商品：
-                        <Input type="tel" clearable  style="width: 200px"/>
+                        <Input type="tel" name="package_buy" v-model="newdataOn.package_buy" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">狀態：
-                        <Input type="tel" clearable  style="width: 200px"/>
+                        <Input type="tel" name="package_status" v-model="newdataOn.package_status" clearable  style="width: 200px"/>
                     </label>
                 </div>
             </div>
             </div> 
             <div class="popup-btn">
                 <!-- <Button type="primary">新增帳號</Button> -->
-                <Button @click="seenAdd=false">確認</Button>
+                <Button @click="seenAdd=!seenAdd">取消</Button>
+                <Button @click="editData">確認</Button>
             </div>
         </form>
     </div>
@@ -170,9 +171,9 @@
                                 <span v-else>{{ row.package_status }}</span>
                             </template>
                             <!-- 按鈕 -->
-                            <template #action>
+                            <template #action="{ row }">
                                 <div class="btn-box">
-                                    <Button @click="seenAdd=!seenAdd">編輯</Button>
+                                    <Button @click="activeData(row.package_no)">編輯</Button>
                                 </div>
                             </template>
                         </Table>
@@ -326,6 +327,7 @@
                     align: 'center'
                 }
                 ],
+                newdataOn:[],
                 dataOn: [],
                 dataDraft: [
                     {
@@ -370,6 +372,7 @@
                 editnews_title: '',  // 第四列输入框
                 editnews_status: '',
                 editnews_session: '',
+                activeIndex:"",
                 }
             },
         created(){
@@ -405,6 +408,24 @@
                     console.log(result);
                 })
             },
+            editData(){
+                const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelcase.php');
+                fetch(addURL,{ method:'post',body: new URLSearchParams({
+                   
+                    package_status:this.newdataOn.package_status,
+                    package_name:this.newdataOn.package_name,
+                    package_buy:this.newdataOn.package_buy,
+                    package_title:this.newdataOn.package_title,
+                    package_price:this.newdataOn.package_price,
+                    package_tag:this.newdataOn.package_tag,
+                    package_no:this.newdataOn.package_no,
+                })})
+                .then((rb)=>rb.json())
+                .then((resultb)=>{
+                    console.log(resultb);
+                    this.seenAdd = false;
+                })
+            },
             handleEdit (row, index) {
                 this.editnews_no = row.package_name;
                 this.editnews_time = row.package_create_date;
@@ -415,12 +436,12 @@
                 this.editIndex = index;
             },
             handleSave (index) {
-                this.data[index].news_no = this.editnews_no;
-                this.data[index].news_time = this.editnews_time;
-                this.data[index].news_class = this.editnews_class;
-                this.data[index].news_title = this.editnews_title;
-                this.data[index].news_status = this.editnews_status;
-                this.data[index].news_session = this.editnews_session;
+                this.data[index].package_name = this.editnews_no;
+                this.data[index].package_create_date = this.editnews_time;
+                this.data[index].package_des = this.editnews_class;
+                this.data[index].package_title = this.editnews_title;
+                this.data[index].package_status = this.editnews_status;
+                this.data[index].package_price = this.editnews_session;
                 this.editIndex = -1;
             },
             dbcheck(){
@@ -429,7 +450,14 @@
                     return this.addnew;
                 }
             },
-        }
+            activeData(ed) {
+                this.activeIndex = ed;
+                this.seenAdd = true;
+                this.newdataOn = this.dataOn.find((v) => v.package_no === this.activeIndex) ?? {};
+            },
+        },
+        computed: {
+        },
     }
 </script>
 

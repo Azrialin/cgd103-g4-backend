@@ -4,18 +4,17 @@
         <div class="container">
             <div class="content">
                 <div class="type opencode">
-                    <p class="nname">開團編號 :</p>
-                    <p class="succe">A0001</p>
+                    <p class="qq">開團 :</p>
                 </div>
                 <div class="type travelcode">
                     <p class="nname">行程方案 :</p>
                     <div class="choose">
                         <select class="choosein" name="package_no" v-model="packageno">
                             <option value="" disabled>-請選擇-</option>
-                            <option value="方案A">方案A</option>
-                            <option value="方案B">方案B</option>
-                            <option value="方案C">方案C</option>
-                            <option value="方案D">方案D</option>
+                            <option value="0">方案A</option>
+                            <option value="1">方案B</option>
+                            <option value="2">方案C</option>
+                            <option value="3">方案D</option>
                         </select>
                     </div>
                 </div>
@@ -79,7 +78,7 @@
         },
         methods:{
             addData(){
-                const myURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setopen.php');
+                const myURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelopen.php');
                 fetch(myURL,{method:'POST',body: new URLSearchParams({
                     package_no:this.packageno,
                     departure_date:this.departuredate,
@@ -157,6 +156,12 @@
         .type{
             display: flex;
             color: #fff;
+            .qq{
+                font-size: 36px;
+                width: 50%;
+                padding: 30px 0px;
+                padding-left: 20%;
+            }
             .nname{
                 font-size: 16px;
                 width: 50%;
