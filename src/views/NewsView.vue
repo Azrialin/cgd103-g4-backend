@@ -1,30 +1,22 @@
 <template>
-<!---------------------use case(簡易隨寫)-----------------------
+<!----------------尚未完成---------------------------
 <div>
     📣 確認鍵所連動的功能還沒寫好，都先暫放toggle
+🔹 tab 資料篩選filter   
+    分類從資料庫抓回來時，顯示文字非數字
+    狀態從資料庫抓回來時，顯示文字非數字
 🔹 新增消息 
-    "新增消息"，"取消"toggle 新增表格彈窗    ✔
-    關掉畫面，上次輸入的資料還是保留  keep-alive✔
-    按下確認鍵的資料修改(若選擇上架，需要檢查欄位是否都填妥) (連動資料本身)
+    按下確認鍵的資料修改(若選擇上架，需要檢查欄位是否都填妥) 
+    新增完資料後，表格框刪除資料，關掉表格畫面，彈出新增成功
+    問題: 跑出null資料?
 🔹 編輯消息(上架)
-    彈窗  ✔
-    已有的資料綁定 ✔ (狀態、分類、圖片尚未綁定)
-    按下確認鍵的資料修改(不可有空職欄位)(連動資料本身)
+    按下確認鍵的資料修改(不可有空職欄位)
 🔹 編輯消息(草稿)
-    彈窗  ✔
-    已有的資料綁定 ✔ (狀態、分類、圖片尚未綁定)
     按下確認鍵的資料修改(連動資料本身)
 🔹 查看消息(下架)
-    彈窗 ✔
-    已有的資料綁定  ✔ (狀態、分類、圖片尚未綁定)
 🔹 刪除消息(草稿)
-🔹 上下頁、顯示資料數設定  (目前用卷軸 ✔
-🔹 各狀態資料筆數顯示於下方
-🔹 排序filter
-    上架日期 ✔
-    最後修改 ✔
-    分類 ✔
-🔹 確認彈窗 功能
+( 🔹 各狀態資料筆數顯示於下方)
+🔹 提示彈窗加入
 </div>
 ------------------------------------------------------->
 <!------------------- 
@@ -57,7 +49,7 @@
 -->
 <!-- 
 目的: 新增資料    
-1. 新增資料function addFaqData
+1. 新增資料function addFaqData 綁定按鈕
         addFaqData(){
             let xhr = new XMLHttpRequest();
             xhr.onload = function(){
@@ -71,10 +63,21 @@
         },
 2. html Form夾要傳送的資料範圍
 3.有兩個新增資料的方法 project_books_formData(HTML5) 1.js(prod_insert.html) 2.php(此次用的方法) prod_insert.php
-
+4. 表單對應資料庫新增的欄位 方法有二 1.表單給name(要對照Php)  2.才俊fetch的方法(?)
+5.
  -->
-    <div class="backstage-news" >
+ <!-- 編輯資料 function -->
+ <!-- 刪除資料 function 
+1. 刪除資料function removeData 綁定按鈕
+2. removeData(){
+    //彈出是否確認刪除彈窗
+    //if (確認){
+        執行刪除指令
+    }else()
+}
 
+-->
+    <div class="backstage-news" >
         <div class="backstage-content">
             <div class="btn-add">
                 <button class="font-20 btn-blue" @click="newToggle">新增消息</button>
@@ -116,7 +119,7 @@
                             <!-- 按鈕 -->
                             <template #action="{ row }">
                                 <div class="btn-box">
-                                    <button class="btn-success"  @click="editOnData(row.news_no)">編輯</button>
+                                    <button class="icon material-symbols-outlined"  @click="editOnData(row.news_no)" ></button>
                                 </div>
                             </template>
                         </Table>
@@ -216,58 +219,60 @@
                 <div class="popup-head font-20">
                     <div class="news-no">
                         <span>公告編號</span>
-                        <span></span>
+                        <span name=""></span>
                     </div>
                     <div class="on-date">
                         <span class="date">發布時間</span>
                         <span class="date"></span>
+                        <input type="text" name="news_time" id="">
                     </div>
                     <div class="last-edit-date">
                         <span class="date">最後更新</span>
                         <span class="date"></span>
+                        <input type="text" name="news_last_edit" id="">
                     </div>
                 </div>
                 <div class="popup-content font-18">
                     <div class="popup-data">
                         <label for="">狀態(必填)
-                            <select name="" id="">
-                                <option value="draft">草稿</option>
-                                <option value="on">上架</option>
-                                <option value="off">下架</option>
+                            <select name="news_type" id="">
+                                <option value="2">草稿</option>
+                                <option value="1">上架</option>
+                                <option value="0">下架</option>
                             </select>
                         </label>
                         <label for="">分類
-                            <select name="" id="">
-                                <option value="important">重要</option>
-                                <option value="action">活動</option>
-                                <option value="other">其他</option>
+                            <select name="news_status" id="">
+                                <option value="1">重要</option>
+                                <option value="2">活動</option>
+                                <option value="3">其他</option>
                             </select>
                         </label>
                     </div>
                     <div class="input-txt">
                         <div class="input-title">
                             <label for="">標題：
-                                <Input placeholder="請輸入標題" clearable style="width: 500px" />
+                                <Input name="news_title" placeholder="請輸入標題" clearable style="width: 500px" />
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">引文：
-                                <Input clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                                <Input name="news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">內文：
-                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                                <Input name="news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">內文：
-                                <Input clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                                <Input name="news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
                             <label for="">結尾：
-                                <Input clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                                <Input name="news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                             </label>
                         </div>
                     </div>
@@ -278,12 +283,12 @@
                     </div>
                     <div class="input-pic-des">
                         <label for="">圖片敘述：
-                            <Input placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                            <Input name="news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                         </label>
                     </div>
                     <div class="popup-btn">
-                        <button class="btn-blue_2nd" @click="newToggle">取消</button>
-                        <button class="btn-blue" @click="newToggle">確認</button>
+                        <button type="button" class="btn-blue_2nd" @click="newToggle">取消</button>
+                        <button type="button" class="btn-blue" @click="addNewsData">確認</button>
                         <!-- 確認鍵功能待補，暫放toggle -->
                     </div>
                 </div>
@@ -909,7 +914,7 @@
 			xhr.open("get",'http://localhost/list.php', true);
 			xhr.send(null);
 		    },
-            addFaqData(){
+            addNewsData(){
             let xhr = new XMLHttpRequest();
             xhr.onload = function(){
                 let result = JSON.parse(xhr.responseText);
@@ -917,7 +922,7 @@
                 // document.getElementById("btnReset").click();
                 // $id("btnReset").click();
             }
-            xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faq_insert.php", true);
+            xhr.open("post", "http://localhost/news_insert.php", true);
             xhr.send(new FormData(document.getElementById("addNewsForm")));
             },
             newToggle(){ //新表單
@@ -1024,10 +1029,7 @@
 .date{
     color: #ccc;
 }
-
-
 /* -------------------彈窗結束----------------- */
-
 /* -------------------新增修改box ------------------------*/
 .popup-box{
     position: absolute;
@@ -1057,33 +1059,8 @@
 
 /* -------------------新增修改結束 ------------------------*/
 
-/* 後台header */
-.backstage-name{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #4F6573;
-    color: #fff;
-    text-align: start;
-    height: 80px;
-}
-.backstage-name h2{
-    margin-left: 40px;
-}
-/* 帳號狀態 */
-.backstage-account span{
-    display: inline-block;
-    cursor: pointer;
-    margin: 0 20px;
-}
 
-/* 消息管理 */
-/* 麵包屑 */
-.backstage-path{
-    text-align: start;
-    color: #888888;
-    margin: 40px 0 0 40px;
-}
+
 
 /* 新增按鈕 */
 .btn-add{
@@ -1094,23 +1071,6 @@
     padding: 8px 16px;
 
 }
-/* 管理介面 */
-.news-manager{
-    height: 45vh;
-    margin: 30px 20px;
-}
-
-/* 上下頁 */
-.btn-bottom{
-    text-align: end;
-    margin:100px 60px 0 0 ;
-    margin-right: 60px;
-}
-
-.btn-bottom button{
-    margin-left: 80px;
-}
-
 /* 確認彈窗按鈕 */
 .popup-box .btn-success{
     padding: 8px 32px;
@@ -1120,21 +1080,6 @@
 .popup-box .check-des{
     translate:0 -16px ;
 }
-
-/* 彈窗背景 */
-
-.modal-mask {
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: table;
-    background-color: rgba(0, 0, 0, .5);
-    transition: opacity .3s ease;
-}
-
 // class名稱
 // .btn-blue        按鈕:藍色
 // .btn-blue_2nd    按鈕:白底藍框
