@@ -4,15 +4,14 @@
     🔹 新增消息 
         確認鍵 資料驗證條件
         新增完資料後，表格框刪除資料，關掉表格畫面，彈出新增成功
-    🔹 刪除消息(草稿)
     🔹 編輯消息
         上架 按下確認鍵的資料修改(不可有空值欄位)
         草稿 按下確認鍵的資料修改(連動資料本身)
         想法: 先清空表單內容，在把所有的資料新增上去
-    🔹 提示彈窗加入
     ( 🔹 各狀態資料筆數顯示於下方)
     🔹 上傳圖片的方法  (為了新增資料正常，先找幾張圖片新增到20.jpg)
     🔹 php放置位置? (後台的有放public嗎 目前我的php是在wwwroot)
+    🔹 取消清除表單資料
     ------------------------------------------------------->
     <!------------------- 筆記
     點擊結果為點擊的內容
@@ -153,9 +152,9 @@
                             <!-- 按鈕 -->
                             <template #action="{ row  }">
                                 <div class="btn-box">
-                                    <Space :size="size">
+                                    <Space>
                                         <span class="icon material-symbols-outlined"   @click="editDraftData(row.news_no)" style="cursor: pointer;">edit_square</span>
-                                        <span class="icon material-symbols-outlined"  @click="remove(row)" style="cursor: pointer;">delete</span>
+                                        <span class="icon material-symbols-outlined"  @click="delNewsData(row.news_no)" style="cursor: pointer;">delete</span>
                                     </Space>
                                 </div>
                             </template>
@@ -546,6 +545,7 @@
                 seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
                 seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
                 seeCheck:false, //確認彈窗、v-show="seeCheck" 按鈕@click="okToggle"
+                // 表單相關
                 columns: [
             {
                 title: '公告編號',
@@ -683,6 +683,23 @@
                 }
                 xhr.open("post", "http://localhost/news_insert.php", true);
                 xhr.send(new FormData(document.getElementById("addNewsForm")));
+
+                // 確認談窗
+                this.$Notice.success({
+                    title: '資料狀態',
+                    desc: 'The desc will hide when you set render.',
+                    render: h => {
+                        return h('span', ['新增資料成功 '])
+                    }
+                });
+                
+                // 關閉表單
+                this.seenNew = !this.seenNew
+
+                // 重新整理頁面
+                setTimeout(() => {
+                    window.location.reload();
+                },500);
             },
             // 修改資料 fetch
             editNewsData(){
@@ -718,21 +735,35 @@
                 })
             },
             // 刪除資料
-            delNewsData(){
+            delNewsData(deleteNo){
+                let deleteIndex = deleteNo;
+                // console.log(deleteNo);
+
+                // console.log(deleteIndex);
                 fetch('http://localhost/news_delete.php',{
                     method:'POST', body:new URLSearchParams({
-                    news_no:this.deleteNo,
+                    news_no:deleteIndex,
+                    
                 })})
                 .then((res) => res.json())
-                .then((result)=> { //以下待求解
-                    this.alert_Loading = true;
-                    setTimeout(() => {
-                        this.activeList.splice(this.rowCount, 1);
-                        this.alert_Loading = false;
-                        this.show_delCheck = false;
-                        this.$Message.success(result.msg);
-                    }, 600);
+                .then((result)=> { 
+                    console.log(result);
                 })
+
+                // 彈窗
+                this.$Notice.success({
+                    title: '資料狀態',
+                    desc: 'The desc will hide when you set render.',
+                    render: h => {
+                        return h('span', ['刪除資料成功 '])
+                    }
+                });
+
+                // 重新整理頁面
+                setTimeout(() => {
+                    window.location.reload();
+                },500);
+
             },
             newToggle(){ //新表單
                 this.seenNew = !this.seenNew
@@ -771,8 +802,7 @@
             this.getNews();
         },
         mounted(){
-        // this.getNews();
-    },
+        },
     }
 </script>
 
