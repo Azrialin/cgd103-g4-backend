@@ -1,9 +1,12 @@
 <!-- 問題
     7. 各個彈窗寫成 component
-    8. 進入頁面預設打開"全部"
     9. 新增/編輯資料時，若欄位為空則不能送出
     10.分頁優化寫法
     11.輸入框剩餘字數
+    13.表單：編輯的 ?? []
+    14.massChangeState 寫成同一支
+    15.分頁
+    16.類別用抓的
 -->
 <!-- 小抄
     摺疊快速鍵 Ctrl K 012345
@@ -14,11 +17,24 @@
     <div class="FAQ">
 		<main>
 <!-- 按鈕 -->
-			<div class="btns">
-				<button class="btn-blue_2nd" @click="changeAll">顯示/隱藏</button>
-				<button class="btn-blue" @click="show_NewForm = !show_NewForm">新增</button>
-				<button class="btn-blue" @click="massDelete">刪除</button>
-			</div>
+            <div class="btns">
+                <button
+                    v-show="selectList.length > 1"
+                    value="1"
+                    class="btn-blue_2nd"
+                    @click="massChangeState_1"
+                >批量顯示
+                </button>
+                <button
+                    v-show="selectList.length > 1"
+                    value="0"
+                    class="btn-blue_2nd"
+                    @click="massChangeState_0"
+                >批量隱藏
+                </button>
+                <button class="btn-blue" @click="show_NewForm = true">新增</button>
+                <button class="btn-blue" @click="delCheck">刪除</button>
+            </div>
 <!-- 分頁標籤 -->
             <ul class="tabs">
                 <li id="tabAll" class="tab font-16" @click="clickAll">全部</li>
@@ -36,7 +52,9 @@
                 :columns="columns"
                 :data="activeList"
                 @on-select="onSelect"
+                @on-select-cancel="onSelectCancel"
                 @on-select-all="onSelectAll"
+                @on-select-all-cancel="selectList=[]"
             >
                 <!-- 編號 -->
                 <template #faq_no="{ row, index }">
@@ -79,10 +97,17 @@
                     </div>
                 </template>
                 <!-- 刪除 -->
-                <template #delete="{ row }">
-                    <span class="icon material-symbols-outlined"
+                <template #delete="{ row, index }">
+                    <span v-if="selectList.length > 1"
+                        class="icon material-symbols-outlined"
                         style="font-size:26px; margin-top: 5px;"
-                        @click="delCheck(row.faq_no)"
+                        @click="delCheck"
+                    >delete
+                    </span>
+                    <span v-else
+                        class="icon material-symbols-outlined"
+                        style="font-size:26px; margin-top: 5px;"
+                        @click="delCheck(row, index)"
                     >delete
                     </span>
                 </template>
@@ -91,11 +116,11 @@
 <!-- 新增表單 -->
         <form id="newForm" method="post" enctype="multipart/form-data">
             <div class="alert-mask" v-show="show_NewForm">
-                <div class="alert-container faq-form">
+                <div class="alert-container faq-form newForm">
                     <!-- 標題 -->
                     <div class="form-head">
                         <p class="font-20">新增 FAQ</p>
-                        <span class="material-symbols-outlined" @click="show_CheckAlert=!show_CheckAlert">close</span>
+                        <span class="material-symbols-outlined" @click="show_cancelCheck = true">close</span>
                     </div>
                     <!-- 內容 -->
                     <div class="form-body">
@@ -165,7 +190,7 @@
                         <!-- 按鈕 -->
                         <div>
                             <p class="font-16">＊為必填／必選項目</p>
-                            <button type="button" class="btn-blue_2nd" @click="show_CheckAlert=!show_CheckAlert">取消</button>
+                            <button type="button" class="btn-blue_2nd" @click="show_cancelCheck = true">取消</button>
                             <button type="button" class="btn-blue" @click="addFaqData">新增</button>
                         </div>
                     </div>
@@ -175,11 +200,11 @@
 <!-- 編輯表單 -->
         <form id="editForm" method="post" enctype="multipart/form-data">
             <div class="alert-mask" v-show="show_EditForm">
-                <div class="alert-container faq-form">
+                <div class="alert-container faq-form editForm">
                     <!-- 標題 -->
                     <div class="form-head">
                         <p class="font-20">編輯 FAQ</p>
-                        <span class="material-symbols-outlined" @click="show_CheckAlert=!show_CheckAlert">close</span>
+                        <span class="material-symbols-outlined" @click="show_cancelCheck = true">close</span>
                     </div>
                     <!-- 內容 -->
                     <div class="form-body">
@@ -250,7 +275,7 @@
                         <!-- 按鈕 -->
                         <div>
                             <p class="font-16">＊為必填／必選項目</p>
-                            <button type="button" class="btn-blue_2nd" @click="show_CheckAlert=!show_CheckAlert">取消</button>
+                            <button type="button" class="btn-blue_2nd" @click="show_cancelCheck = true">取消</button>
                             <button type="button" class="btn-blue" @click="editFaqData">儲存</button>
                         </div>
                     </div>
@@ -258,28 +283,64 @@
             </div>
         </form>
 <!-- 彈窗：刪除確認 -->
-        <div class="alert-mask" v-show="show_DelAlert">
-            <div class="alert-container" @click.self="show_DelAlert=!show_DelAlert">
+        <div class="alert-mask"
+            v-show="show_delCheck"
+            @click.self="show_delCheck = false"
+        >
+            <div class="alert-container delCheck" >
                 <div class="faq-check">
                     <p class="font-16-15em">
                         <span class="icon material-symbols-outlined">error</span>
                         <span>Delete confirmation</span>
                     </p>
-                    <p class="font-16-15em">確定要刪除嗎？</p>
+                    <p v-if="selectList.length > 1" class="font-16-15em">確定要刪除多筆常見問題嗎？</p>
+                    <p v-else class="font-16-15em">確定要刪除嗎？</p>
                     <Button class="btn-danger_2nd"
                         long :loading="alert_Loading"
-                        @click.self="show_DelAlert=!show_DelAlert">取消
+                        @click.self="show_delCheck = false">取消
                     </Button>
-                    <Button class="btn-danger"
+                    <Button v-if="selectList.length > 0"
+                        class="btn-danger"
+                        long :loading="alert_Loading"
+                        @click="massDelete">刪除
+                    </Button>
+                    <Button v-else
+                        class="btn-danger"
                         long :loading="alert_Loading"
                         @click="delFaqData(index)">刪除
                     </Button>
                 </div>
             </div>
         </div>
+<!-- 彈窗：修改狀態確認 -->
+        <div class="alert-mask"
+            v-show="show_statusCheck"
+            @click.self="show_statusCheck = false"
+        >
+            <div class="alert-container statusCheck">
+                <div class="faq-check">
+                    <p class="font-16-15em">
+                        <span class="icon material-symbols-outlined">error</span>
+                        <span>Change confirmation</span>
+                    </p>
+                    <p class="font-16-15em">確定要變更多筆常見問題的狀態？</p>
+                    <Button class="btn-blue_2nd"
+                        long :loading="alert_Loading"
+                        @click="show_statusCheck = false">取消
+                    </Button>
+                    <Button class="btn-blue"
+                        long :loading="alert_Loading"
+                        @click="massChangeStatus">確認
+                    </Button>
+                </div>
+            </div>
+        </div>
 <!-- 彈窗：取消確認 -->
-        <div class="alert-mask" v-show="show_CheckAlert">
-            <div class="alert-container" @click.self="show_CheckAlert=!show_CheckAlert">
+        <div class="alert-mask"
+            v-show="show_cancelCheck"
+            @click.self="show_cancelCheck = false"
+        >
+            <div class="alert-container cancelCheck">
                 <div class="faq-check">
                     <p class="font-16-15em">
                         <span class="icon material-symbols-outlined">error</span>
@@ -288,7 +349,7 @@
                     <p class="font-16-15em">取消後，內容將不會儲存，請問是否取消？</p>
                     <Button class="btn-blue_2nd"
                         long :loading="alert_Loading"
-                        @click.self="show_CheckAlert=!show_CheckAlert">繼續編輯
+                        @click.self="show_cancelCheck = false">繼續編輯
                     </Button>
                     <Button class="btn-blue"
                         long :loading="alert_Loading"
@@ -302,6 +363,7 @@
 	</div>
 </template>
 <script>
+// import {BASE_URL} from '@/assets/js/commom.js'
 import faq from '@/assets/js/faq.js'
 
 export default {
@@ -311,18 +373,20 @@ export default {
     data(){
         return {
 // ----- 表格：選取 ------
-            deleteNo: '',     // 要刪除的資料編號(單筆)
-            selectAll: false, // 是否全選
-            selectList: [],   // 要批量動作的資料編號(陣列)
+            status: '',     // 要批量修改的狀態(0/1)
+            deleteNo: '',   // 要刪除的資料編號(單筆)
+            rowCount: [],   // 選中的列(次序)
+            selectList: [], // 選中的列(編號)
 // ----- 分頁 ------
-            activeCategory: '',
-            activeList: [],
+            activeCategory: '', // 點到的分類
+            activeList: [],     // 與分類相符的資料
             categoryList:[
                 { faq_type: '會員問題' },
                 { faq_type: '行程問題' },
                 { faq_type: '商品問題' },
             ],
 // ----- 表格欄位 ------
+            editIndex: -1,
             columns: [
                 {
                     type: 'selection',
@@ -371,79 +435,14 @@ export default {
                     align: 'center'
                 }
             ],
-// ----- 假資料 ------
-            faqList: [
-                // {
-                //     faq_no: '001',
-                //     faq_type: '會員問題',
-                //     faq_q: '請問我忘記密碼了怎麼辦？',
-                //     faq_a: '請撥打客服電話，由專人為您服務。',
-                //     faq_status: 1,
-                // },
-                // {
-                //     faq_no: '002',
-                //     faq_type: '會員問題',
-                //     faq_q: '請問客服電話是？我找不到。',
-                //     faq_a: '您好，客服電話是：00-0000-0000',
-                //     faq_status: 1,
-                // },
-                // {
-                //     faq_no: '003',
-                //     faq_type: '會員問題',
-                //     faq_q: '請問可以不要填寫LINE ID嗎？',
-                //     faq_a: '可以的，親。',
-                //     faq_status: 1,
-                // },
-                // {
-                //     faq_no: '004',
-                //     faq_type: '行程問題',
-                //     faq_q: '我不小心訂錯行程了，請問要如何退訂？',
-                //     faq_a: '請至【會員專區】>【行程訂單查詢】，點擊【取消行程】',
-                //     faq_status: 1,
-                // },
-                // {
-                //     faq_no: '005',
-                //     faq_type: '行程問題',
-                //     faq_q: '我想要刷卡，但我不能填寫安全碼？',
-                //     faq_a: '請撥打客服電話，由專人為您服務。',
-                //     faq_status: 1,
-                // },
-                // {
-                //     faq_no: '006',
-                //     faq_type: '行程問題',
-                //     faq_q: '我請問我要如何查詢乘車座位？',
-                //     faq_a: '您好，我們不提供劃位服務，建議您提早上車，先搶先贏。',
-                //     faq_status: 0,
-                // },
-                // {
-                //     faq_no: '007',
-                //     faq_type: '行程問題',
-                //     faq_q: '我購買了方案A，請問發車時間是？',
-                //     faq_a: '請撥打客服電話，由專人為您服務。',
-                //     faq_status: 1,
-                // },
-                // {
-                //     faq_no: '008',
-                //     faq_type: '商品問題',
-                //     faq_q: '請問現貨商品多久會寄出？',
-                //     faq_a: '請撥打客服電話，由專人為您服務。',
-                //     faq_status: 1,
-                // },
-                // {
-                //     faq_no: '009',
-                //     faq_type: '商品問題',
-                //     faq_q: '請問我要如何查詢貨況呢？',
-                //     faq_a: '請撥打客服電話，由專人為您服務。',
-                //     faq_status: 1,
-                // },
-            ],
+// ----- 存資料 ------
+            faqList: [],
 // ----- 表單：新增資料 ------
             newFaq_type: '',
             newFaq_q: '',
             newFaq_a: '',
             newFaq_status: 1,
 // ----- 表單：修改資料 ------
-            editIndex: -1,
             editingNo: '',  // 在修改的資料編號
             editingFaq: [], // 要回傳的陣列
 // ----- 表單：下拉選單 ------
@@ -453,15 +452,15 @@ export default {
                 { text: '商品問題', },
             ],
 // ----- 彈窗 ------
-            show_CheckAlert: false,
-            show_DelAlert:   false,
-            show_NewForm:    false,
-            show_EditForm:   false,
-            alert_Loading:   false,
+            show_statusCheck: false,
+            show_cancelCheck: false,
+            show_delCheck:    false,
+            show_NewForm:     false,
+            show_EditForm:    false,
+            alert_Loading:    false,
         }
     },
     computed: {
-
     },
     methods: {
 // ----- 分頁切換 ------
@@ -488,56 +487,59 @@ export default {
                     this.selectList.push(index[i].faq_no);
             }
         },
-// ----- 全選事件 ------修改中
-        onSelectAll(index){
-            if(this.selectAll == 0){
-                for(let i=0; i<index.length; i++){
-                    if( this.selectList.includes(index[i].faq_no) == 0 )
-                        this.selectList.push(index[i].faq_no);
-                }
-                console.log(this.selectList);
-            }else{
-                this.selectList=[];
-                console.log(this.selectList);
+        onSelectCancel(index){
+            if(index.length < 2){
+                this.show_statusCheck = false;
             }
-            // this.selectAll=!this.selectAll;
-            // console.log(this.selectAll);
-            // switch (this.selectAll) {
-            // case 1:
-            //     this.selectList='1';
-            //     console.log(this.selectAll);
-            //     break;
-            // case 0:
+            this.selectList=[];
+            for(let i=0; i<index.length; i++){
+                if( this.selectList.includes(index[i].faq_no) == 0 )
+                    this.selectList.push(index[i].faq_no);
+            }
+        },
+// ----- 全選事件 ------
+        onSelectAll(index){
+            for(let i=0; i<index.length; i++){
+                this.selectList.push(index[i].faq_no);
+            }
+
+            // if( this.selectAll == true){  // 全選   
+            //     console.log('全選   ',this.selectList);
+            //     this.selectList=[];
+            //     this.selectAll = false;
+            // }
+            // if(this.selectAll == false && this.selectAll.length == 0){  // 一個都沒選
+            //         console.log('一個都沒選',this.selectList);
+            //         for(let i=0; i<index.length; i++){
+            //             this.selectList.push(index[i].faq_no);
+            //         }
+            //         this.selectAll = true; 
+            // }
+            // if(this.selectAll == false && this.selectAll.length >= 0){  // 選了一部分
+            //     console.log('選了一部分',this.selectList)
             //     for(let i=0; i<index.length; i++){
             //         if( this.selectList.includes(index[i].faq_no) == 0 )
             //             this.selectList.push(index[i].faq_no);
-            //     };	
-            //     console.log(this.selectAll);
-            //     break;
+            //     }
+            //     this.selectAll = true;
             // }
-            // this.selectAll=!this.selectAll;
-
-
-            // for(let i=0; i<index.length; i++){
-            //     if( this.selectList.includes(index[i].faq_no) == 0 )
-            //         this.selectList.push(index[i].faq_no);
-            // }
-            // console.log(this.selectAll);
-
-
-            // console.log(this.selectList);
+        },
+// ----- 取消全選事件 ------
+        onSelectAllCancel(){
+            this.selectList=[];
         },
 // ----- 表單：編輯 ------
         editForm(edit){
             this.editingNo = edit;
-            this.show_EditForm = !this.show_EditForm;
+            this.show_EditForm = true;
             this.editingFaq = this.activeList.find(v=> v.faq_no === this.editingNo) ?? [];
         },
 // ----- 關閉彈窗(取消) ------
         cancel(){
             this.alert_Loading = true;
             setTimeout(() => {
-                this.show_CheckAlert = false;
+                this.show_statusCheck = false;
+                this.show_cancelCheck = false;
                 this.show_NewForm = false;
                 this.show_EditForm = false;
                 this.alert_Loading = false;
@@ -550,9 +552,10 @@ export default {
 		// 	xhr.onload = ()=>{
         //         if(xhr.status == 200){
         //             faqVue.faqList = JSON.parse(xhr.responseText);
+//                     faqVue.activeList = faqVue.faqList;
 		// 		}
 		// 	}
-		// 	xhr.open("get", "http://localhost/CGD103_G4_back/public/php/getFaqData_02.php", true);
+		// 	xhr.open("get", "http://localhost/CGD103_G4_back/public/php/Faq_getData_02.php", true);
 		// 	xhr.send(null);
 		// },
 // ----- 新增資料 ------ XML
@@ -562,22 +565,31 @@ export default {
         //         let result = JSON.parse(xhr.responseText);
         //         alert(result.msg);
         //     }
-        //     xhr.open("post", "http://localhost/CGD103_G4_back/public/php/insertFaq.php", true);
+        //     xhr.open("post", "http://localhost/CGD103_G4_back/public/php/Faq_insert.php", true);
         //     xhr.send(new FormData(document.getElementById("newForm")));
         //     this.show_NewForm = false;
         // },
 // ----- 撈資料 ------ fetch
         getFaqData_Fetch(){
-            fetch('http://localhost/CGD103_G4_back/public/php/getFaqData.php')
+            // fetch(`{BASE_URL}/Faq_getData.php`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
             .then(res=>res.json())
             .then(json=>{
                 this.faqList = json;
+                this.activeList = this.faqList;
+                // if(this.faqList.faq_status == 1){
+                //     this.activeList.faq_status = "顯示";
+                // }else{
+                //     this.activeList.faq_status = "隱藏";
+                // }
+                // console.log(this.activeList);
             })
 		},
 // ----- 新增資料 ------ fetch
         addFaqData(){
-            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/insertFaq.php");
-            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+            fetch(`{BASE_URL}/`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_insert.php',{
+                method:'POST', body:new URLSearchParams({
                 faq_type:this.newFaq_type,
                 faq_q:this.newFaq_q,
                 faq_a:this.newFaq_a,
@@ -605,13 +617,14 @@ export default {
         //         console.log(result);
         //         alert(result.msg);
         //     }
-        //     xhr.open("post", "http://localhost/CGD103_G4_back/public/php/updateFaq.php", true);
+        //     xhr.open("post", "http://localhost/CGD103_G4_back/public/php/Faq_update.php", true);
         //     xhr.send(new FormData(document.getElementById("editForm")));
         // },
 // ----- 單筆修改資料 ------ fetch
         editFaqData(){
-            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/updateFaq.php");
-            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+            // fetch(`{BASE_URL}/Faq_update.php`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_update.php',{
+                method:'POST', body:new URLSearchParams({
                 faq_no:this.editingFaq.faq_no,
                 faq_type:this.editingFaq.faq_type,
                 faq_q:this.editingFaq.faq_q,
@@ -631,65 +644,96 @@ export default {
 // ----- 單筆狀態切換 ------
         changeStatus(row){
             row.faq_status
-            ? this.$Message.info('狀態：顯示')
-            : this.$Message.info('狀態：隱藏');
+            ? this.$Message.info('狀態：已成功將該筆問題狀態變更為「顯示」')
+            : this.$Message.info('狀態：已成功將該筆問題狀態變更為「隱藏」');
 
-            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/changeFaqState.php");
-            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+            // fetch(`{BASE_URL}/Faq_changeState.php`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_changeState.php',{
+                method:'POST', body:new URLSearchParams({
                 faq_no:row.faq_no,
                 faq_status:row.faq_status,
             })})
             .then((res) => res.json())
-            // .then((result)=> {
-            //     // console.log(result)
-            //     this.alert_Loading = true;
-            //     setTimeout(() => {
-            //         this.alert_Loading = false;
-            //         this.$Message.success(result.msg);
-            //     }, 600);
-            // })
         },
-// ----- 批量狀態切換 ------
+// ----- 彈窗：多筆狀態切換 ------
+        massChangeState_1(){
+            this.status = 1;
+            this.show_statusCheck = true;
+        },
+        massChangeState_0(){
+            this.status = 0;
+            this.show_statusCheck = true;
+        },
+// ----- 多筆狀態切換 ------
         massChangeStatus(){
-            console.log(this.selectList);
+            let faqVue = this;
+            // fetch(`{BASE_URL}/Faq_massChangeState.php`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_massChangeState.php',{
+                method:'POST', body:new URLSearchParams({
+                items: this.selectList,
+                status: this.status,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                this.alert_Loading = true;
+
+                setTimeout(() => {
+                    let arr = this.activeList;
+                    this.selectList.forEach(function(no){
+                        const onPick = arr.filter(function(item){
+                            return item.faq_no === no;
+                        });
+                        onPick.forEach(function(item){
+                            item.faq_status = faqVue.status;
+                            // console.log(faqVue.status);
+                        });
+                    });
+                    this.alert_Loading = false;
+                    this.show_statusCheck = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+            })
         },
 // ----- 彈窗：刪除確認 ------
-        delCheck(del){
-            this.deleteNo = del;
-            this.show_DelAlert=!this.show_DelAlert;
+        delCheck(row, index){
+            this.deleteNo = row.faq_no,
+            this.rowCount = index,
+            this.show_delCheck = true;
         },
 // ----- 單筆刪除資料 ------ fetch
         delFaqData(){
-            // this.activeList.splice(index, 1);
-            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/deleteFaq.php");
-            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+            // console.log(this.selectList);
+            // fetch(`{BASE_URL}/Faq_delete.php`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_delete.php',{
+                method:'POST', body:new URLSearchParams({
                 faq_no:this.deleteNo,
             })})
             .then((res) => res.json())
             .then((result)=> {
                 this.alert_Loading = true;
                 setTimeout(() => {
+                    this.activeList.splice(this.rowCount, 1);
                     this.alert_Loading = false;
-                    this.show_DelAlert = false;
+                    this.show_delCheck = false;
                     this.$Message.success(result.msg);
                 }, 600);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
             })
         },
-// ----- 批量刪除資料 ------ fetch
+// ----- 刪除多筆資料 ------ fetch
         massDelete(){
-            const myUrl = new URL("http://localhost/CGD103_G4_back/public/php/massDeleteFaq.php");
-            fetch(myUrl,{ method:'POST', body:new URLSearchParams({
+            // console.log(this.selectList);
+            // fetch(`{BASE_URL}/Faq_massDelete.php`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_massDelete.php',{
+                method:'POST', body:new URLSearchParams({
                 items: this.selectList,
             })})
             .then((res) => res.json())
             .then((result)=> {
-                console.log(result)
                 this.alert_Loading = true;
+
                 setTimeout(() => {
                     this.alert_Loading = false;
+                    this.show_delCheck = false;
                     this.$Message.success(result.msg);
                 }, 600);
                 setTimeout(() => {
