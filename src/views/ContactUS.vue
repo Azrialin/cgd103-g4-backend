@@ -123,6 +123,7 @@ export default {
         .then((res) => res.json())
         .then((json) => {
           this.result = json;
+           this.temperature = response.data.main.temp + '°C';
           console.log(this.result);
         });
     },
