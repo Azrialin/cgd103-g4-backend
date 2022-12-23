@@ -92,15 +92,6 @@ export default {
   },
   created() {
     this.getData();
-    // axios
-    //   .post("http://localhost/cgd103-g4-backend/public/phpfiles/getProducts.php")
-    //   .then((response) => {
-    //     console.log(response.data.opinion_no);
-    //     return res
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   },
   methods: {
     rowClassName(row, index) {
@@ -123,7 +114,6 @@ export default {
         .then((res) => res.json())
         .then((json) => {
           this.result = json;
-           this.temperature = response.data.main.temp + '°C';
           console.log(this.result);
         });
     },
