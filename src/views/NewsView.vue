@@ -1,17 +1,13 @@
 <template>
     <!----------------尚未完成---------------------------
-        📣 確認鍵所連動的功能還沒寫好，都先暫放toggle
     🔹 新增消息 
         確認鍵 資料驗證條件
-        新增完資料後，表格框刪除資料，關掉表格畫面，彈出新增成功
     🔹 編輯消息
         上架 按下確認鍵的資料修改(不可有空值欄位)
         草稿 按下確認鍵的資料修改(連動資料本身) 進度中
-        想法: 先清空表單內容，在把所有的資料新增上去
-    ( 🔹 各狀態資料筆數顯示於下方)
     🔹 上傳圖片的方法  (為了新增資料正常，先找幾張圖片新增到20.jpg)
-    🔹 php放置位置? (後台的有放public嗎 目前我的php是在wwwroot)
-    🔹 取消清除表單資料
+    🔹 php放置位置 功能寫完後放置
+    ( 🔹 各狀態資料筆數顯示於下方)
     ------------------------------------------------------->
     <!------------------- 筆記
     點擊結果為點擊的內容
@@ -84,7 +80,7 @@
                             <!-- 最後編輯 -->
                             <template #news_last_edit="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else>{{ row.news_last_edit }}</span>
                             </template>
                             <!-- 分類 -->
                             <template #news_type="{ row, index }">
@@ -300,13 +296,13 @@
         <div class="popup-content font-18">
             <div class="popup-data">
                 <label for="">狀態
-                    <select name="" id="" >
+                    <select name="" id="" v-model="editingNews.news_status">
                         <option value="上架" >上架</option>
                         <option value="下架" >下架</option>
                     </select>
                 </label>
                 <label for="">分類
-                    <select name="" id="">
+                    <select name="" id="" v-model="editingNews.news_type">
                         <option value="重要">重要</option>
                         <option value="活動">活動</option>
                         <option value="其他">其他</option>
@@ -352,8 +348,7 @@
             </div>
             <div class="popup-btn">
                 <button class="btn-blue_2nd" @click="editOnData">取消</button>
-                <button class="btn-blue" @click="editOnData">確認</button>
-                    <!-- 確認鍵功能待補，暫放toggle -->
+                <button class="btn-blue" @click="editNewsData()">確認</button>
             </div>
         </div>
     </div>
@@ -373,18 +368,20 @@
                 <div class="last-edit-date">
                     <span class="date">最後更新</span>
                     <span class="date">{{activeDraftData.news_last_edit}}</span>
+                    <!-- <Input v-model="activeDraftData.news_last_edit" placeholder="請輸入標題" clearable style="width: 500px" /> -->
+
                 </div>
             </div>
             <div class="popup-content font-18">
                 <div class="popup-data">
-                    <label for="">狀態(必填)
-                        <select name="" id="">
+                    <label for="">狀態
+                        <select name="" id="" v-model="editingNews.news_status">
                             <option value="草稿">草稿</option>
                             <option value="上架">上架</option>
                         </select>
                     </label>
                     <label for="">分類
-                        <select name="" id="">
+                        <select name="" id="" v-model="editingNews.news_type">
                             <option value="重要">重要</option>
                             <option value="活動">活動</option>
                             <option value="其他">其他</option>
@@ -567,24 +564,24 @@
                 filters: [
                             {
                                 label: '重要',
-                                value: 1
+                                value: '重要'
                             },
                             {
                                 label: '活動',
-                                value: 2
+                                value: '活動'
                             },
                             {
                                 label: '其他',
-                                value: 3
+                                value: '其他'
                             }
                         ],
                         filterMultiple: false, //https://www.iviewui.com/view-ui-plus/component/form/table#Brief_Introduction
                         filterMethod (value,row) { 
-                            if (value === 1) {
+                            if (value === '重要') {
                                 return row.news_type==='重要';
-                            } else if (value === 2) {
+                            } else if (value === '活動') {
                                 return row.news_type==='活動' ;
-                            }else if (value === 3) {
+                            }else if (value === '其他') {
                                 return row.news_type==='其他' ;
                             }
                         }
@@ -628,6 +625,14 @@
                 dataOff: [],
                 editIndex: -1,  // 当前聚焦的输入框的行数
                 activeIndex:null,
+                // news_last_edit:''
+        //------表單 : 下拉選單(公告分類) 
+                typeList:[
+                    {text : '重要'},
+                    {text : '活動'},
+                    {text : '其他'}
+                ],
+                editingNews:[]
                 }
             },
             methods: {
@@ -693,36 +698,40 @@
                     window.location.reload();
                 },500);
             },
-            // 表單 : 編輯
-            editForm(edit){
-                this.editingNo = edit;
-                this.editingNews = this.dataDraft.find(v=> v.news_no === this.editingNo) ?? [];
-            },
             // 修改資料 fetch
             editNewsData(){
+                // 抓取現在的時間
+                var now = new Date();
+                var year = now.getFullYear();
+                var month = now.getMonth()+1;
+                var date = now.getDate();
+                var news_last_edit= year + '' + month + date;
+                // 如果狀態改為上架，需要加入上架間 
+
+
                 fetch('http://localhost/news_update.php',{
                 method:'POST', body:new URLSearchParams({
 
-                news_no:this.news_no, // 為了比對
-                // news_time:this.news_time, //不給更新 這段可刪
-                // news_last_edit:this.news_last_edit, // 抓取現在時間
-                news_type:this.news_type,
-                news_title:this.news_title,
-                news_text_start:this.news_text_start,
-                news_text_middle:this.news_text_middle,
-                news_text_trans:this.news_text_trans,
-                news_text_end:this.news_text_end,
-                // news_img:this.news_img,  //圖片狀況先不考慮
-                news_img_des:this.news_img_des,
-                news_status:this.news_status
+                news_no:this.editingNews.news_no, // 為了比對
+                // news_time:this.editingNews.news_time, //不給更新 這段可刪
+                news_last_edit:news_last_edit, // 抓取現在時間
+                news_type:this.editingNews.news_type,
+                news_title:this.editingNews.news_title,
+                news_text_start:this.editingNews.news_text_start,
+                news_text_middle:this.editingNews.news_text_middle,
+                news_text_trans:this.editingNews.news_text_trans,
+                news_text_end:this.editingNews.news_text_end,
+                // news_img:this.editingNews.news_img,  //圖片狀況先不考慮
+                news_img_des:this.editingNews.news_img_des,
+                news_status:this.editingNews.news_status
                 })})
                 .then((res) => res.json())
                 .then((result)=> { 
                     console.log(result);
                 })
-
+                console.log(this.editingNews.news_no);
                 
-                // 彈窗
+                // 彈提示
                 this.$Notice.success({
                     title: '資料狀態',
                     desc: 'The desc will hide when you set render.',
@@ -731,10 +740,18 @@
                     }
                 });
 
-                // 重新整理頁面
-                // setTimeout(() => {
-                //     window.location.reload();
-                // },500);
+                //關閉表單
+                if(this.editingNews.news_type ==="上架"){
+                    this.seeOnData = !this.seeOnData;
+                }else{ //草稿
+                    this.seeDraftData = !this.seeDraftData
+                }
+
+                // 重新整理頁面 
+                setTimeout(() => {
+                    window.location.reload();
+                },500);
+
             },
             // 刪除資料
             delNewsData(deleteNo){
@@ -770,13 +787,19 @@
             newToggle(){ //新表單
                 this.seenNew = !this.seenNew
             },
-            editOnData(no){ //上架編輯表單彈窗
+            editOnData(no){ //上架編輯表單彈窗，將資料editingNews傳入確定編輯function
                 this.seeOnData = !this.seeOnData;
+                
                 this.activeIndex = no;
+                this.editingNews = this.dataOn.find(v=> v.news_no === this.activeIndex) ?? [];
             },
-            editDraftData(no){ //草稿編輯表單彈窗
+            editDraftData(no){ //草稿編輯表單彈窗，將資料editingNews傳入確定編輯function
                 this.seeDraftData = !this.seeDraftData
+
                 this.activeIndex = no;
+                this.editingNews = this.dataDraft.find(v=> v.news_no === this.activeIndex) ?? [];
+                // console.log(this.editingNews);
+
             },
             checkOffData(no){ //下架資料彈窗
                 this.seeOffData = !this.seeOffData
