@@ -7,32 +7,38 @@
             <div class="input-txt">
                 <div class="input-info">
                     <label for="">前台區塊：
-                        <Input type="text" name="package_name" v-model="newdataOn.package_name" clearable style="width: 200px" />
+                        <Input type="text" name="package_name" v-model="data.package_name" clearable style="width: 200px" />
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">活動標籤：
-                        <Input type="text" name="package_tag" v-model="newdataOn.package_tag" clearable  style="width: 200px"/>
+                        <Input type="text" name="package_tag" v-model="data.package_tag" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">價格：
-                        <Input type="" name="package_price" v-model="newdataOn.package_price" clearable  style="width: 200px"/>
+                        <Input type="" name="package_price" v-model="data.package_price" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">標題：
-                        <Input type="email" name="package_title" v-model="newdataOn.package_title" clearable  style="width: 200px"/>
+                        <Input type="email" name="package_title" v-model="data.package_title" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">推薦商品：
-                        <Input type="tel" name="package_buy" v-model="newdataOn.package_buy" clearable  style="width: 200px"/>
+                        <Input type="tel" name="package_buy" v-model="data.package_buy" clearable  style="width: 200px"/>
                     </label>
                 </div>
                 <div class="input-info">
                     <label for="">狀態：
-                        <Input type="tel" name="package_status" v-model="newdataOn.package_status" clearable  style="width: 200px"/>
+                        <!-- <Input type="tel" name="package_status" v-model="data.package_status" clearable  style="width: 200px"/> -->
+                        <select class="choosein" name="package_status" v-model="data.package_status">
+                            <option value="" disabled>-請選擇-</option>
+                            <option value="上架">上架</option>
+                            <option value="草稿">草稿</option>
+                            <option value="下架">下架</option>
+                        </select>
                     </label>
                 </div>
             </div>
@@ -183,37 +189,37 @@
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_no }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
                                 <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else>{{ row.package_create_date }}</span>
                             </template>
                             <!-- 最後編輯 -->
                             <template #news_session="{ row, index }">
-                                <Input type="text" v-model="editnews_session" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_session }}</span>
+                                <Input type="text" v-model="editIndex_session" v-if="editIndex === index" />
+                                <span v-else>{{ row.package_name }}</span>
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row, index }">
                                 <Input type="text" v-model="editnews_class" v-if="editIndex === index" />
-                                <span v-else>{{ (row.news_class) }}</span>
+                                <span v-else>{{ (row.package_price) }}</span>
                             </template>
                             <!-- 標題 -->
                             <template #news_title="{ row, index }">
                                 <Input type="text" v-model="editnews_title" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_title }}</span>
+                                <span v-else>{{ row.package_title }}</span>
                             </template>
                             <!-- 狀態 -->
                             <template #news_status="{ row, index }">
                                 <Input type="text" v-model="editnews_status" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_status }}</span>
+                                <span v-else>{{ row.package_status }}</span>
                             </template>
                             <!-- 按鈕 -->
-                            <template #action>
+                            <template #action="{ row }">
                                 <div class="btn-box">
-                                    <Button @click="seenAdd=!seenAdd">編輯</Button>
+                                    <Button @click="activeDataDr(row.package_no)">編輯</Button>
                                 </div>
                             </template>
                         </Table>
@@ -221,39 +227,39 @@
                     <TabPane label="下架" >
                         <Table stripe border :columns="columns" :data="dataOff" >
                             <!-- 公告編號 -->
-                            <template #news_no="{ row, index }">
+                                                        <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_no }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
                                 <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else>{{ row.package_create_date }}</span>
                             </template>
                             <!-- 最後編輯 -->
                             <template #news_session="{ row, index }">
-                                <Input type="text" v-model="editnews_session" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_session }}</span>
+                                <Input type="text" v-model="editIndex_session" v-if="editIndex === index" />
+                                <span v-else>{{ row.package_name }}</span>
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row, index }">
                                 <Input type="text" v-model="editnews_class" v-if="editIndex === index" />
-                                <span v-else>{{ (row.news_class) }}</span>
+                                <span v-else>{{ (row.package_price) }}</span>
                             </template>
                             <!-- 標題 -->
                             <template #news_title="{ row, index }">
                                 <Input type="text" v-model="editnews_title" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_title }}</span>
+                                <span v-else>{{ row.package_title }}</span>
                             </template>
                             <!-- 狀態 -->
                             <template #news_status="{ row, index }">
                                 <Input type="text" v-model="editnews_status" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_status }}</span>
+                                <span v-else>{{ row.package_status }}</span>
                             </template>
                             <!-- 按鈕 -->
-                            <template #action>
+                            <template #action="{ row }">
                                 <div class="btn-box">
-                                    <Button @click="seenAdd=!seenAdd">編輯</Button>
+                                    <Button @click="activeDataFr(row.package_no)">編輯</Button>
                                 </div>
                             </template>
                         </Table>
@@ -327,43 +333,44 @@
                     align: 'center'
                 }
                 ],
+                data:[],
                 newdataOn:[],
                 dataOn: [],
                 dataDraft: [
-                    {
-                        news_no: 'A1100005',
-                        news_time: '2022/11/23',
-                        news_session:'E',
-                        news_class: '火車佐便當',
-                        news_title: '高千穗-夜神樂',
-                        news_status:'草稿',
-                    },
-                    {
-                        news_no: 'A1100006',
-                        news_time: '2022/11/24',
-                        news_session:'F',
-                        news_class: '火車佐便當',
-                        news_title: '列車停駛',
-                        news_status:'草稿',
-                    }
+                    // {
+                    //     news_no: 'A1100005',
+                    //     news_time: '2022/11/23',
+                    //     news_session:'E',
+                    //     news_class: '火車佐便當',
+                    //     news_title: '高千穗-夜神樂',
+                    //     news_status:'草稿',
+                    // },
+                    // {
+                    //     news_no: 'A1100006',
+                    //     news_time: '2022/11/24',
+                    //     news_session:'F',
+                    //     news_class: '火車佐便當',
+                    //     news_title: '列車停駛',
+                    //     news_status:'草稿',
+                    // }
                 ],
                 dataOff: [
-                    {
-                        news_no: 'A1100007',
-                        news_time: '2022/11/25',
-                        news_session:'G',
-                        news_class: '火車佐便當',
-                        news_title: '「鹿兒島沙浴」體驗活動報名',
-                        news_status:'下架',
-                    },
-                    {
-                        news_no: 'A1100008',
-                        news_time: '2022/11/26',
-                        news_session:'H',
-                        news_class: '火車佐便當',
-                        news_title: '商城新品上市!!',
-                        news_status:'下架',
-                    }
+                    // {
+                    //     news_no: 'A1100007',
+                    //     news_time: '2022/11/25',
+                    //     news_session:'G',
+                    //     news_class: '火車佐便當',
+                    //     news_title: '「鹿兒島沙浴」體驗活動報名',
+                    //     news_status:'下架',
+                    // },
+                    // {
+                    //     news_no: 'A1100008',
+                    //     news_time: '2022/11/26',
+                    //     news_session:'H',
+                    //     news_class: '火車佐便當',
+                    //     news_title: '商城新品上市!!',
+                    //     news_status:'下架',
+                    // }
                 ],
                 editIndex: -1,  // 当前聚焦的输入框的行数
                 editnews_no: '',  // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
@@ -384,8 +391,16 @@
                 fetch(gege)
                 .then((res)=>res.json())
                 .then((json)=>{
-                    this.dataOn = json;
-                    console.log(this.dataOn);
+                    this.data = json;
+                    this.dataOn = this.data.filter(item => {
+                        return item.package_status === "上架";
+                    });
+                    this.dataDraft = this.data.filter(item => {
+                        return item.package_status === "草稿";
+                    })
+                    this.dataOff = this.data.filter(item => {
+                        return item.package_status === "下架";
+                    })
                 })
             },
             addData(){
@@ -412,13 +427,14 @@
                 const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelcase.php');
                 fetch(addURL,{ method:'post',body: new URLSearchParams({
                    
-                    package_status:this.newdataOn.package_status,
-                    package_name:this.newdataOn.package_name,
-                    package_buy:this.newdataOn.package_buy,
-                    package_title:this.newdataOn.package_title,
-                    package_price:this.newdataOn.package_price,
-                    package_tag:this.newdataOn.package_tag,
-                    package_no:this.newdataOn.package_no,
+                    package_status:this.data.package_status,
+                    package_name:this.data.package_name,
+                    package_buy:this.data.package_buy,
+                    package_title:this.data.package_title,
+                    package_price:this.data.package_price,
+                    package_tag:this.data.package_tag,
+                    package_no:this.data.package_no,
+
                 })})
                 .then((rb)=>rb.json())
                 .then((resultb)=>{
@@ -453,7 +469,17 @@
             activeData(ed) {
                 this.activeIndex = ed;
                 this.seenAdd = true;
-                this.newdataOn = this.dataOn.find((v) => v.package_no === this.activeIndex) ?? {};
+                this.data = this.dataOn.find((v) => v.package_no === this.activeIndex) ?? {};
+            },
+            activeDataDr(ed) {
+                this.activeIndex = ed;
+                this.seenAdd = true;
+                this.data = this.dataDraft.find((v) => v.package_no === this.activeIndex) ?? {};
+            },
+            activeDataFr(ed) {
+                this.activeIndex = ed;
+                this.seenAdd = true;
+                this.data = this.dataOff.find((v) => v.package_no === this.activeIndex) ?? {};
             },
         },
         computed: {
