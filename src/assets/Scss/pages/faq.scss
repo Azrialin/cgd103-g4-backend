@@ -5,6 +5,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        margin-bottom: 50px;
         .icon{
             cursor: pointer;
             &:hover{
@@ -76,11 +77,7 @@
         background-color: rgba(0, 0, 0, 0.3);
         transition: opacity .3s ease;
         .alert-container{
-            position: absolute;
-            top: 50vh;
-            // left: 50%;
-            left: calc(50% - 150px);
-            transform: translate(-50%, -50%);
+            position: fixed;
             // 彈窗>確認彈窗
             .faq-check{
                 width: fit-content;
@@ -199,6 +196,31 @@
                     }
                 }
             }
+        }
+        // 彈窗>表單>新增
+        .newForm{
+            top: calc(50vh - 550px / 2); // 表單長 550
+            left: calc(50% - 584px / 2); // 表單寬 584
+        }
+        // 彈窗>表單>編輯
+        .editForm{
+            top: calc(50vh - 550px / 2); // 表單長 550
+            left: calc(50% - 530px / 2); // 表單寬 530
+        }
+        // 彈窗>刪除確認
+        .delCheck{
+            top: calc(50vh - 155px / 2); // 表單長 155
+            left: calc(50% - 333px / 2); // 表單寬 333
+        }
+        // 彈窗>修改狀態確認
+        .statusCheck{
+            top: calc(50vh - 155px / 2); // 表單長 155
+            left: calc(50% - 400px / 2); // 表單寬 400
+        }
+        // 彈窗>取消確認
+        .cancelCheck{
+            top: calc(50vh - 155px / 2); // 表單長 155
+            left: calc(50% - 464px / 2); // 表單寬 464
         }
     }    
 }
