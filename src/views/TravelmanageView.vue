@@ -53,44 +53,45 @@
                 <Tabs  type="card" :animated="false">
                     <TabPane label="會員訂單查詢" >
                         <Table stripe border :columns="columns" :data="dataOn" >
-                            <!-- 公告編號 -->
+                            <!-- 方案名稱 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_no }}</span>
+                                <span v-else>{{ row.package_name }}</span>
                             </template>
-                            <!-- 上架日期 -->
+                            <!-- 下訂日期 -->
                             <template #news_time="{ row, index }">
                                 <Input type="text" v-model="editnews_time" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else>{{ row.package_order_date }}</span>
                             </template>
-                            <!-- 最後編輯 -->
+                            <!-- 訂單編號 -->
                             <template #news_session="{ row, index }">
                                 <Input type="text" v-model="editIndex_session" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_session }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
-                            <!-- 分類 -->
+                            <!-- 會員編號 -->
                             <template #news_class="{ row, index }">
                                 <Input type="text" v-model="editnews_class" v-if="editIndex === index" />
-                                <span v-else>{{ (row.news_class) }}</span>
+                                <span v-else>{{ row.mem_no }}</span>
                             </template>
-                            <!-- 標題 -->
+                            <!-- 會員姓名 -->
                             <template #news_title="{ row, index }">
                                 <Input type="text" v-model="editnews_title" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_title }}</span>
+                                <span v-else>{{ row.mem_name }}</span>
                             </template>
-                            <!-- 狀態 -->
+                            <!-- 訂單狀態 -->
                             <template #news_status="{ row, index }">
                                 <Input type="text" v-model="editnews_status" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_status }}</span>
+                                <span v-else>{{ row.package_pay_status }}</span>
                             </template>
-                            <!-- 按鈕 -->
+                            <!-- 訂單金額 -->
                             <template #news_price="{ row, index }">
                                 <Input type="text" v-model="editnews_price" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_price }}</span>
+                                <span v-else>{{ row.package_price }}</span>
                             </template>
+                            <!-- 訂單數量 -->
                             <template #news_number="{ row, index }">
                                 <Input type="text" v-model="editnews_number" v-if="editIndex === index" />
-                                <span v-else>{{ row.news_number }}</span>
+                                <span v-else>{{ row.package_ticket_amount }}</span>
                             </template>
                         </Table>
                     </TabPane>
@@ -375,50 +376,50 @@
             },
                 ],
                 dataOn: [
-                    {
-                        news_no: 'A1100001',
-                        news_time: '2022/11/22',
-                        news_session:'2352',
-                        news_class: '123456',
-                        news_title: '臣土產',
-                        news_status:'已付款',
-                        news_price:'699',
-                        news_number:'20',
+                    // {
+                    //     news_no: 'A1100001',
+                    //     news_time: '2022/11/22',
+                    //     news_session:'2352',
+                    //     news_class: '123456',
+                    //     news_title: '臣土產',
+                    //     news_status:'已付款',
+                    //     news_price:'699',
+                    //     news_number:'20',
 
-                    },
-                    {
-                        news_no: 'A1100002',
-                        news_time: '2022/11/23',
-                        news_session:'2353',
-                        news_class: '123456',
-                        news_title: '臣土產',
-                        news_status:'已付款',
-                        news_price:'699',
-                        news_number:'20',
+                    // },
+                    // {
+                    //     news_no: 'A1100002',
+                    //     news_time: '2022/11/23',
+                    //     news_session:'2353',
+                    //     news_class: '123456',
+                    //     news_title: '臣土產',
+                    //     news_status:'已付款',
+                    //     news_price:'699',
+                    //     news_number:'20',
 
-                    },
-                    {
-                        news_no: 'A1100003',
-                        news_time: '2022/11/24',
-                        news_session:'2354',
-                        news_class: '123456',
-                        news_title: '臣土產',
-                        news_status:'已付款',
-                        news_price:'699',
-                        news_number:'20',
+                    // },
+                    // {
+                    //     news_no: 'A1100003',
+                    //     news_time: '2022/11/24',
+                    //     news_session:'2354',
+                    //     news_class: '123456',
+                    //     news_title: '臣土產',
+                    //     news_status:'已付款',
+                    //     news_price:'699',
+                    //     news_number:'20',
 
-                    },
-                    {
-                        news_no: 'A1100004',
-                        news_time: '2022/11/25',
-                        news_session:'2355',
-                        news_class: '123456',
-                        news_title: '臣土產',
-                        news_status:'已付款',
-                        news_price:'699',
-                        news_number:'20',
+                    // },
+                    // {
+                    //     news_no: 'A1100004',
+                    //     news_time: '2022/11/25',
+                    //     news_session:'2355',
+                    //     news_class: '123456',
+                    //     news_title: '臣土產',
+                    //     news_status:'已付款',
+                    //     news_price:'699',
+                    //     news_number:'20',
 
-                    },
+                    // },
                 ],
                 dataA: [
                     {
@@ -531,7 +532,19 @@
                 activeIndexb: null,
                 }
             },
+            created(){
+                this.getData();
+            },
             methods: {
+                getData(){
+                    const joinURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanage.php');
+                    fetch(joinURL)
+                    .then((res)=>res.json())
+                    .then((json)=>{
+                        this.dataOn = json;
+                        console.log(this.dataOn);
+                    })
+                },
                 editOnData(no) {
                 //上架編輯表單彈窗
                 this.seeOnData = !this.seeOnData;
@@ -542,25 +555,25 @@
                 this.seeCheck = !this.seeCheck;
                 },
                 handleEdit (row, index) {
-                    this.editnews_no = row.news_no;
-                    this.editnews_time = row.news_time;
-                    this.editnews_title = row.news_title;
-                    this.editnews_class = row.news_class;
-                    this.editnews_status = row.news_status;
-                    this.editnews_session = row.news_session;
-                    this.editnews_price = row.news_price;
-                    this.editnews_number = row.news_number;
+                    this.editnews_no = row.package_no;
+                    this.editnews_time = row.package_order_date;
+                    this.editnews_title = row.package_ticket_amount;
+                    this.editnews_class = row.package_pay_status;
+                    this.editnews_status = row.package_pay_status;
+                    this.editnews_session = row.package_pay_status;
+                    this.editnews_price = row.package_price;
+                    this.editnews_number = row.package_pay_status;
                     this.editIndex = index;
                 },
                 handleSave (index) {
-                    this.data[index].news_no = this.editnews_no;
-                    this.data[index].news_time = this.editnews_time;
+                    this.data[index].package_no = this.editnews_no;
+                    this.data[index].package_order_date = this.editnews_time;
                     this.data[index].news_class = this.editnews_class;
-                    this.data[index].news_title = this.editnews_title;
-                    this.data[index].news_status = this.editnews_status;
-                    this.data[index].news_session = this.editnews_session;
-                    this.data[index].news_price = this.editnews_price;
-                    this.data[index].news_number = this.editnews_number;
+                    this.data[index].package_ticket_amount = this.editnews_title;
+                    this.data[index].package_pay_status = this.editnews_status;
+                    this.data[index].package_pay_status = this.editnews_session;
+                    this.data[index].package_price = this.editnews_price;
+                    this.data[index].package_pay_status = this.editnews_number;
                     this.editIndex = -1;
                 }
             },
