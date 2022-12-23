@@ -6,7 +6,7 @@
         新增完資料後，表格框刪除資料，關掉表格畫面，彈出新增成功
     🔹 編輯消息
         上架 按下確認鍵的資料修改(不可有空值欄位)
-        草稿 按下確認鍵的資料修改(連動資料本身)
+        草稿 按下確認鍵的資料修改(連動資料本身) 進度中
         想法: 先清空表單內容，在把所有的資料新增上去
     ( 🔹 各狀態資料筆數顯示於下方)
     🔹 上傳圖片的方法  (為了新增資料正常，先找幾張圖片新增到20.jpg)
@@ -61,15 +61,7 @@
     5.
      -->
      <!-- 編輯資料 function -->
-     <!-- 刪除資料 function 
-    1. 刪除資料function removeData 綁定按鈕
-    2. removeData(){
-        //彈出是否確認刪除彈窗
-        //if (確認){
-            執行刪除指令
-        }else()
-    }
-    -->
+     <!-- 上架草稿編輯同一個function -->
     <div class="backstage-news" >
         <div class="backstage-content">
             <div class="btn-add">
@@ -701,38 +693,48 @@
                     window.location.reload();
                 },500);
             },
+            // 表單 : 編輯
+            editForm(edit){
+                this.editingNo = edit;
+                this.editingNews = this.dataDraft.find(v=> v.news_no === this.editingNo) ?? [];
+            },
             // 修改資料 fetch
             editNewsData(){
                 fetch('http://localhost/news_update.php',{
                 method:'POST', body:new URLSearchParams({
-                // faq_no:this.editingFaq.faq_no,
-                // faq_type:this.editingFaq.faq_type,
-                // faq_q:this.editingFaq.faq_q,
-                // faq_a:this.editingFaq.faq_a,
-                // faq_status:this.editingFaq.faq_status,
 
-                // news_no:this.news_no // 不給更新?要寫嗎
-                // news_time:this.news_time //不給更新?
-                // news_last_edit:this.news_last_edit
-                // news_type:this.news_type
-                // news_title:this.news_title
-                // news_text_start:this.news_text_start
-                // news_text_middle:this.news_text_middle
-                // news_text_trans:this.news_text_trans
-                // news_text_end:this.news_text_end
-                // news_img:this.news_img  //圖片狀況先不考慮
-                // news_img_des:this.news_img_des
-                // news_status:this.news_status
+                news_no:this.news_no, // 為了比對
+                // news_time:this.news_time, //不給更新 這段可刪
+                // news_last_edit:this.news_last_edit, // 抓取現在時間
+                news_type:this.news_type,
+                news_title:this.news_title,
+                news_text_start:this.news_text_start,
+                news_text_middle:this.news_text_middle,
+                news_text_trans:this.news_text_trans,
+                news_text_end:this.news_text_end,
+                // news_img:this.news_img,  //圖片狀況先不考慮
+                news_img_des:this.news_img_des,
+                news_status:this.news_status
                 })})
                 .then((res) => res.json())
-                .then((result)=> { //下面這段求解釋
-                // this.alert_Loading = true;
-                // setTimeout(() => {
-                //     this.alert_Loading = false;
-                //     this.show_EditForm = false;
-                //     this.$Message.success(result.msg);
-                // }, 600);
+                .then((result)=> { 
+                    console.log(result);
                 })
+
+                
+                // 彈窗
+                this.$Notice.success({
+                    title: '資料狀態',
+                    desc: 'The desc will hide when you set render.',
+                    render: h => {
+                        return h('span', ['編輯資料成功 '])
+                    }
+                });
+
+                // 重新整理頁面
+                // setTimeout(() => {
+                //     window.location.reload();
+                // },500);
             },
             // 刪除資料
             delNewsData(deleteNo){
@@ -779,9 +781,6 @@
             checkOffData(no){ //下架資料彈窗
                 this.seeOffData = !this.seeOffData
                 this.activeIndex = no;
-            },
-            remove (index) { //草稿 -刪除資料(目前僅畫面上顯示刪除)
-            this.dataDraft.splice(index, 1);
             },
             okToggle () { //確認彈窗
                 this.seeCheck = !this.seeCheck
