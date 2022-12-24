@@ -144,6 +144,13 @@
                             color: $clr_blue_L3;
                         }
                     }
+                    #faq_type{
+                        &.error{
+                            :deep(.ivu-select-placeholder){
+                                color: #ed4014!important;
+                            }
+                        }
+                    }
                 }
                 // 彈窗>表單>輸入框
                 >div:nth-of-type(2), >div:nth-of-type(3){
@@ -151,6 +158,10 @@
                     p{
                         color: $clr_gray_L5;
                         white-space: nowrap;
+                        &.error{
+                            color: $clr_danger;
+                            font-weight: 600;
+                        }
                     }
                     textarea{
                         resize: none ;
@@ -197,12 +208,12 @@
                 }
             }
         }
-        // 彈窗>表單>新增
+        // 彈窗>新增表單
         .newForm{
             top: calc(50vh - 550px / 2); // 表單長 550
             left: calc(50% - 584px / 2); // 表單寬 584
         }
-        // 彈窗>表單>編輯
+        // 彈窗>編輯表單
         .editForm{
             top: calc(50vh - 550px / 2); // 表單長 550
             left: calc(50% - 530px / 2); // 表單寬 530
@@ -224,6 +235,15 @@
         }
     }    
 }
+
+// :deep(.ivu-select-placeholder){
+//     color: #ed4014!important;
+// }
+
+// .ivu-input-word-count{
+//     right: 0!important;
+//     padding-right: 5px;
+// }
 
 // .scrollBar{
 //     height: 425px;
