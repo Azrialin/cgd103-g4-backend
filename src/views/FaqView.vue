@@ -1,12 +1,13 @@
 <!-- 問題
     7. 各個彈窗寫成 component
-    9. 新增/編輯資料時，若欄位為空則不能送出
+    9. 新增/編輯資料時，若欄位為空則不能送出>>>彈窗
     10.分頁優化寫法
-    11.輸入框剩餘字數
-    13.表單：編輯的 ?? []
+    11.輸入框剩餘字數>>>:deep
     14.massChangeState 寫成同一支
     15.分頁
-    16.類別用抓的
+    16.宣傳頁
+    17.忘記密碼/重設密碼
+    18.
 -->
 <!-- 小抄
     摺疊快速鍵 Ctrl K 012345
@@ -128,21 +129,22 @@
                             <!-- 下拉選單 -->
                             <p class="font-16">＊類別：</p>
                             <Select name="faq_type"
+                                id="faq_type"
                                 v-model="newFaq_type"
                                 placeholder="請選擇"
                                 style="width: 120px"
                             >
                                 <Option v-for="dropDownItem in dropDownList"
-                                    :value="dropDownItem.text"
-                                    :key="dropDownItem.text"
+                                    :value="dropDownItem.faq_type"
+                                    :key="dropDownItem.faq_type"
                                 >
-                                    {{dropDownItem.text}}
+                                    {{dropDownItem.faq_type}}
                                 </Option>
                             </Select>
                             <!-- 狀態開關 -->
                             <p class="font-16">＊狀態：</p>
-                            <Switch size="large"
-                                name="faq_status"
+                            <Switch name="faq_status"
+                                size="large"
                                 v-model="newFaq_status"
                                 :true-value = 1
                                 :false-value = 0
@@ -157,8 +159,9 @@
                         </div>
                         <!-- 輸入框 -->
                         <div>
-                            <p class="font-16">＊問題：</p>
+                            <p ref="" class="font-16">＊問題：</p>
                             <textarea name="faq_q"
+                                id="faq_q"
                                 v-model="newFaq_q"
                                 showCount
                                 class="font-16"
@@ -171,6 +174,7 @@
                         <div>
                             <p class="font-16">＊回答：</p>
                             <textarea name="faq_a"
+                                id="faq_a"
                                 v-model="newFaq_a"
                                 showCount
                                 class="font-16"
@@ -218,10 +222,10 @@
                                 style="width: 120px"
                             >
                                 <Option v-for="dropDownItem in dropDownList"
-                                    :value="dropDownItem.text"
-                                    :key="dropDownItem.text"
+                                    :value="dropDownItem.faq_type"
+                                    :key="dropDownItem.faq_type"
                                 >
-                                    {{dropDownItem.text}}
+                                    {{dropDownItem.faq_type}}
                                 </Option>
                             </Select>
                             <!-- 狀態開關 -->
@@ -264,6 +268,14 @@
                                 placeholder="請輸入回答"
                                 >
                             </textarea>
+                            <!-- <Input name="faq_a"
+                                class="textarea"
+                                v-model="editingFaq.faq_a"
+                                maxlength="100"
+                                show-word-limit
+                                type="textarea"
+                                placeholder="請輸入回答"
+                                :autosize="{minRows: 10,maxRows: 10}"/> -->
                         </div>
                         <!-- <span class="ivu-input-word-count">0/100</span> -->
                         <!-- <Space class="inputs">
@@ -359,7 +371,7 @@
             </div>
         </div>
 <!-- 分頁頁碼 -->
-        <!-- <Page :total="40" size="small" show-elevator show-sizer/> -->
+        <!-- <Page :total=this.activeList.length size="small" show-elevator show-sizer/> -->
 	</div>
 </template>
 <script>
@@ -381,10 +393,12 @@ export default {
             activeCategory: '', // 點到的分類
             activeList: [],     // 與分類相符的資料
             categoryList:[
-                { faq_type: '會員問題' },
-                { faq_type: '行程問題' },
-                { faq_type: '商品問題' },
+                // { faq_type: '會員問題' },
+                // { faq_type: '行程問題' },
+                // { faq_type: '商品問題' },
             ],
+// ----- 分頁 ------
+            dataCount:'',
 // ----- 表格欄位 ------
             editIndex: -1,
             columns: [
@@ -447,9 +461,9 @@ export default {
             editingFaq: [], // 要回傳的陣列
 // ----- 表單：下拉選單 ------
             dropDownList: [
-                { text: '會員問題', },
-                { text: '行程問題', },
-                { text: '商品問題', },
+                // { faq_type: '會員問題' },
+                // { faq_type: '行程問題' },
+                // { faq_type: '商品問題' },
             ],
 // ----- 彈窗 ------
             show_statusCheck: false,
@@ -524,10 +538,6 @@ export default {
             //     this.selectAll = true;
             // }
         },
-// ----- 取消全選事件 ------
-        onSelectAllCancel(){
-            this.selectList=[];
-        },
 // ----- 表單：編輯 ------
         editForm(edit){
             this.editingNo = edit;
@@ -577,17 +587,32 @@ export default {
             .then(json=>{
                 this.faqList = json;
                 this.activeList = this.faqList;
-                // if(this.faqList.faq_status == 1){
-                //     this.activeList.faq_status = "顯示";
-                // }else{
-                //     this.activeList.faq_status = "隱藏";
-                // }
-                // console.log(this.activeList);
+                this.categoryList = [...new Set(this.faqList.map(item => item.faq_type))].map(faqType => ({ faq_type: faqType }));
+                this.dropDownList = [...new Set(this.faqList.map(item => item.faq_type))].map(faqType => ({ faq_type: faqType }));
             })
 		},
 // ----- 新增資料 ------ fetch
         addFaqData(){
-            fetch(`{BASE_URL}/`)
+            let faq_type = document.getElementById("faq_type");
+            let faq_q = document.getElementById("faq_q");
+            let faq_a = document.getElementById("faq_a");
+            
+            if(this.newFaq_type == '' || this.newFaq_type == undefined || this.newFaq_type == null){
+                alert('請選擇類別');
+                faq_type.classList.add('error');
+                return;
+            }else if(this.newFaq_q == '' || this.newFaq_q == undefined || this.newFaq_q == null){
+                alert('請填寫問題');
+                faq_q.classList.add('error');
+                return;
+            }
+            else if(this.newFaq_a == '' || this.newFaq_a == undefined || this.newFaq_a == null){
+                alert('請填寫回答');
+                faq_a.classList.add('error');
+                return;
+            }
+
+            // fetch(`{BASE_URL}/`)
             fetch('http://localhost/CGD103_G4_back/public/php/Faq_insert.php',{
                 method:'POST', body:new URLSearchParams({
                 faq_type:this.newFaq_type,
@@ -598,14 +623,29 @@ export default {
             .then((res) => res.json())
             .then((result)=> {
                 this.alert_Loading = true;
-                setTimeout(() => {
-                    this.alert_Loading = false;
-                    this.show_NewForm = false;
-                    this.$Message.success(result.msg);
-                }, 600);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                if(result.msg == "已成功新增一筆常見問題"){
+                    setTimeout(() => {
+                        this.$Notice.success({
+                            title: "新增成功",
+                            desc: result.msg,
+                        });
+                        this.alert_Loading = false;
+                        this.show_NewForm = false;
+                    }, 600);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }else{
+                    setTimeout(() => {
+                        this.$Notice.error({
+                            title: "新增失敗",
+                            desc: result.msg,
+                            duration: 0 // 彈窗不消失
+                        });
+                        this.alert_Loading = false;
+                        this.show_NewForm = false;
+                    }, 600);
+                }
             })
         },
 // ----- 測試修改資料 ------ XML(不能用)
@@ -685,7 +725,6 @@ export default {
                         });
                         onPick.forEach(function(item){
                             item.faq_status = faqVue.status;
-                            // console.log(faqVue.status);
                         });
                     });
                     this.alert_Loading = false;
