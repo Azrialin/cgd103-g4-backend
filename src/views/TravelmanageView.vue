@@ -15,7 +15,7 @@
                             </div>
                             <div class="input-title">
                                 <label for="">方案編號:
-                                    <Input name="package_name" v-model="databang.package_name" clearable style="width: 300px" disabled/>
+                                    <Input name="package_name" v-model="databang.package_no" clearable style="width: 300px" disabled/>
                                 </label>
                             </div>
                             <div class="input-title">
@@ -58,7 +58,7 @@
                             <!-- 方案名稱 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_name }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
                             <!-- 下訂日期 -->
                             <template #news_time="{ row, index }">
@@ -102,7 +102,7 @@
                             <!-- 方案編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_name }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
                             <!-- 出發日期 -->
                             <template #news_time="{ row, index }">
@@ -116,7 +116,7 @@
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row }">
-                                <Button @click="activeData(row.package_no)">編輯</Button>
+                                <Button @click="activeData(row.group_id)">編輯</Button>
                             </template>
                             <!-- 人數上限 -->
                             <template #news_title="{ row, index }">
@@ -145,7 +145,7 @@
                             <!-- 方案編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_name }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
@@ -188,7 +188,7 @@
                             <!-- 方案編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_name }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
@@ -202,7 +202,7 @@
                             </template>
                             <!-- 分類 -->
                             <template #news_class="{ row }">
-                                <Button @click="activeDataC(row.package_no)">編輯</Button>
+                                <Button @click="activeDataC(row.group_id)">編輯</Button>
                             </template>
                             <!-- 人數上限 -->
                             <template #news_title="{ row, index }">
@@ -231,7 +231,7 @@
                             <!-- 方案編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_name }}</span>
+                                <span v-else>{{ row.package_no }}</span>
                             </template>
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
@@ -467,16 +467,16 @@
                     .then((json2)=>{
                         this.databang = json2
                         this.dataA = this.databang.filter(v=>{
-                            return v.package_name === "方案A";
+                            return v.package_no == "1";
                         });
                         this.dataB = this.databang.filter(v=>{
-                            return v.package_name === "方案B";
+                            return v.package_no == "2";
                         });
                         this.dataC = this.databang.filter(v=>{
-                            return v.package_name === "方案C";
+                            return v.package_no == "3";
                         });
                         this.dataD = this.databang.filter(v=>{
-                            return v.package_name === "方案D";
+                            return v.package_no == "4";
                         });
                     })
                 },
@@ -493,7 +493,7 @@
                     const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelmanage.php');
                     fetch(addURL,{ method:'post',body: new URLSearchParams({
                     
-                        package_no:this.databang.package_no,
+                        group_id:this.databang.group_id,
                         departure_date:this.databang.departure_date,
                         package_price:this.databang.package_price,
                         max_attendees:this.databang.max_attendees,
@@ -541,22 +541,22 @@
                 activeData(ed) {
                     this.activeIndex = ed;
                     this.seeOnData=true;
-                    this.databang = this.dataA.find((v) => v.package_no === this.activeIndex) ?? {};
+                    this.databang = this.dataA.find((v) => v.group_id === this.activeIndex) ?? {};
                 },
                 activeDataB(ed) {
                     this.activeIndex = ed;
                     this.seeOnData=true;
-                    this.databang = this.dataB.find((v) => v.package_no === this.activeIndex) ?? {};
+                    this.databang = this.dataB.find((v) => v.group_id === this.activeIndex) ?? {};
                 },
                 activeDataC(ed) {
                     this.activeIndex = ed;
                     this.seeOnData=true;
-                    this.databang = this.dataC.find((v) => v.package_no === this.activeIndex) ?? {};
+                    this.databang = this.dataC.find((v) => v.group_id === this.activeIndex) ?? {};
                 },
                 activeDataD(ed) {
                     this.activeIndex = ed;
                     this.seeOnData=true;
-                    this.databang = this.dataD.find((v) => v.package_no === this.activeIndex) ?? {};
+                    this.databang = this.dataD.find((v) => v.group_id === this.activeIndex) ?? {};
                 },
             },
     }

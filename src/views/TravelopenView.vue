@@ -11,10 +11,10 @@
                     <div class="choose">
                         <select class="choosein" name="package_no" v-model="packageno">
                             <option value="" disabled>-請選擇-</option>
-                            <option value="0">方案A</option>
-                            <option value="1">方案B</option>
-                            <option value="2">方案C</option>
-                            <option value="3">方案D</option>
+                            <option value="1">方案A</option>
+                            <option value="2">方案B</option>
+                            <option value="3">方案C</option>
+                            <option value="4">方案D</option>
                         </select>
                     </div>
                 </div>
@@ -65,6 +65,7 @@
     export default {
         data () {
             return {
+                data:[],
                 selected:"",
                 value:"",
                 value2:"",
@@ -76,7 +77,18 @@
                 closingdate:"",
             }
         },
+        created(){
+            // this.seeData();
+        },
         methods:{
+            // seeData(){
+            //     const joinURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelopen.php');
+            //     fetch(joinURL)
+            //     .then((res)=>res.json())
+            //     .then((json)=>{
+            //         this.data = json
+            //     })
+            // },
             addData(){
                 const myURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelopen.php');
                 fetch(myURL,{method:'POST',body: new URLSearchParams({
