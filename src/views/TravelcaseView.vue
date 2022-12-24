@@ -124,14 +124,16 @@
                 </div>
                 <div class="type travelcode">
                     <p class="nname">插入圖片 :</p>
-                    <Input class="succe" type="text" name="package_price" v-model="value3" style="width: 300px" />
+                    <Input class="succe" type="file" name="package_price" v-model="valuex" style="width: 300px" />
+                    <!-- v-model="valuex" -->
+                    <!-- v-model="value3" -->
                     <!-- <Upload class="succe" action="//jsonplaceholder.typicode.com/posts/">
                         <Button icon="ios-cloud-upload-outline">Upload files</Button>
                     </Upload> -->
                 </div>
                 <div class="delcan">
                     <div class="shure">取消</div>
-                    <div class="shure" @click="addData">確認</div>
+                    <div class="shure" @click="onChange();addData()">確認</div>
                 </div>
             </div>
         </div>
@@ -282,6 +284,7 @@
                 value4:"",
                 value5:"",
                 value6:"",
+                valuex:"",
                 tager:"",
                 formItem: {
                     textarea: '',
@@ -380,12 +383,17 @@
                 editnews_status: '',
                 editnews_session: '',
                 activeIndex:"",
+                fileName:"",
                 }
             },
         created(){
             this.getData();
         },
         methods: {
+            onChange() {
+                this.value3 = this.valuex.split(':').pop().split('\\').pop();
+                return this.value3;
+            },
             getData(){
                 const gege = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelcase.php');
                 fetch(gege)
@@ -404,6 +412,8 @@
                 })
             },
             addData(){
+                // this.value3 = this.valuex.split(':').pop().split('\\').pop();
+                // return this.value3;
                 const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
                 fetch(addURL,{ method:'post',body: new URLSearchParams({
                    
@@ -481,8 +491,6 @@
                 this.seenAdd = true;
                 this.data = this.dataOff.find((v) => v.package_no === this.activeIndex) ?? {};
             },
-        },
-        computed: {
         },
     }
 </script>
