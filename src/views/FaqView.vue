@@ -364,7 +364,7 @@
 	</div>
 </template>
 <script>
-// import {BASE_URL} from '@/assets/js/commom.js'
+import {BASE_URL} from "@/assets/js/common.js"
 import faq from '@/assets/js/faq.js'
 
 export default {
@@ -576,8 +576,8 @@ export default {
         // },
 // ----- 撈資料 ------ fetch
         getFaqData_Fetch(){
-            // fetch(`{BASE_URL}/Faq_getData.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
+            // fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
+            fetch(`${BASE_URL}/Faq_getData.php`)
             .then(res=>res.json())
             .then(json=>{
                 this.faqList = json;
@@ -593,22 +593,22 @@ export default {
             let newFaq_a = document.getElementById("newFaq_a");
             
             if(this.newFaq_type == '' || this.newFaq_type == undefined || this.newFaq_type == null){
-                alert('請選擇類別');
+                this.$Message.warning('請選擇類別');
                 newFaq_type.classList.add('error');
                 return;
             }else if(this.newFaq_q == '' || this.newFaq_q == undefined || this.newFaq_q == null){
-                alert('請填寫問題');
+                this.$Message.warning('請填寫問題');
                 newFaq_q.classList.add('error');
                 return;
             }
             else if(this.newFaq_a == '' || this.newFaq_a == undefined || this.newFaq_a == null){
-                alert('請填寫回答');
+                this.$Message.warning('請填寫回答');
                 newFaq_a.classList.add('error');
                 return;
             }
 
-            // fetch(`{BASE_URL}/Faq_insert.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_insert.php',{
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_getData.php",{
+            fetch(`${BASE_URL}/Faq_insert.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_type:this.newFaq_type,
                 faq_q:this.newFaq_q,
@@ -657,8 +657,21 @@ export default {
         // },
 // ----- 單筆修改資料 ------ fetch
         editFaqData(){
-            // fetch(`{BASE_URL}/Faq_update.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_update.php',{
+            let editFaq_q = document.getElementById("editFaq_q");
+            let editFaq_a = document.getElementById("editFaq_a");
+            
+            if(this.editingFaq.faq_q == '' || this.editingFaq.faq_q == undefined || this.editingFaq.faq_q == null){
+                this.$Message.warning('請填寫問題');
+                editFaq_q.classList.add('error');
+                return;
+            }
+            else if(this.editingFaq.faq_a == '' || this.editingFaq.faq_a == undefined || this.editingFaq.faq_a == null){
+                this.$Message.warning('請填寫回答');
+                editFaq_a.classList.add('error');
+                return;
+            }
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_update.php",{
+            fetch(`${BASE_URL}/Faq_update.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:this.editingFaq.faq_no,
                 faq_type:this.editingFaq.faq_type,
@@ -682,8 +695,7 @@ export default {
             ? this.$Message.info('狀態：已成功將該筆問題狀態變更為「顯示」')
             : this.$Message.info('狀態：已成功將該筆問題狀態變更為「隱藏」');
 
-            // fetch(`{BASE_URL}/Faq_changeState.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_changeState.php',{
+            fetch(`${BASE_URL}/Faq_changeState.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:row.faq_no,
                 faq_status:row.faq_status,
@@ -702,8 +714,7 @@ export default {
 // ----- 多筆狀態切換 ------
         massChangeStatus(){
             let faqVue = this;
-            // fetch(`{BASE_URL}/Faq_massChangeState.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_massChangeState.php',{
+            fetch(`${BASE_URL}/Faq_massChangeState.php`,{
                 method:'POST', body:new URLSearchParams({
                 items: this.selectList,
                 status: this.status,
@@ -737,8 +748,7 @@ export default {
 // ----- 單筆刪除資料 ------ fetch
         delFaqData(){
             // console.log(this.selectList);
-            // fetch(`{BASE_URL}/Faq_delete.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_delete.php',{
+            fetch(`${BASE_URL}/Faq_delete.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:this.deleteNo,
             })})
@@ -755,9 +765,7 @@ export default {
         },
 // ----- 刪除多筆資料 ------ fetch
         massDelete(){
-            // console.log(this.selectList);
-            // fetch(`{BASE_URL}/Faq_massDelete.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_massDelete.php',{
+            fetch(`${BASE_URL}/Faq_massDelete.php`,{
                 method:'POST', body:new URLSearchParams({
                 items: this.selectList,
             })})
