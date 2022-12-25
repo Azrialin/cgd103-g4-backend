@@ -103,6 +103,7 @@
 </template>
 
 <script>
+import {BASE_URL} from '@/assets/js/common.js'
 export default {
 	name: 'AdministratorView',
 	components: {
@@ -187,7 +188,7 @@ export default {
             console.log(this);
         },
         getData(){
-            fetch('http://localhost/cgd103-g4-backend/public/phpfiles/getMemberInfo.php')
+            fetch(`${BASE_URL}/getMemberInfo.php`)
                   .then((res) => res.json())
                   .then((json) =>{
                     this.result = json;

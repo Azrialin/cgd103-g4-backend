@@ -1,19 +1,36 @@
-<!-- 問題
+<!--
+    ?問題
+    //1. 新增後，禁止畫面跳轉
+    //2. 假的下拉選單取資料
+    //3. 假的下拉選單及狀態切換開關，要怎麼回傳值
+    //4. 修改資料/刪除資料
+    //5. 編輯時，表單對應資料顯示
+    //6. 多選
     7. 各個彈窗寫成 component
-    9. 新增/編輯資料時，若欄位為空則不能送出>>>彈窗
+    //8. 進入頁面預設打開"全部"
+    9. 新增/編輯資料時，若欄位為空則不能送出>>>的彈窗
     10.分頁優化寫法
-    11.輸入框剩餘字數>>>:deep
+    11.輸入框剩餘字數
+    //12.iVue的全選第二下沒有動作
+    //13.表單：編輯的 ?? []
     14.massChangeState 寫成同一支
     15.分頁
     16.宣傳頁
     17.忘記密碼/重設密碼
     18.
--->
-<!-- 小抄
+    
+    ?小抄
     摺疊快速鍵 Ctrl K 012345
     打開快速鍵 Ctrl K J
     sass ./src/assets/sass/style.scss ./src/assets/css/style.css
  -->
+
+<!--*  -->
+<!--!  -->
+<!--?  -->
+<!--todo  -->
+<!--//  -->
+
  <template>
     <div class="FAQ">
 		<main>
@@ -129,7 +146,7 @@
                             <!-- 下拉選單 -->
                             <p class="font-16">＊類別：</p>
                             <Select name="faq_type"
-                                id="faq_type"
+                                id="newFaq_type"
                                 v-model="newFaq_type"
                                 placeholder="請選擇"
                                 style="width: 120px"
@@ -160,37 +177,26 @@
                         <!-- 輸入框 -->
                         <div>
                             <p ref="" class="font-16">＊問題：</p>
-                            <textarea name="faq_q"
-                                id="faq_q"
+                            <Input name="faq_q"
+                                id="newFaq_q"
                                 v-model="newFaq_q"
-                                showCount
-                                class="font-16"
-                                rows="3"
                                 maxlength="100"
+                                show-word-limit
                                 placeholder="請輸入問題"
-                            >
-                            </textarea>
+                                type="textarea"
+                                :autosize="{minRows: 4,maxRows: 4}"/>
                         </div>
                         <div>
                             <p class="font-16">＊回答：</p>
-                            <textarea name="faq_a"
-                                id="faq_a"
+                            <Input name="faq_a"
+                                id="newFaq_a"
                                 v-model="newFaq_a"
-                                showCount
-                                class="font-16"
-                                rows="10"
-                                maxlength="100"
+                                maxlength="300"
+                                show-word-limit
                                 placeholder="請輸入回答"
-                            >
-                            </textarea>
+                                type="textarea"
+                                :autosize="{minRows: 8.6,maxRows: 8.6}"/>
                         </div>
-                        <!-- <span class="ivu-input-word-count">0/100</span> -->
-                        <!-- <Space class="inputs">
-                            <Input class="input question"
-                                v-model="newFaq_q" maxlength="100"
-                                show-word-limit placeholder="Enter something..."
-                                style="width: 200px"/>
-                        </Space> -->
                         <!-- 按鈕 -->
                         <div>
                             <p class="font-16">＊為必填／必選項目</p>
@@ -247,43 +253,26 @@
                         <!-- 輸入框 -->
                         <div>
                             <p class="font-16">＊問題：</p>
-                            <textarea name="faq_q"
-                                showCount
-                                class="font-16"
-                                rows="3"
-                                maxlength="100"
+                            <Input name="faq_q"
+                                id="editFaq_q"
                                 v-model="editingFaq.faq_q"
+                                maxlength="100"
+                                show-word-limit
                                 placeholder="請輸入問題"
-                            >
-                            </textarea>
+                                type="textarea"
+                                :autosize="{minRows: 4,maxRows: 4}"/>
                         </div>
                         <div>
                             <p class="font-16">＊回答：</p>
-                            <textarea name="faq_a"
-                                showCount
-                                class="font-16"
-                                rows="10"
-                                maxlength="100"
+                            <Input name="faq_a"
+                                id="editFaq_a"
                                 v-model="editingFaq.faq_a"
-                                placeholder="請輸入回答"
-                                >
-                            </textarea>
-                            <!-- <Input name="faq_a"
-                                class="textarea"
-                                v-model="editingFaq.faq_a"
-                                maxlength="100"
+                                maxlength="300"
                                 show-word-limit
-                                type="textarea"
                                 placeholder="請輸入回答"
-                                :autosize="{minRows: 10,maxRows: 10}"/> -->
+                                type="textarea"
+                                :autosize="{minRows: 8.6,maxRows: 8.6}"/>
                         </div>
-                        <!-- <span class="ivu-input-word-count">0/100</span> -->
-                        <!-- <Space class="inputs">
-                            <Input class="input question"
-                            v-model="newFaq_q" maxlength="100"
-                                show-word-limit placeholder="Enter something..."
-                                style="width: 200px"/>
-                        </Space> -->
                         <!-- 按鈕 -->
                         <div>
                             <p class="font-16">＊為必填／必選項目</p>
@@ -375,7 +364,7 @@
 	</div>
 </template>
 <script>
-// import {BASE_URL} from '@/assets/js/commom.js'
+import {BASE_URL} from "@/assets/js/common.js"
 import faq from '@/assets/js/faq.js'
 
 export default {
@@ -389,7 +378,7 @@ export default {
             deleteNo: '',   // 要刪除的資料編號(單筆)
             rowCount: [],   // 選中的列(次序)
             selectList: [], // 選中的列(編號)
-// ----- 分頁 ------
+// ----- 分頁 tab ------
             activeCategory: '', // 點到的分類
             activeList: [],     // 與分類相符的資料
             categoryList:[
@@ -397,7 +386,7 @@ export default {
                 // { faq_type: '行程問題' },
                 // { faq_type: '商品問題' },
             ],
-// ----- 分頁 ------
+// ----- 分頁 page ------
             dataCount:'',
 // ----- 表格欄位 ------
             editIndex: -1,
@@ -553,6 +542,12 @@ export default {
                 this.show_NewForm = false;
                 this.show_EditForm = false;
                 this.alert_Loading = false;
+                this.newFaq_type = '';
+                this.newFaq_q = '';
+                this.newFaq_a = '';
+                document.getElementById("newFaq_type").classList.remove('error');
+                document.getElementById("newFaq_q").classList.remove('error');
+                document.getElementById("newFaq_a").classList.remove('error');
             }, 200);
         },
 // ----- 撈資料 ------ XML
@@ -562,7 +557,7 @@ export default {
 		// 	xhr.onload = ()=>{
         //         if(xhr.status == 200){
         //             faqVue.faqList = JSON.parse(xhr.responseText);
-//                     faqVue.activeList = faqVue.faqList;
+        //             faqVue.activeList = faqVue.faqList;
 		// 		}
 		// 	}
 		// 	xhr.open("get", "http://localhost/CGD103_G4_back/public/php/Faq_getData_02.php", true);
@@ -581,8 +576,8 @@ export default {
         // },
 // ----- 撈資料 ------ fetch
         getFaqData_Fetch(){
-            // fetch(`{BASE_URL}/Faq_getData.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
+            // fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
+            fetch(`${BASE_URL}/Faq_getData.php`)
             .then(res=>res.json())
             .then(json=>{
                 this.faqList = json;
@@ -593,27 +588,27 @@ export default {
 		},
 // ----- 新增資料 ------ fetch
         addFaqData(){
-            let faq_type = document.getElementById("faq_type");
-            let faq_q = document.getElementById("faq_q");
-            let faq_a = document.getElementById("faq_a");
+            let newFaq_type = document.getElementById("newFaq_type");
+            let newFaq_q = document.getElementById("newFaq_q");
+            let newFaq_a = document.getElementById("newFaq_a");
             
             if(this.newFaq_type == '' || this.newFaq_type == undefined || this.newFaq_type == null){
-                alert('請選擇類別');
-                faq_type.classList.add('error');
+                this.$Message.warning('請選擇類別');
+                newFaq_type.classList.add('error');
                 return;
             }else if(this.newFaq_q == '' || this.newFaq_q == undefined || this.newFaq_q == null){
-                alert('請填寫問題');
-                faq_q.classList.add('error');
+                this.$Message.warning('請填寫問題');
+                newFaq_q.classList.add('error');
                 return;
             }
             else if(this.newFaq_a == '' || this.newFaq_a == undefined || this.newFaq_a == null){
-                alert('請填寫回答');
-                faq_a.classList.add('error');
+                this.$Message.warning('請填寫回答');
+                newFaq_a.classList.add('error');
                 return;
             }
 
-            // fetch(`{BASE_URL}/`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_insert.php',{
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_getData.php",{
+            fetch(`${BASE_URL}/Faq_insert.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_type:this.newFaq_type,
                 faq_q:this.newFaq_q,
@@ -662,8 +657,21 @@ export default {
         // },
 // ----- 單筆修改資料 ------ fetch
         editFaqData(){
-            // fetch(`{BASE_URL}/Faq_update.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_update.php',{
+            let editFaq_q = document.getElementById("editFaq_q");
+            let editFaq_a = document.getElementById("editFaq_a");
+            
+            if(this.editingFaq.faq_q == '' || this.editingFaq.faq_q == undefined || this.editingFaq.faq_q == null){
+                this.$Message.warning('請填寫問題');
+                editFaq_q.classList.add('error');
+                return;
+            }
+            else if(this.editingFaq.faq_a == '' || this.editingFaq.faq_a == undefined || this.editingFaq.faq_a == null){
+                this.$Message.warning('請填寫回答');
+                editFaq_a.classList.add('error');
+                return;
+            }
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_update.php",{
+            fetch(`${BASE_URL}/Faq_update.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:this.editingFaq.faq_no,
                 faq_type:this.editingFaq.faq_type,
@@ -687,8 +695,7 @@ export default {
             ? this.$Message.info('狀態：已成功將該筆問題狀態變更為「顯示」')
             : this.$Message.info('狀態：已成功將該筆問題狀態變更為「隱藏」');
 
-            // fetch(`{BASE_URL}/Faq_changeState.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_changeState.php',{
+            fetch(`${BASE_URL}/Faq_changeState.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:row.faq_no,
                 faq_status:row.faq_status,
@@ -707,8 +714,7 @@ export default {
 // ----- 多筆狀態切換 ------
         massChangeStatus(){
             let faqVue = this;
-            // fetch(`{BASE_URL}/Faq_massChangeState.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_massChangeState.php',{
+            fetch(`${BASE_URL}/Faq_massChangeState.php`,{
                 method:'POST', body:new URLSearchParams({
                 items: this.selectList,
                 status: this.status,
@@ -742,8 +748,7 @@ export default {
 // ----- 單筆刪除資料 ------ fetch
         delFaqData(){
             // console.log(this.selectList);
-            // fetch(`{BASE_URL}/Faq_delete.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_delete.php',{
+            fetch(`${BASE_URL}/Faq_delete.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:this.deleteNo,
             })})
@@ -760,9 +765,7 @@ export default {
         },
 // ----- 刪除多筆資料 ------ fetch
         massDelete(){
-            // console.log(this.selectList);
-            // fetch(`{BASE_URL}/Faq_massDelete.php`)
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_massDelete.php',{
+            fetch(`${BASE_URL}/Faq_massDelete.php`,{
                 method:'POST', body:new URLSearchParams({
                 items: this.selectList,
             })})
@@ -793,4 +796,5 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/Scss/pages/faq.scss";
+@import "../assets/Scss/components/scrollBar.scss";
 </style>

@@ -1,13 +1,11 @@
 <template>
     <!----------------尚未完成---------------------------
-    🔹 新增消息 
-        確認鍵 資料驗證條件
-    🔹 編輯消息
-        上架 按下確認鍵的資料修改(不可有空值欄位)
-        草稿 按下確認鍵的資料修改(連動資料本身) 進度中
+    🔹 新增消息 上架資料驗證  (表面) 因為是xhr 晚點在寫
+    🔹 編輯消息 上架資料驗證  (選取上架尚未轉換紅字)
     🔹 上傳圖片的方法  (為了新增資料正常，先找幾張圖片新增到20.jpg)
     🔹 php放置位置 功能寫完後放置
     ( 🔹 各狀態資料筆數顯示於下方)
+    ( 🔹 順序顛倒)
     ------------------------------------------------------->
     <!------------------- 筆記
     點擊結果為點擊的內容
@@ -56,8 +54,10 @@
     4. 表單對應資料庫新增的欄位 方法有二 1.表單給name(要對照Php)  2.才俊fetch的方法(?)
     5.
      -->
-     <!-- 編輯資料 function -->
-     <!-- 上架草稿編輯同一個function -->
+    <!-- 編輯資料 function -->
+    <!-- 上架草稿編輯同一個function -->
+     <!-- *上架時間 (困難點: MySQL 已經設定輸入內容必須是date，不能給null，嘗試給0000-00-00 失敗 | 使用if 無效 | 如果前段判斷不等於上架將他隱藏，資料庫那邊的資料顯示沒意義) -->
+    <!-- 解決上架時間問題，請看editNewsData function -->
     <div class="backstage-news" >
         <div class="backstage-content">
             <div class="btn-add">
@@ -75,7 +75,7 @@
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else :class="{ isNotOnStatus : row.news_time === '9999-12-31'}">{{ row.news_time }}</span> 
                             </template>
                             <!-- 最後編輯 -->
                             <template #news_last_edit="{ row, index }">
@@ -105,8 +105,8 @@
                             </template>
                         </Table>
                     </TabPane>
-                    <TabPane label="草稿" >
-                        <Table class="scrollBar" stripe border :columns="columns" :data="dataDraft" >
+                    <TabPane class="scrollBar" label="草稿" >
+                        <Table  stripe border :columns="columns" :data="dataDraft" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -115,7 +115,7 @@
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else :class="{ isNotOnStatus : row.news_time === '9999-12-31'}">{{ row.news_time }}</span>
                             </template>
                             <!-- 最後編輯 -->
                             <template #news_last_edit="{ row, index }">
@@ -148,8 +148,8 @@
                             </template>
                         </Table>
                     </TabPane>
-                    <TabPane label="下架" >
-                        <Table class="scrollBar" stripe border :columns="columns" :data="dataOff" >
+                    <TabPane class="scrollBar" label="下架" >
+                        <Table stripe border :columns="columns" :data="dataOff" >
                             <!-- 公告編號 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
@@ -158,12 +158,12 @@
                             <!-- 上架日期 -->
                             <template #news_time="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else :class="{ isNotOnStatus : row.news_time === '9999-12-31'}">{{ row.news_time }}</span>
                             </template>
                             <!-- 最後編輯 -->
                             <template #news_last_edit="{ row, index }">
                                 <Input type="text"  v-if="editIndex === index" />
-                                <span v-else>{{ row.news_time }}</span>
+                                <span v-else>{{ row.news_last_edit }}</span>
                             </template>
                             <!-- 分類 -->
                             <template #news_type="{ row, index }">
@@ -205,22 +205,20 @@
                     <div class="on-date">
                         <span class="date">發布時間</span>
                         <span class="date"></span>
-                        <!-- <input type="text" name="news_time" id=""> -->
                     </div>
                     <div class="last-edit-date">
                         <span class="date">最後更新</span>
                         <span class="date"></span>
-                        <!-- <input type="text" name="news_last_edit" id=""> -->
                     </div>
                 </div>
                 <div class="popup-content font-18">
                     <div class="popup-data">
                         <label for="">狀態
-                            <select name="news_status" id="">
-                                <option value="草稿">草稿</option>
+                            <select name="news_status" v-model="selectedOnStatus">
+                                <option value="草稿" selected>草稿</option>
                                 <option value="上架">上架</option>
-                                <option value="下架">下架</option>
                             </select>
+                            <span class="type_on" v-show="selectedOnStatus === '上架'"> *必填</span>
                         </label>
                         <label for="">分類
                             <select name="news_type" id="">
@@ -228,41 +226,49 @@
                                 <option value="活動">活動</option>
                                 <option value="其他">其他</option>
                             </select>
+                            <span class="type_on" v-show="selectedOnStatus === '上架'"> *請確認</span>
                         </label>
                     </div>
                     <div class="input-txt">
                         <div class="input-title">
+                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">標題：
-                                <Input name="news_title" placeholder="請輸入標題" clearable style="width: 500px" />
+                                <Input name="news_title" placeholder="請輸入標題" clearable style="width: 500px" required/>
                             </label>
                         </div>
                         <div class="input-des">
+                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">引文：
                                 <Input name="news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
+                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">內文：
                                 <Input name="news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
+                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">內文：
                                 <Input name="news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                             </label>
                         </div>
                         <div class="input-des">
+                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">結尾：
                                 <Input name="news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                             </label>
                         </div>
                     </div>
                     <div class="input-pic">
+                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                         <label class="test" for="">插入圖片：
                             <input type="file">
                         </label>
                     </div>
                     <div class="input-pic-des">
+                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                         <label for="">圖片敘述：
                             <Input name="news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                         </label>
@@ -296,10 +302,11 @@
         <div class="popup-content font-18">
             <div class="popup-data">
                 <label for="">狀態
-                    <select name="" id="" v-model="editingNews.news_status">
+                    <select name="" id="" v-model="editingNews.news_status" >
                         <option value="上架" >上架</option>
                         <option value="下架" >下架</option>
                     </select>
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> * 必填</span>
                 </label>
                 <label for="">分類
                     <select name="" id="" v-model="editingNews.news_type">
@@ -307,41 +314,49 @@
                         <option value="活動">活動</option>
                         <option value="其他">其他</option>
                     </select>
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *請確認</span>
                 </label>
             </div>
             <div class="input-txt">
                 <div class="input-title">
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
                     <label for="">標題：
                         <Input v-model="activeData.news_title" clearable style="width: 500px" />
                     </label>
                 </div>
                 <div class="input-des">
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
                     <label for="">引文：
                         <Input v-model="activeData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
                     <label for="">內文：
                         <Input v-model="activeData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
                     <label for="">內文：
                         <Input v-model="activeData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
                     </label>
                 </div>
                 <div class="input-des">
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
                     <label for="">結尾：
                         <Input v-model="activeData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
                     </label>
                 </div>
             </div>
             <div class="input-pic">
+                <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
                 <label class="test" for="">插入圖片：
                     <input type="file">
                 </label>
             </div>
             <div class="input-pic-des">
+                <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
                 <label for="">圖片敘述：
                     <Input v-model="activeData.news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
                 </label>
@@ -368,8 +383,6 @@
                 <div class="last-edit-date">
                     <span class="date">最後更新</span>
                     <span class="date">{{activeDraftData.news_last_edit}}</span>
-                    <!-- <Input v-model="activeDraftData.news_last_edit" placeholder="請輸入標題" clearable style="width: 500px" /> -->
-
                 </div>
             </div>
             <div class="popup-content font-18">
@@ -445,7 +458,7 @@
                     <span class="date">{{activeOffData.news_time}}</span>
                 </div>
                 <div class="last-edit-date">
-                    <span class="date">最後更新</span>
+                    <span class="date">修改日期</span><!-- 最後更新 -->
                     <span class="date">{{activeOffData.news_last_edit}}</span>
                 </div>
             </div>
@@ -526,6 +539,8 @@
 </template>
 <!-- https://run.iviewui.com/4CEEQf1j -->
 <script>
+import {BASE_URL} from '@/assets/js/common.js'
+
     export default {
         data () {
             return {
@@ -534,6 +549,7 @@
                 seeDraftData:false, //草稿資料彈窗，綁草稿資料v-show、編輯按鈕@click="editDraftData"
                 seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
                 seeCheck:false, //確認彈窗、v-show="seeCheck" 按鈕@click="okToggle"
+                selectedOnStatus:'草稿',// 如果表單選擇上架，顯示 *
                 // 表單相關
                 columns: [
             {
@@ -550,7 +566,7 @@
                 "sortable": true // 排序
             },
             {
-                title: '最後修改',
+                title: '修改日期',
                 slot: 'news_last_edit',
                 width: 110,
                 align: 'center',
@@ -598,7 +614,7 @@
                 align: 'center'
             },
             {
-                title: '編輯',
+                title: '編輯 | 刪除 | 查看',
                 slot: 'action',
                 width: 180,
                 align: 'center'
@@ -626,19 +642,14 @@
                 editIndex: -1,  // 当前聚焦的输入框的行数
                 activeIndex:null,
                 // news_last_edit:''
-        //------表單 : 下拉選單(公告分類) 
-                typeList:[
-                    {text : '重要'},
-                    {text : '活動'},
-                    {text : '其他'}
-                ],
                 editingNews:[]
                 }
             },
             methods: {
             // 測試本地資料庫 fetch
             getNews(){
-                fetch('http://localhost/list.php')
+                // fetch('http://localhost/list.php') //本地端
+                fetch(`${BASE_URL}/list.php`)
                 .then(res=>res.json())
                 .then(json=>{
                     // 抓回所有資料
@@ -678,7 +689,10 @@
                 // document.getElementById("btnReset").click();
                 // $id("btnReset").click();
                 }
-                xhr.open("post", "http://localhost/news_insert.php", true);
+                // xhr.open("post", "http://localhost/news_insert.php", true); //本地端
+                xhr.open("post", `${BASE_URL}/news_insert.php`, true); 
+                // 如果是上架，要抓取現在的時間
+                
                 xhr.send(new FormData(document.getElementById("addNewsForm")));
 
                 // 確認談窗
@@ -698,7 +712,7 @@
                     window.location.reload();
                 },500);
             },
-            // 修改資料 fetch
+            // 編輯資料 fetch
             editNewsData(){
                 // 抓取現在的時間
                 var now = new Date();
@@ -706,14 +720,31 @@
                 var month = now.getMonth()+1;
                 var date = now.getDate();
                 var news_last_edit= year + '' + month + date;
-                // 如果狀態改為上架，需要加入上架間 
 
+                // 如果狀態改為上架，需要加入上架時間 
+                var news_time = ''; 
+                if(this.editingNews.news_status == "草稿"){ //如果是草稿，日期抓9999-12-31，畫面再把這日期隱藏起來
+                    news_time = '9999-12-31';
+                }else if(this.news_status == "下架"){ //如果是下架，日期抓原本的上架時間 
+                    news_time = this.news_time;
+                }else{
+                    news_time = news_last_edit; //如果是上架，時間抓當日
+                };
+                console.log(this.editingNews.news_status);
 
-                fetch('http://localhost/news_update.php',{
+                //上架時的資料驗證 //目前失敗
+                if(this.editingNews.news_status == "上架"){
+                    if(this.editingNews.news_status == ""){
+                        alert("標題沒寫!");
+                        return;
+                    }
+                };
+                // fetch('http://localhost/news_update.php',{ //本地端
+                fetch(`${BASE_URL}/news_update.php`,{
                 method:'POST', body:new URLSearchParams({
 
                 news_no:this.editingNews.news_no, // 為了比對
-                // news_time:this.editingNews.news_time, //不給更新 這段可刪
+                news_time:news_time, //不給更新 這段可刪
                 news_last_edit:news_last_edit, // 抓取現在時間
                 news_type:this.editingNews.news_type,
                 news_title:this.editingNews.news_title,
@@ -759,7 +790,8 @@
                 // console.log(deleteNo);
 
                 // console.log(deleteIndex);
-                fetch('http://localhost/news_delete.php',{
+                // fetch('http://localhost/news_delete.php',{ //本地端
+                fetch(`${BASE_URL}/news_delete.php`,{
                     method:'POST', body:new URLSearchParams({
                     news_no:deleteIndex,
                     
@@ -830,6 +862,14 @@
 
 <style scoped lang="scss">
 @import "../assets/Scss/components/scrollBar.scss";
+
+/* -------------------是否上架 ------------------------*/
+.type_on{
+    color: red;
+}
+.isNotOnStatus{
+    display: none;
+}
 /* -------------------彈窗 ------------------------*/
 .popup{
     position: absolute;
