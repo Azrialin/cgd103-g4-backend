@@ -1,48 +1,59 @@
 <template>
     <div class="backstage-administrator" >
-        <!-- <div class="backstage-name">
-            <div>
-                <h2 class="font-36" >帳號管理</h2>
-            </div>
-            <div class="backstage-account">
-                <span class="font-18">管理員名稱</span>
-                <span class="font-18">登出</span>
-            </div>
-        </div> -->
         <div class="backstage-content">
-            <!-- <div class="backstage-path font-16">帳號管理 / 管理者帳號</div> -->
             <div class="btn-add">
                 <Button type="primary"
                 @click="addToggle">新增帳號</Button>
             </div>
         </div>
         <div class="administrator-manager">
-            <Table stripe border :columns="columns" :data="data">
+            <Table stripe border :columns="columns" :data="Addata">
                 <!-- 員工編號 -->
-                <template #staff_no="{ row, index }">
+                <template #emp_no="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_no }}</span>
+                        <span v-else>{{ row.emp_no }}</span>
                 </template>
                 <!-- 員工帳號 -->
-                <template #staff_number="{ row, index }">
+                <template #emp_id="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_number }}</span>
+                        <span v-else>{{ row.emp_id }}</span>
                 </template>
                 <!-- 員工姓名 -->
-                <template #staff_name="{ row, index }">
+                <template #emp_name="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_name }}</span>
+                        <span v-else>{{ row.emp_name }}</span>
                 </template>
                 <!-- 員工信箱 -->
-                <template #staff_email="{ row, index }">
+                <template #emp_email="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
-                        <span v-else>{{ row.staff_email }}</span>
+                        <span v-else>{{ row.emp_email }}</span>
                 </template>
                 <!-- 帳號狀態 -->
-                <template #staff_state>
-                    <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow_list = true">
-                        <Switch :before-change="handleBeforeChange" true-color="#13ce66" false-color="#E6E6E6" />
-                    </span>
+                <template #emp_status="{ row }">
+                    <!-- <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow_list = true"> -->
+                    <span v-if="row.emp_status == 1">啟用</span>
+                    <span v-else-if="row.emp_status == 0">停用</span>
+                        <!-- <Switch :before-change="handleBeforeChange" true-color="#13ce66" false-color="#E6E6E6" /> -->
+                    <!-- </span> -->
+                </template>
+                <!-- <template #emp_states="{ row }" >
+                    <Switch size="large"
+                        v-model="row.emp_status"
+                        :true-value = 1
+                        :false-value = 0
+                        true-color = "#6C9255"
+                        false-color = "#E6E6E6"
+                        @click="changeStatus(row.emp_status)">
+                        <template #open><span>ON</span></template>
+                        <template #close><span>OFF</span></template>
+                    </Switch>
+                </template> -->
+                <!-- 編輯 -->
+                <template #emp_edit="{ row }">
+                    <div class="btn-box">
+                        <span class="icon material-symbols-outlined" style="cursor: pointer;" 
+                        @click="editToggle(row.emp_no)">edit_square</span>
+                    </div>
                 </template>
                 <!-- 彈窗：帳號狀態變更確認 -->
                 <div class="modal-mask" :style="modalStyle">
@@ -50,7 +61,7 @@
                         <div class="modal-body">
                             <p class="font-16-15em">
                                 <span class="icon material-symbols-outlined">error</span>
-                                <span>Delete confirmation</span>
+                                <span>Edit confirmation</span>
                             </p>
                             <p class="font-16-15em">確定要變更嗎？</p>
                             <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
@@ -91,53 +102,86 @@
                     </div>
                 </div>
             </div>
+            <!-- 彈窗：編輯帳號 -->
+            <form id="Ad_editForm" method="post" enctype="multipart/form-data">
+                <div class="popup-edit " v-show="Ad_editForm" >
+                    <div class="popup-content font-18">
+                        <div class="popup-head font-20">編輯帳號</div>
+                        <div class="input-txt">
+                            <div class="input-info">
+                                <label for="">員工姓名：
+                                    <Input type="text" name="emp_name" placeholder="請輸入姓名" clearable  style="width: 200px"/>
+                                </label>
+                            </div>
+                            <div class="input-info">
+                                <label for="">員工信箱：
+                                    <Input type="email"  name="emp_email" placeholder="請輸入Email" clearable  style="width: 200px"/>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-switchs">
+                            <label class="state" for="">帳號狀態：
+                                <Switch true-color="#13ce66" false-color="#E6E6E6" />
+                                <!-- <input type="text" name="emp_status"> -->
+                            </label>
+                        </div>
+                        <div class="popup-btn">
+                            <Button type="primary" class="btn-blue" @click="addAdData">儲存</Button>
+                            <Button class="btn-blue_2nd" @click="editToggle">取消</Button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <!-- <Page :total="40" size="small" /> -->
 
     <!-- style="display:none" -->
     <!--新增表單 -->
-    <div class="popup " v-show="seenAdd" >
-        <div class="popup-head font-20">新增員工帳號</div>
-        <div class="popup-content font-18">
-            <div class="input-txt">
-                <div class="input-info">
-                    <label for="">員工編號：
-                        <Input type="text" placeholder="" clearable style="width: 200px" />
+    <form id="newForm" method="post" enctype="multipart/form-data">
+        <div class="popup " v-show="seenAdd" >
+            <div class="popup-content font-18">
+                <div class="popup-head font-20">新增員工帳號</div>
+                <div class="input-txt">
+                    <div class="input-info">
+                        <label for="">員工編號：
+                            <Input type="text" placeholder="" clearable style="width: 200px" />
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工帳號：
+                            <Input type="text" name="emp_id" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工密碼：
+                            <Input type="password" name="emp_psw" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工姓名：
+                            <Input type="text" name="emp_name" placeholder="請輸入姓名" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                    <div class="input-info">
+                        <label for="">員工信箱：
+                            <Input type="email"  name="emp_email" placeholder="請輸入Email" clearable  style="width: 200px"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-switchs">
+                    <label class="state" for="">帳號狀態：
+                        <Switch true-color="#13ce66" false-color="#E6E6E6" />
+                        <input type="text" name="emp_status">
                     </label>
                 </div>
-                <div class="input-info">
-                    <label for="">員工帳號：
-                        <Input type="text" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
-                    </label>
+                <div class="popup-btn">
+                    <Button type="primary" class="btn-blue" @click="addAdData">新增帳號</Button>
+                    <Button class="btn-blue_2nd" @click="addToggle">取消</Button>
                 </div>
-                <div class="input-info">
-                    <label for="">員工密碼：
-                        <Input type="password" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
-                    </label>
-                </div>
-                <div class="input-info">
-                    <label for="">員工姓名：
-                        <Input type="text" placeholder="請輸入姓名" clearable  style="width: 200px"/>
-                    </label>
-                </div>
-                <div class="input-info">
-                    <label for="">員工信箱：
-                        <Input type="email" placeholder="請輸入Email" clearable  style="width: 200px"/>
-                    </label>
-                </div>
-            </div>
-            <div class="input-switchs">
-                <label class="state" for="">帳號狀態：
-                    <Switch true-color="#13ce66" false-color="#E6E6E6" />
-                </label>
-            </div>
-            <div class="popup-btn">
-                <Button type="primary">新增帳號</Button>
-                <Button @click="addToggle">取消</Button>
             </div>
         </div>
-    </div>
+    </form>
 </template>
 
 <script>
@@ -154,31 +198,38 @@ export default {
             isShow_list: false,
             modal_loading: false,
             seenAdd:false, //新表格彈窗，綁新表單v-show、按鈕@click="seenAdd"
+            Ad_editForm:false, //編輯帳號彈窗
             size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
             columns: [
                 {
                     title: '員工編號',
-                    slot: 'staff_no',
+                    slot: 'emp_no',
                     align: 'center'
                 },
                 {
                     title: '員工帳號',
-                    slot: 'staff_number',
+                    slot: 'emp_id',
                     align: 'center'
                 },
                 {
                     title: '員工姓名',
-                    slot: 'staff_name',
+                    slot: 'emp_name',
                     align: 'center'
                 },
                 {
                     title: '員工信箱',
-                    slot: 'staff_email',
+                    slot: 'emp_email',
                     align: 'center'
                 },
                 {
                     title: '帳號狀態',
-                    slot: 'staff_state',
+                    slot: 'emp_status',
+                    width: 120,
+                    align: 'center'
+                },
+                {
+                    title: '編輯帳號',
+                    slot: 'emp_edit',
                     width: 120,
                     align: 'center'
                 },
@@ -189,31 +240,31 @@ export default {
                     align: 'center'
                 }
             ],
-            data: [
-                {
-                    staff_no: '001',
-                    staff_number: 'A12367',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com'
-                },
-                {
-                    staff_no: '002',
-                    staff_number: 'B12367',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com'
-                },
-                {
-                    staff_no: '003',
-                    staff_number: 'C12367',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com'
-                },
-                {
-                    staff_no: '004',
-                    staff_number: 'A12367',
-                    staff_name: '三個字',
-                    staff_email: 'abc@gmail.com'
-                }
+            Addata: [
+                // {
+                //     emp_no: '001',
+                //     emp_id: 'A12367',
+                //     emp_name: '三個字',
+                //     emp_email: 'abc@gmail.com'
+                // },
+                // {
+                //     emp_no: '002',
+                //     emp_id: 'B12367',
+                //     emp_name: '三個字',
+                //     emp_email: 'abc@gmail.com'
+                // },
+                // {
+                //     emp_no: '003',
+                //     emp_id: 'C12367',
+                //     emp_name: '三個字',
+                //     emp_email: 'abc@gmail.com'
+                // },
+                // {
+                //     emp_no: '004',
+                //     emp_id: 'A12367',
+                //     emp_name: '三個字',
+                //     emp_email: 'abc@gmail.com'
+                // }
             ]
         }
     },
@@ -233,24 +284,35 @@ export default {
         show (index) {
             this.$Modal.info({
                 title: 'User Info',
-                content: `Name：${this.data[index].name}<br>Age：${this.data[index].age}<br>Address：${this.data[index].address}`
+                content: `Name：${this.Addata[index].name}<br>Age：${this.Addata[index].age}<br>Address：${this.Addata[index].address}`
             })
         },
         remove (index) {
-            this.data.splice(index, 1);
+            this.Addata.splice(index, 1);
         },
-        addToggle(){ //新表單
+        //新增編輯表單
+        addToggle(){ 
             this.seenAdd = !this.seenAdd
+        },
+        //關閉新增編輯表單(取消)
+        cancel(){
+            this.modal_loading = true;
+
         },
         // 刪除帳號彈窗
         del(index){
-            this.data.splice(index, 1);
+            this.Addata.splice(index, 1);
             this.modal_loading = true;
             setTimeout(() => {
                 this.modal_loading = false;
                 this.isShow = false;
                 this.$Message.success('已刪除一筆管理者帳號');
             }, 200);
+        },
+        //編輯帳號彈窗
+        editToggle(){ 
+            this.Ad_editForm = !this.Ad_editForm;
+            // console.log(this);
         },
         // 變更帳號狀態彈窗
         list(index){
@@ -269,7 +331,53 @@ export default {
             this.isShow_list = !this.isShow_list;
             // console.log(this);
         },
-    }
+        // 測試本地資料庫 fetch
+        // getAdData_Fetch(){
+        //     fetch('http://localhost/phpLab/list_cgd103.php')
+        //     // fetch('http://localhost/phpLab/connectJet_speed.php')
+        //     // fetch('../../../../phpLab/connectJet_speed.php')
+        //     .then(res=>res.json())
+        //     .then(json=>{
+        //         this.Addata = json;
+        //     })
+		// },
+        // 測試本地資料庫 XML
+        getAdData_XML(){
+            let faqVue = this;
+			let xhr = new XMLHttpRequest();
+            // console.log(this);
+			xhr.onload = ()=>{
+                // console.log(this);
+                if(xhr.status == 200){
+                    // console.log(this);
+                    faqVue.Addata = JSON.parse(xhr.responseText);
+				}
+			}
+			xhr.open("get", "http://localhost/phpLab/getFaqData_XML.php", true);
+			// xhr.open("get", "http://localhost/phpLab/list_cgd103.php", true);
+			xhr.send(null);
+		},
+        // 測試新增資料
+        addAdData(){
+            let xhr = new XMLHttpRequest();
+            xhr.onload = function(){
+                let result = JSON.parse(xhr.responseText);
+                alert(result.msg);
+            }
+            xhr.open("post", "http://localhost/phpLab/faqInsert.php", true);
+            xhr.send(new FormData(document.getElementById("newForm")));
+        },
+        changeStatus(row){
+            featch()
+        }
+    },
+    created(){
+		// this.getAdData_Fetch();
+
+	},
+    mounted(){
+        this.getAdData_XML();
+    },
 }
 </script>
 
@@ -330,23 +438,31 @@ export default {
 /* -------------------新增帳號彈窗 ------------------------*/
 .popup{
     position: absolute;
-    top: 60px;
-    left: 300px;
-    margin: auto;
     z-index: 10;
-
-    width: 40%;
-    background-color: #4F6573;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: opacity .3s ease;
 }
 /* 上方區塊顏色 */
 .popup-head{
     background-color: #2D3740;
     height: 40px;
     color: #ccc;
-
     display: flex;
     justify-content: space-around;
     align-items: center;
+}
+.popup-content{
+    position: absolute;
+    top: 60px;
+    left: 300px;
+    margin: auto;
+    z-index: 10;
+    width: 40%;
+    background-color: #4F6573;
 }
 .input-txt{
     margin-top: 50px;
@@ -422,6 +538,62 @@ export default {
     }
     Button+Button{
         margin-left: 30px;
+    }
+}
+
+// ------------------- 編輯帳號彈窗 -------------------
+.popup-edit{
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: opacity .3s ease;
+    /* 上方區塊顏色 */
+    .popup-head{
+        background-color: #2D3740;
+        height: 40px;
+        color: #ccc;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .popup-content{
+        position: absolute;
+        top: 100px;
+        left: 300px;
+        margin: auto;
+        z-index: 10;
+        width: 40%;
+        background-color: #4F6573;
+    }
+    .input-txt{
+        margin-top: 50px;
+    }
+    .input-info{
+        margin-bottom: 40px;
+        padding-left: 85px;
+        color: #fff;
+    }
+    .input-switchs{
+        margin-bottom: 15px;
+        padding-left: 85px;
+        color: #fff;
+    }
+    .input-txt{
+        margin-bottom: 40px;
+    }
+    .popup-btn{
+        margin: 70px 90px 50px 0 ;
+        display: flex;
+        justify-content: right;
+
+    }
+
+    .popup-btn Button{
+        margin: 0 20px;
     }
 }
 </style>
