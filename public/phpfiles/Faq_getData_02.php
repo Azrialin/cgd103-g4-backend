@@ -8,7 +8,7 @@ try {
 	$faqs = $pdo->prepare($sql);
 	$faqs->execute();
 	$faqRows = $faqs->fetchAll(PDO::FETCH_ASSOC);
-	echo json_encode($faqRows);
+	echo json_encode($faqRows, JSON_NUMERIC_CHECK);
 
 } catch (PDOException $e) {
 	//echo "錯誤原因 : ", $e->getMessage(), "<br>";
