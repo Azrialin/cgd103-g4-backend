@@ -197,7 +197,7 @@
           </div>
           <div class="popup-btn">
             <button class="btn-blue_2nd" @click="addCancel">取消</button>
-            <div class="btn-blue" @click="addOk">確認</div>
+            <button class="btn-blue" @click="addOk">確認</button>
             <!-- 確認鍵功能待補，暫放toggle -->
           </div>
         </div>
