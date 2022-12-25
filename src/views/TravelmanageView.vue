@@ -463,7 +463,7 @@
             methods: {
                 getData2(){
                     // const join2URL = new URL(`${BASE_URL}/getTravelmanagechr.php`);
-                    const join2URL = new URL('http://localhost/CGD103_G4_back/public/phpfiles/getTravelmanagechr.php');
+                    const join2URL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanagechr.php');
                     fetch(join2URL)
                     .then((res)=>res.json())
                     .then((json2)=>{
