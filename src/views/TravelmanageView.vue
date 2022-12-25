@@ -462,7 +462,8 @@
             },
             methods: {
                 getData2(){
-                    const join2URL = new URL(`${BASE_URL}/getTravelmanagechr.php`);
+                    // const join2URL = new URL(`${BASE_URL}/getTravelmanagechr.php`);
+                    const join2URL = new URL('http://localhost/CGD103_G4_back/public/phpfiles/getTravelmanagechr.php');
                     fetch(join2URL)
                     .then((res)=>res.json())
                     .then((json2)=>{
@@ -482,7 +483,8 @@
                     })
                 },
                 getData(){
-                    const joinURL = new URL(`${BASE_URL}/getTravelmanage.php`);
+                    // const joinURL = new URL(`${BASE_URL}/getTravelmanage.php`);
+                    const joinURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanage.php');
                     fetch(joinURL)
                     .then((res)=>res.json())
                     .then((json)=>{
@@ -491,7 +493,8 @@
                     })
                 },
                 editData(){
-                    const addURL = new URL(`${BASE_URL}/updateTravelmanage.php`);
+                    // const addURL = new URL(`${BASE_URL}/updateTravelmanage.php`);
+                    const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelmanage.php');
                     fetch(addURL,{ method:'post',body: new URLSearchParams({
                     
                         group_id:this.databang.group_id,

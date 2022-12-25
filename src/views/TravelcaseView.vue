@@ -395,6 +395,7 @@
                 return this.value3;
             },
             getData(){
+                // const gege = new URL(`${BASE_URL}/getTravelcase.php`);
                 const gege = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelcase.php');
                 fetch(gege)
                 .then((res)=>res.json())
@@ -414,7 +415,8 @@
             addData(){
                 // this.value3 = this.valuex.split(':').pop().split('\\').pop();
                 // return this.value3;
-                const addURL = new URL(`${BASE_URL}/setTravelcase.php`);
+                // const addURL = new URL(`${BASE_URL}/setTravelcase.php`);
+                const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
                 fetch(addURL,{ method:'post',body: new URLSearchParams({
                    
                     package_status:this.selected,
@@ -434,7 +436,8 @@
                 })
             },
             editData(){
-                const addURL = new URL(`${BASE_URL}/updateTravelcase.php`);
+                // const addURL = new URL(`${BASE_URL}/updateTravelcase.php`);
+                const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelcase.php');
                 fetch(addURL,{ method:'post',body: new URLSearchParams({
                    
                     package_status:this.data.package_status,
