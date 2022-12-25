@@ -109,8 +109,9 @@ $desk: back;
 %btn-backStyle{
     width: min-content;
     white-space:nowrap;
+    height: 32px;
     // min-width: 80px;
-    @include btnPadding(4, 10);
+    @include btnPadding(4, 12);
     @include btnFont(500, 14){
         font-family: 'Noto Sans';
     }
