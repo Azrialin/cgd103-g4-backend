@@ -62,6 +62,7 @@
 </form>
 </template>
 <script>
+    import {BASE_URL} from '@/assets/js/common.js'
     export default {
         data () {
             return {
@@ -90,7 +91,7 @@
             //     })
             // },
             addData(){
-                const myURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelopen.php');
+                const myURL = new URL(`${BASE_URL}/setTravelopen.php`);
                 fetch(myURL,{method:'POST',body: new URLSearchParams({
                     package_no:this.packageno,
                     departure_date:this.departuredate,
