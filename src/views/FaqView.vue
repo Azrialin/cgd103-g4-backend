@@ -17,7 +17,7 @@
     15.分頁
     16.宣傳頁
     17.忘記密碼/重設密碼
-    18.
+    18.狀態變成沒綁到了?
     
     ?小抄
     摺疊快速鍵 Ctrl K 012345
@@ -31,7 +31,7 @@
 <!--todo  -->
 <!--//  -->
 
- <template>
+<template>
     <div class="FAQ">
 		<main>
 <!-- 按鈕 -->
@@ -576,8 +576,8 @@ export default {
         // },
 // ----- 撈資料 ------ fetch
         getFaqData_Fetch(){
-            // fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
-            fetch(`${BASE_URL}/Faq_getData.php`)
+            fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
+            // fetch(`${BASE_URL}/Faq_getData.php`)
             .then(res=>res.json())
             .then(json=>{
                 this.faqList = json;
@@ -691,10 +691,12 @@ export default {
         },
 // ----- 單筆狀態切換 ------
         changeStatus(row){
+            console.log(row.faq_status);
             row.faq_status
             ? this.$Message.info('狀態：已成功將該筆問題狀態變更為「顯示」')
             : this.$Message.info('狀態：已成功將該筆問題狀態變更為「隱藏」');
 
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_changeState.php",{
             fetch(`${BASE_URL}/Faq_changeState.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:row.faq_no,
@@ -714,6 +716,7 @@ export default {
 // ----- 多筆狀態切換 ------
         massChangeStatus(){
             let faqVue = this;
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_massChangeState.php",{
             fetch(`${BASE_URL}/Faq_massChangeState.php`,{
                 method:'POST', body:new URLSearchParams({
                 items: this.selectList,
@@ -736,6 +739,7 @@ export default {
                     this.alert_Loading = false;
                     this.show_statusCheck = false;
                     this.$Message.success(result.msg);
+                    this.selectList=[];
                 }, 600);
             })
         },
@@ -747,7 +751,7 @@ export default {
         },
 // ----- 單筆刪除資料 ------ fetch
         delFaqData(){
-            // console.log(this.selectList);
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_delete.php",{
             fetch(`${BASE_URL}/Faq_delete.php`,{
                 method:'POST', body:new URLSearchParams({
                 faq_no:this.deleteNo,
@@ -765,6 +769,7 @@ export default {
         },
 // ----- 刪除多筆資料 ------ fetch
         massDelete(){
+            // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_massDelete.php",{
             fetch(`${BASE_URL}/Faq_massDelete.php`,{
                 method:'POST', body:new URLSearchParams({
                 items: this.selectList,
