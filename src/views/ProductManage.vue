@@ -197,7 +197,7 @@
           </div>
           <div class="popup-btn">
             <button class="btn-blue_2nd" @click="addCancel">取消</button>
-            <div class="btn-blue" @click="addOk">確認</div>
+            <button class="btn-blue" @click="addOk">確認</button>
             <!-- 確認鍵功能待補，暫放toggle -->
           </div>
         </div>
@@ -343,6 +343,7 @@
 </template>
 
 <script>
+import {BASE_URL} from '@/assets/js/common.js';
 export default {
   name: "ProductManage",
   props: {},
@@ -645,7 +646,7 @@ export default {
       }
     },
     getData() {
-      fetch("http://localhost/g4-backend/public/phpfiles/getProducts.php")
+      fetch(`${BASE_URL}/getProducts.php`)
         .then((res) => res.json())
         .then((json) => {
           this.dataOn = json;
