@@ -343,6 +343,7 @@
 </template>
 
 <script>
+import {BASE_URL} from '@/assets/js/common.js';
 export default {
   name: "ProductManage",
   props: {},
@@ -645,7 +646,7 @@ export default {
       }
     },
     getData() {
-      fetch("http://localhost/g4-backend/public/phpfiles/getProducts.php")
+      fetch(`${BASE_URL}/getProducts.php`)
         .then((res) => res.json())
         .then((json) => {
           this.dataOn = json;
