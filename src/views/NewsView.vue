@@ -1,63 +1,4 @@
 <template>
-    <!----------------尚未完成---------------------------
-    🔹 新增消息 上架資料驗證  (表面) 因為是xhr 晚點在寫
-    🔹 編輯消息 上架資料驗證  (選取上架尚未轉換紅字)
-    🔹 上傳圖片的方法  (為了新增資料正常，先找幾張圖片新增到20.jpg)
-    🔹 php放置位置 功能寫完後放置
-    ( 🔹 各狀態資料筆數顯示於下方)
-    ( 🔹 順序顛倒)
-    ------------------------------------------------------->
-    <!------------------- 筆記
-    點擊結果為點擊的內容
-    1.按鈕click設定function，並帶參數 編輯 : (row.news_no)  | 刪除 (row)
-    2. data新增屬性值 activeIndex:null,
-    3-1 刪除函式:
-                remove (index) { //草稿 -刪除資料(目前僅畫面上顯示刪除)
-                this.dataDraft.splice(index, 1);
-                },
-    3-2 編輯函式: 
-                activeDraftData(){
-                return this.dataDraft.find(v=> v.news_no === this.activeIndex) ?? {}
-                },
-    --------------------->
-    <!-- 
-    1.移動專案到wwwroot、source tree更改(remove mark原本的，add引進新的((路徑)))
-    2.connect books新增一個專題版本，更改連動的資料庫(名稱、路徑) connectG4.php
-    3.wwwroot php新增list 小龜的跨域那一段
-    4.新增
-    // 測試本地資料庫 fetch
-            // getFaqData(){
-            //     fetch('http://localhost/list.php')
-            //     .then(res=>res.json())
-            //     .then(json=>{
-            //         this.faqList = json;
-            //     })
-            // },
-    5.調整資料結構與套件的資料顯示
-    -->
-    <!-- 
-    目的: 新增資料    
-    1. 新增資料function addFaqData 綁定按鈕
-            addFaqData(){
-                let xhr = new XMLHttpRequest();
-                xhr.onload = function(){
-                    let result = JSON.parse(xhr.responseText);
-                    alert(result.msg);
-                    // document.getElementById("btnReset").click();
-                    // $id("btnReset").click();
-                }
-                xhr.open("post", "http://localhost/CGD103_PHP_class/project_books_formData/faq_insert.php", true);
-                xhr.send(new FormData(document.getElementById("myForm")));
-            },
-    2. html Form夾要傳送的資料範圍
-    3.有兩個新增資料的方法 project_books_formData(HTML5) 1.js(prod_insert.html) 2.php(此次用的方法) prod_insert.php
-    4. 表單對應資料庫新增的欄位 方法有二 1.表單給name(要對照Php)  2.才俊fetch的方法(?)
-    5.
-     -->
-    <!-- 編輯資料 function -->
-    <!-- 上架草稿編輯同一個function -->
-     <!-- *上架時間 (困難點: MySQL 已經設定輸入內容必須是date，不能給null，嘗試給0000-00-00 失敗 | 使用if 無效 | 如果前段判斷不等於上架將他隱藏，資料庫那邊的資料顯示沒意義) -->
-    <!-- 解決上架時間問題，請看editNewsData function -->
     <div class="backstage-news" >
         <div class="backstage-content">
             <div class="btn-add">
@@ -192,8 +133,8 @@
             </div>
         </div>
     </div>
-    <!-- style="display:none" -->
-    <!--一張全新表單 -->
+
+    <!--全新表單 -->
     <keep-alive>
         <form method="post" id="addNewsForm" enctype="multipart/form-data">
             <div class="popup " v-show="seenNew" >
@@ -205,6 +146,7 @@
                     <div class="on-date">
                         <span class="date">發布時間</span>
                         <span class="date"></span>
+                        <input type="hidden" name="news_time" ><!-- 為了傳送資料，設立一個隱藏的input -->
                     </div>
                     <div class="last-edit-date">
                         <span class="date">最後更新</span>
@@ -264,8 +206,9 @@
                     <div class="input-pic">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                         <label class="test" for="">插入圖片：
-                            <input type="file">
+                            <input type="file" name="news_img">
                         </label>
+                        <img src="" alt="" id="showImg" style="width:80px;height:80px">
                     </div>
                     <div class="input-pic-des">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
@@ -276,14 +219,13 @@
                     <div class="popup-btn">
                         <button type="button" class="btn-blue_2nd" @click="newToggle">取消</button>
                         <button type="button" class="btn-blue" @click="addNewsData">確認</button>
-                        <!-- 確認鍵功能待補，暫放toggle -->
                     </div>
                 </div>
             </div>
         </form>
     </keep-alive>
 
-    <!--串聯資料用表單(上架)可繼續上架、下架，無草稿-->
+    <!--表單-草稿  -->
     <div class="popup on" v-show="seeOnData">
         <div class="popup-head font-20">
             <div class="news-no">
@@ -302,7 +244,7 @@
         <div class="popup-content font-18">
             <div class="popup-data">
                 <label for="">狀態
-                    <select name="" id="" v-model="editingNews.news_status" >
+                    <select class="draftStatus" name="" id="" v-model="editingNews.news_status" >
                         <option value="上架" >上架</option>
                         <option value="下架" >下架</option>
                     </select>
@@ -368,7 +310,7 @@
         </div>
     </div>
 
-    <!--串聯資料用表單(草稿)可上架無下架 -->
+    <!--表單-下架 -->
     <keep-alive>
         <div class="popup used" v-show="seeDraftData">
             <div class="popup-head font-20">
@@ -388,7 +330,7 @@
             <div class="popup-content font-18">
                 <div class="popup-data">
                     <label for="">狀態
-                        <select name="" id="" v-model="editingNews.news_status">
+                        <select name="" id="" v-model="editingNews.news_status" @change="changeStatus">
                             <option value="草稿">草稿</option>
                             <option value="上架">上架</option>
                         </select>
@@ -537,9 +479,9 @@
     </div>
 
 </template>
-<!-- https://run.iviewui.com/4CEEQf1j -->
+
 <script>
-import {BASE_URL} from '@/assets/js/common.js'
+    import {BASE_URL} from '@/assets/js/common.js'
 
     export default {
         data () {
@@ -558,13 +500,13 @@ import {BASE_URL} from '@/assets/js/common.js'
                 width: 100,
                 align: 'center'
             },
-            {
-                title: '上架日期',
-                slot: 'news_time',
-                width: 110,
-                align: 'center',
-                "sortable": true // 排序
-            },
+            // {
+            //     title: '上架日期',
+            //     slot: 'news_time',
+            //     width: 110,
+            //     align: 'center',
+            //     "sortable": true // 排序
+            // },
             {
                 title: '修改日期',
                 slot: 'news_last_edit',
@@ -621,35 +563,18 @@ import {BASE_URL} from '@/assets/js/common.js'
             }
                 ],
                 news:[],
-                dataOn: [
-                    // {
-                    //     news_no: '2022001',
-                    //     news_time: '2022/12/01',
-                    //     news_last_edit:'2022/12/01',
-                    //     news_type: '重要',
-                    //     news_title: '「JS 春季行程方案」報名開始',
-                    //     news_text_start:'我們已經開始接受 2022 年 11 月至 2022 年 12 月發車的「JS 春季行程方案」...',
-                    //     news_text_middle:'此次行程與活動請見網頁詳細介紹',
-                    //     news_text_trans:'早鳥訂購優惠4人行響87折優惠。',
-                    //     news_text_end:'還在猶豫什麼呢?',
-                    //     news_img:'1.jpg',
-                    //     news_img_des:'門司港夜景',
-                    //     news_status:'上架',
-                    // }
-                ],
+                dataOn: [],
                 dataDraft: [],
                 dataOff: [],
                 editIndex: -1,  // 当前聚焦的输入框的行数
                 activeIndex:null,
-                // news_last_edit:''
                 editingNews:[]
                 }
             },
-            methods: {
-            // 測試本地資料庫 fetch
+        methods: {  // 測試本地資料庫 fetch
             getNews(){
-                // fetch('http://localhost/list.php') //本地端
-                fetch(`${BASE_URL}/list.php`)
+                // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/list.php') //本地端
+                fetch(`${BASE_URL}/list.php`) //線上版
                 .then(res=>res.json())
                 .then(json=>{
                     // 抓回所有資料
@@ -668,31 +593,27 @@ import {BASE_URL} from '@/assets/js/common.js'
                     });
                 })
             },
-            // getNews(){
-			// //取得商品資料 XML方法
-			//     let xhr = new XMLHttpRequest();
+            // getNews(){   //取得商品資料 XML方法
+            //     let xhr = new XMLHttpRequest();
             //     let data = this;
-			//     xhr.onload = function(){
-			// 	    if(xhr.status == 200){ //OK
-			// 		    data.dataOn = JSON.parse(xhr.responseText);
-			// 	    }
-			//     }
-			//     xhr.open("get",'http://localhost/list.php', true);
-			//     xhr.send(null);
-		    // },
-            // 新增資料 xhr
+            //     xhr.onload = function(){
+            // 	    if(xhr.status == 200){ //OK
+            // 		    data.dataOn = JSON.parse(xhr.responseText);
+            // 	    }
+            //     }
+            //     xhr.open("get",'http://localhost/list.php', true);
+            //     xhr.send(null);
+            // },
+        // 新增資料 xhr
             addNewsData(){
                 let xhr = new XMLHttpRequest();
                 xhr.onload = function(){
                 let result = JSON.parse(xhr.responseText);
                 alert(result.msg);
-                // document.getElementById("btnReset").click();
-                // $id("btnReset").click();
                 }
-                // xhr.open("post", "http://localhost/news_insert.php", true); //本地端
-                xhr.open("post", `${BASE_URL}/news_insert.php`, true); 
-                // 如果是上架，要抓取現在的時間
-                
+                // xhr.open("post", "http://localhost/cgd103-g4-backend/public/phpfiles/news_insert.php", true); //專案裡的檔案 
+                xhr.open("post", `${BASE_URL}/news_insert.php`, true); //線上版 
+
                 xhr.send(new FormData(document.getElementById("addNewsForm")));
 
                 // 確認談窗
@@ -739,8 +660,8 @@ import {BASE_URL} from '@/assets/js/common.js'
                         return;
                     }
                 };
-                // fetch('http://localhost/news_update.php',{ //本地端
-                fetch(`${BASE_URL}/news_update.php`,{
+                // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/news_update.php',{ //本地端
+                fetch(`${BASE_URL}/news_update.php`,{ //線上版
                 method:'POST', body:new URLSearchParams({
 
                 news_no:this.editingNews.news_no, // 為了比對
@@ -790,8 +711,8 @@ import {BASE_URL} from '@/assets/js/common.js'
                 // console.log(deleteNo);
 
                 // console.log(deleteIndex);
-                // fetch('http://localhost/news_delete.php',{ //本地端
-                fetch(`${BASE_URL}/news_delete.php`,{
+                // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/news_delete.php',{ //本地端
+                fetch(`${BASE_URL}/news_delete.php`,{ //線上版
                     method:'POST', body:new URLSearchParams({
                     news_no:deleteIndex,
                     
@@ -839,6 +760,17 @@ import {BASE_URL} from '@/assets/js/common.js'
             },
             okToggle () { //確認彈窗
                 this.seeCheck = !this.seeCheck
+            },
+            changeStatus(){ //監聽草稿如果變成上架，要顯示提示字樣 //好像失敗喔?
+                var selected = document.querySelector('.draftStatus').value;
+
+                if( selected =="上架"){
+                    document.querySelector('.type_on').style.display = 'inline-block';
+                    }
+
+            },
+            showImg(){ //表單預覽圖片 id="showImg"
+
             }
         },
         computed:{
