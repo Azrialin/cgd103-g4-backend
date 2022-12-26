@@ -93,6 +93,12 @@ const routes = [
 	component: () => import('../views/ContactUS.vue'),
 	meta: { title: '意見表管理' }
 },
+{
+	path: '/Login_back',
+	name: 'Login_back',
+	component: () => import('../views/Login_backView.vue'),
+	meta: { title: '管理者登入' }
+},
 ]
 
 // router 跳轉畫面後，維持置頂
