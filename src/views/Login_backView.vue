@@ -9,17 +9,67 @@
             <h2>後台登入</h2>
             <div class="info">
                 <h3>帳號：</h3>
-                <Input type="text" name="login_id" placeholder="半形英數共10碼" clearable/>
+                <Input type="text" name="emp_id" v-model="emp_id" placeholder="半形英數共10碼" clearable/>
             </div>
             <div class="info">
                 <h3>密碼：</h3>
-                <Input type="password" name="login_psw" placeholder="半形英數共10碼" clearable/>
+                <Input type="password" name="emp_psw" v-model="emp_psw" placeholder="半形英數共10碼" clearable/>
             </div>
-            <Button type="primary">登入</Button>
+            <Button type="primary" @click="members">登入</Button>
         </form>
     </div>
 </template>
 <script>
+    import {BASE_URL} from "@/assets/js/common.js"
+    export default {
+            name: 'login_back',
+            
+            data() {
+                return {
+                    emp_id: "",
+                    emp_psw: "",
+                    errorFlag: false,
+                    errorMsg: "",
+                };
+            },
+            methods: {
+                members() {
+                    let thisvue = this;
+                    if (thisvue.emp_id == "" || thisvue.emp_psw == ""){
+                        // thisvue.errorMsg = "請輸入帳號和密碼";
+                        // thisvue.errorFlag = true;
+                    }else {
+                        fetch("http://localhost/cgd103-g4-backend/public/phpfiles/login_back.php",
+                        // fetch(`${BASE_URL}/login_back.php`,
+                            {
+                                method: "post",
+                                credentials: "include",
+                                body: new URLSearchParams({
+                                    emp_id: this.emp_id,
+                                    emp_psw: this.emp_psw,
+                                }),
+                            }
+                        )
+                        .then((res) => res.json())
+                        .then((json) => {
+                            if (json.code == 1) {
+                                thisvue.$router.push("/");
+                                // sessionStorage.setItem("mem_no", json.mem_no);
+                                this.$store.dispatch("setMember", json.emp_no);
+                                // this.$store.state.mem_no
+                                alert("登入成功");
+                            }
+                            else if (json.code == 0) {
+                                alert("帳號或密碼錯誤");
+                            }
+
+                        });
+                    }
+
+                },
+            },
+    };
+
 </script>
 <style scoped lang="scss">
 @import "../assets//Scss/components/btn.scss";

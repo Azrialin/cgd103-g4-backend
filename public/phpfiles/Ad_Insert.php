@@ -6,7 +6,9 @@ header("Content-Type:application/json;charset=utf-8");
 try{
 	require_once("./connect_cgd103g4.php");
 	// sql 指令
-	// 跟資料庫表格的欄位數目必須相
+	// 跟資料庫表格的欄位數目必須相同
+	$id = $_POST['emp_id'];
+	$sql = "select * from `emp` where emp_id = :emp_id";
 	$sql = "insert into emp values (null, :emp_id, :emp_psw, :emp_name, :emp_email, :emp_status)";
 	// 編譯, 執行
 	$faq = $pdo->prepare($sql);
