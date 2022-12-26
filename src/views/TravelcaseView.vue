@@ -132,7 +132,7 @@
                     </Upload> -->
                 </div>
                 <div class="delcan">
-                    <div class="shure">取消</div>
+                    <div class="shure" @click="addnew=false">取消</div>
                     <div class="shure" @click="onChange();addData()">確認</div>
                 </div>
             </div>
@@ -395,9 +395,9 @@
                 return this.value3;
             },
             getData(){
-                // const gege = new URL(`${BASE_URL}/getTravelcase.php`);
                 // const gege = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelcase.php');
                 fetch(`${BASE_URL}/getTravelcase.php`)
+                // fetch(gege)
                 .then((res)=>res.json())
                 .then((json)=>{
                     this.data = json;
@@ -415,9 +415,9 @@
             addData(){
                 // this.value3 = this.valuex.split(':').pop().split('\\').pop();
                 // return this.value3;
-                // const addURL = new URL(`${BASE_URL}/setTravelcase.php`);
                 // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
                 fetch(`${BASE_URL}/setTravelcase.php`,{ method:'post',body: new URLSearchParams({
+                // fetch(addURL,{ method:'post',body: new URLSearchParams({
                    
                     package_status:this.selected,
                     package_name:this.selected2,
@@ -433,12 +433,14 @@
                 .then((rt)=>rt.json())
                 .then((result)=>{
                     console.log(result);
+                    this.addnew=false
+                    location.reload()
                 })
             },
             editData(){
-                // const addURL = new URL(`${BASE_URL}/updateTravelcase.php`);
                 // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelcase.php');
                 fetch(`${BASE_URL}/updateTravelcase.php`,{ method:'post',body: new URLSearchParams({
+                // fetch(addURL,{ method:'post',body: new URLSearchParams({
                    
                     package_status:this.data.package_status,
                     package_name:this.data.package_name,

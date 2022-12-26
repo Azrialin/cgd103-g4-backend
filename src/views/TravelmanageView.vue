@@ -58,7 +58,7 @@
                             <!-- 方案名稱 -->
                             <template #news_no="{ row, index }">
                                 <Input type="text" v-model="editnews_no" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_no }}</span>
+                                <span v-else>{{ row.package_name }}</span>
                             </template>
                             <!-- 下訂日期 -->
                             <template #news_time="{ row, index }">
@@ -68,7 +68,7 @@
                             <!-- 訂單編號 -->
                             <template #news_session="{ row, index }">
                                 <Input type="text" v-model="editIndex_session" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_no }}</span>
+                                <span v-else>{{ row.package_order_no }}</span>
                             </template>
                             <!-- 會員編號 -->
                             <template #news_class="{ row, index }">
@@ -88,7 +88,7 @@
                             <!-- 訂單金額 -->
                             <template #news_price="{ row, index }">
                                 <Input type="text" v-model="editnews_price" v-if="editIndex === index" />
-                                <span v-else>{{ row.package_price }}</span>
+                                <span v-else>{{ row.package_total }}</span>
                             </template>
                             <!-- 訂單數量 -->
                             <template #news_number="{ row, index }">
@@ -462,9 +462,9 @@
             },
             methods: {
                 getData2(){
-                    // const join2URL = new URL(`${BASE_URL}/getTravelmanagechr.php`);
                     // const join2URL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanagechr.php');
                     fetch(`${BASE_URL}/getTravelmanagechr.php`)
+                    // fetch(join2URL)
                     .then((res)=>res.json())
                     .then((json2)=>{
                         this.databang = json2
@@ -483,9 +483,9 @@
                     })
                 },
                 getData(){
-                    // const joinURL = new URL(`${BASE_URL}/getTravelmanage.php`);
                     // const joinURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanage.php');
                     fetch(`${BASE_URL}/getTravelmanage.php`)
+                    // fetch(joinURL)
                     .then((res)=>res.json())
                     .then((json)=>{
                         this.data = json
@@ -493,9 +493,9 @@
                     })
                 },
                 editData(){
-                    // const addURL = new URL(`${BASE_URL}/updateTravelmanage.php`);
                     // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelmanage.php');
                     fetch(`${BASE_URL}/updateTravelmanage.php`,{ method:'post',body: new URLSearchParams({
+                    // fetch(addURL,{ method:'post',body: new URLSearchParams({
                     
                         group_id:this.databang.group_id,
                         departure_date:this.databang.departure_date,
@@ -508,7 +508,10 @@
                     .then((rb)=>rb.json())
                     .then((resultb)=>{
                         console.log(resultb);
+                        alert("修改成功");
+                        
                         this.seeOnData = false;
+                        location.reload()
                     })
                 },
                 editOnData(no) {

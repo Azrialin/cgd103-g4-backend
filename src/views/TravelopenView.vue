@@ -78,22 +78,11 @@
                 closingdate:"",
             }
         },
-        created(){
-            // this.seeData();
-        },
         methods:{
-            // seeData(){
-            //     const joinURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelopen.php');
-            //     fetch(joinURL)
-            //     .then((res)=>res.json())
-            //     .then((json)=>{
-            //         this.data = json
-            //     })
-            // },
             addData(){
-                // const myURL = new URL(`${BASE_URL}/setTravelopen.php`);
                 // const myURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelopen.php');
                 fetch(`${BASE_URL}/setTravelopen.php`,{method:'POST',body: new URLSearchParams({
+                // fetch(myURL,{method:'POST',body: new URLSearchParams({
                     package_no:this.packageno,
                     departure_date:this.departuredate,
                     package_price:this.packageprice,
@@ -104,6 +93,8 @@
                 .then((res)=>res.json())
                 .then((result)=>{
                     console.log(result);
+                    alert("成功開團")
+                    this.$router.push("/");
                 })
             },
         },
