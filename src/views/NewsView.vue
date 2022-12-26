@@ -205,10 +205,11 @@
                     </div>
                     <div class="input-pic">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
-                        <label class="test" for="">插入圖片：
+                        <label class="test" for="">插入圖片(必填)：
                             <input type="file" name="news_img">
                         </label>
-                        <img src="" alt="" id="showImg" style="width:80px;height:80px">
+                        <!-- <img src="" alt="" id="showImg" style="width:80px;height:80px">  -->
+                        <!-- 圖片預覽 -->
                     </div>
                     <div class="input-pic-des">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
