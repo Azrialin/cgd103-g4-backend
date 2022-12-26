@@ -6,8 +6,9 @@
                 @click="addToggle">新增帳號</Button>
             </div>
         </div>
+        <!------- 列表內容 ------->
         <div class="administrator-manager">
-            <Table stripe border :columns="columns" :data="Addata">
+            <Table stripe border :columns="columns" :data="AdList">
                 <!-- 員工編號 -->
                 <template #emp_no="{ row, index }">
                     <Input type="text" v-if="editIndex === index" />
@@ -135,9 +136,9 @@
         </div>
     </div>
     <!-- <Page :total="40" size="small" /> -->
-
     <!-- style="display:none" -->
-    <!--新增表單 -->
+
+    <!------ 新增表單 ------>
     <form id="newForm" method="post" enctype="multipart/form-data">
         <div class="popup " v-show="seenAdd" >
             <div class="popup-content font-18">
@@ -145,34 +146,49 @@
                 <div class="input-txt">
                     <div class="input-info">
                         <label for="">員工編號：
-                            <Input type="text" placeholder="" clearable style="width: 200px" />
+                            <Input type="text" placeholder="新增後產生"
+                            disabled="disabled"
+                            clearable style="width: 200px" />
                         </label>
                     </div>
                     <div class="input-info">
                         <label for="">員工帳號：
-                            <Input type="text" name="emp_id" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
+                            <Input type="text" name="emp_id"  id="newForm_id" v-model="newForm_id" 
+                            maxlength="10"
+                            placeholder="半形英數共10碼"
+                            style="width: 200px"/>
                         </label>
                     </div>
                     <div class="input-info">
                         <label for="">員工密碼：
-                            <Input type="password" name="emp_psw" placeholder="半形英數共10碼" clearable  style="width: 200px"/>
+                            <Input type="password" name="emp_psw" id="newForm_psw" v-model="newForm_psw" 
+                            maxlength="10"
+                            placeholder="半形英數共10碼"  style="width: 200px"/>
                         </label>
                     </div>
                     <div class="input-info">
                         <label for="">員工姓名：
-                            <Input type="text" name="emp_name" placeholder="請輸入姓名" clearable  style="width: 200px"/>
+                            <Input type="text" name="emp_name" id="newForm_name" v-model="newForm_name" 
+                            maxlength="5"
+                            placeholder="請輸入姓名(最多五個字)" clearable  style="width: 200px"/>
                         </label>
                     </div>
                     <div class="input-info">
                         <label for="">員工信箱：
-                            <Input type="email"  name="emp_email" placeholder="請輸入Email" clearable  style="width: 200px"/>
+                            <Input type="email"  name="emp_email" id="newForm_email" v-model="newForm_email" 
+                            maxlength="100"
+                            placeholder="請輸入Email" 
+                            required
+                            style="width: 200px"/>
                         </label>
                     </div>
                 </div>
                 <div class="input-switchs">
                     <label class="state" for="">帳號狀態：
-                        <Switch true-color="#13ce66" false-color="#E6E6E6" />
-                        <input type="text" name="emp_status">
+                        <Switch true-color="#13ce66" false-color="#E6E6E6" v-model="newForm_status"
+                                :true-value = 1
+                                :false-value = 0 />
+                        <!-- <input type="text" name="emp_status"> -->
                     </label>
                 </div>
                 <div class="popup-btn">
@@ -185,6 +201,7 @@
 </template>
 
 <script>
+import {BASE_URL} from "@/assets/js/common.js"
 import { Switch } from 'view-ui-plus';
 
 export default {
@@ -240,7 +257,7 @@ export default {
                     align: 'center'
                 }
             ],
-            Addata: [
+            AdList: [
                 // {
                 //     emp_no: '001',
                 //     emp_id: 'A12367',
@@ -265,7 +282,24 @@ export default {
                 //     emp_name: '三個字',
                 //     emp_email: 'abc@gmail.com'
                 // }
-            ]
+            ],
+            formValidate: {
+                    mail: '',
+            },
+            ruleValidate: {
+                mail: [
+                    { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
+                    { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+                ],
+            },
+// ------- 儲存資料 ---------
+            // AdList: [],
+// ------- 編輯帳號 ---------
+            newForm_id: '',
+            newForm_psw: '',
+            newForm_name: '',
+            newForm_email: '',
+            newForm_status: 1,
         }
     },
     computed: {
@@ -284,24 +318,94 @@ export default {
         show (index) {
             this.$Modal.info({
                 title: 'User Info',
-                content: `Name：${this.Addata[index].name}<br>Age：${this.Addata[index].age}<br>Address：${this.Addata[index].address}`
+                content: `Name：${this.AdList[index].name}<br>Age：${this.AdList[index].age}<br>Address：${this.AdList[index].address}`
             })
         },
         remove (index) {
-            this.Addata.splice(index, 1);
+            this.AdList.splice(index, 1);
         },
-        //新增編輯表單
+// ------- 新增編輯表單 -------
         addToggle(){ 
             this.seenAdd = !this.seenAdd
         },
-        //關閉新增編輯表單(取消)
+// ----- 新增帳號資料 ------ fetch
+        addAdData(){
+            let newForm_id = document.getElementById("newForm_id");
+            let newForm_psw = document.getElementById("newForm_psw");
+            let newForm_name = document.getElementById("newForm_name");
+            let newForm_email = document.getElementById("newForm_email");
+            // let newForm_status = document.getElementById("newForm_status");
+            
+            if(this.newForm_id == '' || this.newForm_id == undefined || this.newForm_id == null){
+                this.$Message.warning('請填寫帳號');
+                newForm_id.classList.add('error');
+                return;
+            }else if(this.newForm_psw == '' || this.newForm_psw == undefined || this.newForm_psw == null){
+                this.$Message.warning('請填寫密碼');
+                newForm_psw.classList.add('error');
+                return;
+            }
+            else if(this.newForm_name == '' || this.newForm_name == undefined || this.newForm_name == null){
+                this.$Message.warning('請填寫姓名');
+                newForm_name.classList.add('error');
+                return;
+            }
+            else if(this.newForm_email == '' || this.newForm_email == undefined || this.newForm_email == null){
+                this.$Message.warning('請填寫Email');
+                newForm_email.classList.add('error');
+                return;
+            }
+            else if(this.newForm_email.indexOf("@") === -1){
+                this.$Message.warning('Email格式錯誤');
+                newForm_email.classList.add('error');
+                return;
+            }
+
+            // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_Insert.php",{
+            fetch(`${BASE_URL}/Ad_insert.php`,{
+                method:'POST', body:new URLSearchParams({
+                emp_id:this.newForm_id,
+                emp_psw:this.newForm_psw,
+                emp_name:this.newForm_name,
+                emp_email:this.newForm_email,
+                emp_status:this.newForm_status,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                this.alert_Loading = true;
+                if(result.msg == "新增成功"){
+                    setTimeout(() => {
+                        this.$Notice.success({
+                            // title: "新增成功",
+                            desc: result.msg,
+                        });
+                        this.alert_Loading = false;
+                        this.show_NewForm = false;
+                    }, 600);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }else{
+                    setTimeout(() => {
+                        this.$Notice.error({
+                            title: "新增失敗",
+                            desc: result.msg,
+                            duration: 0 // 彈窗不消失
+                        });
+                        this.alert_Loading = false;
+                        this.show_NewForm = false;
+                    }, 600);
+                }
+            })
+        },
+// ------- 關閉新增編輯表單(取消) -------
         cancel(){
             this.modal_loading = true;
 
         },
-        // 刪除帳號彈窗
+// ------ 刪除帳號彈窗 -------
         del(index){
-            this.Addata.splice(index, 1);
+            this.AdList.splice(index, 1);
             this.modal_loading = true;
             setTimeout(() => {
                 this.modal_loading = false;
@@ -309,12 +413,12 @@ export default {
                 this.$Message.success('已刪除一筆管理者帳號');
             }, 200);
         },
-        //編輯帳號彈窗
+// ------- 編輯帳號彈窗 -------
         editToggle(){ 
             this.Ad_editForm = !this.Ad_editForm;
             // console.log(this);
         },
-        // 變更帳號狀態彈窗
+// ------- 變更帳號狀態彈窗 -------
         list(index){
             this.modal_loading = true;
             setTimeout(() => {
@@ -331,6 +435,15 @@ export default {
             this.isShow_list = !this.isShow_list;
             // console.log(this);
         },
+// ------- 抓後端資料 --------
+        getFaqData_Fetch(){
+            // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/Ad_getData.php')
+            fetch(`${BASE_URL}/Ad_getData.php`)
+            .then(res=>res.json())
+            .then(json=>{
+                this.AdList = json;
+            })
+        },
         // 測試本地資料庫 fetch
         // getAdData_Fetch(){
         //     fetch('http://localhost/phpLab/list_cgd103.php')
@@ -342,41 +455,43 @@ export default {
         //     })
 		// },
         // 測試本地資料庫 XML
-        getAdData_XML(){
-            let faqVue = this;
-			let xhr = new XMLHttpRequest();
-            // console.log(this);
-			xhr.onload = ()=>{
-                // console.log(this);
-                if(xhr.status == 200){
-                    // console.log(this);
-                    faqVue.Addata = JSON.parse(xhr.responseText);
-				}
-			}
-			xhr.open("get", "http://localhost/phpLab/getFaqData_XML.php", true);
-			// xhr.open("get", "http://localhost/phpLab/list_cgd103.php", true);
-			xhr.send(null);
-		},
+        // getAdData_XML(){
+        //     let faqVue = this;
+		// 	let xhr = new XMLHttpRequest();
+        //     // console.log(this);
+		// 	xhr.onload = ()=>{
+        //         // console.log(this);
+        //         if(xhr.status == 200){
+        //             // console.log(this);
+        //             faqVue.Addata = JSON.parse(xhr.responseText);
+		// 		}
+		// 	}
+		// 	xhr.open("get", "http://localhost/phpLab/getFaqData_XML.php", true);
+		// 	// xhr.open("get", "http://localhost/phpLab/list_cgd103.php", true);
+		// 	xhr.send(null);
+		// },
         // 測試新增資料
-        addAdData(){
-            let xhr = new XMLHttpRequest();
-            xhr.onload = function(){
-                let result = JSON.parse(xhr.responseText);
-                alert(result.msg);
-            }
-            xhr.open("post", "http://localhost/phpLab/faqInsert.php", true);
-            xhr.send(new FormData(document.getElementById("newForm")));
-        },
-        changeStatus(row){
-            featch()
-        }
+        // addAdData(){
+        //     let xhr = new XMLHttpRequest();
+        //     xhr.onload = function(){
+        //         let result = JSON.parse(xhr.responseText);
+        //         alert(result.msg);
+        //     }
+        //     xhr.open("post", "http://localhost/phpLab/faqInsert.php", true);
+        //     xhr.send(new FormData(document.getElementById("newForm")));
+        // },
+        // changeStatus(row){
+        //     featch()
+        // }
+
     },
     created(){
+        this.getFaqData_Fetch();
 		// this.getAdData_Fetch();
 
 	},
     mounted(){
-        this.getAdData_XML();
+        // this.getAdData_XML();
     },
 }
 </script>
@@ -466,17 +581,23 @@ export default {
 }
 .input-txt{
     margin-top: 50px;
+    margin-bottom: 40px;
 }
+
 .input-info{
     margin-bottom: 40px;
     padding-left: 85px;
+    &:deep(.ivu-input[disabled]){
+        background-color: rgb(84, 84, 84);
+        color: #fff
+    }
+    // &:deep(.ivu-input){
+    //     color: red;
+    // }
 }
 .input-switchs{
     margin-bottom: 15px;
     padding-left: 85px;
-}
-.input-txt{
-    margin-bottom: 40px;
 }
 .popup-btn{
     margin: 70px 90px 50px 0 ;
@@ -484,10 +605,10 @@ export default {
     justify-content: right;
 
 }
-
 .popup-btn Button{
     margin: 0 20px;
 }
+
 
 /* 彈窗字顏色 */
 .popup label{
