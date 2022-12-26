@@ -463,8 +463,8 @@
             methods: {
                 getData2(){
                     // const join2URL = new URL(`${BASE_URL}/getTravelmanagechr.php`);
-                    const join2URL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanagechr.php');
-                    fetch(join2URL)
+                    // const join2URL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanagechr.php');
+                    fetch(`${BASE_URL}/getTravelmanagechr.php`)
                     .then((res)=>res.json())
                     .then((json2)=>{
                         this.databang = json2
@@ -484,8 +484,8 @@
                 },
                 getData(){
                     // const joinURL = new URL(`${BASE_URL}/getTravelmanage.php`);
-                    const joinURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanage.php');
-                    fetch(joinURL)
+                    // const joinURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelmanage.php');
+                    fetch(`${BASE_URL}/getTravelmanage.php`)
                     .then((res)=>res.json())
                     .then((json)=>{
                         this.data = json
@@ -494,8 +494,8 @@
                 },
                 editData(){
                     // const addURL = new URL(`${BASE_URL}/updateTravelmanage.php`);
-                    const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelmanage.php');
-                    fetch(addURL,{ method:'post',body: new URLSearchParams({
+                    // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelmanage.php');
+                    fetch(`${BASE_URL}/updateTravelmanage.php`,{ method:'post',body: new URLSearchParams({
                     
                         group_id:this.databang.group_id,
                         departure_date:this.databang.departure_date,
