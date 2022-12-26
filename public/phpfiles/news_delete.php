@@ -4,8 +4,7 @@ header('Access-Control-Allow-Origin:*');
 header("Content-Type:application/json;charset=utf-8");
 
 try{
-	// require_once("connect_cgd103g4.php");本地端
-	require_once("./connect_cgd103g4.php");
+	require_once("connect_cgd103g4.php");
 	// require_once("connectG4.php");
 	// sql 指令
     $sql = "delete from news where news_no = :news_no;";
