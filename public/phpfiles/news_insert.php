@@ -4,7 +4,8 @@ header("Content-Type:application/json;charset=utf-8");
 
 
 // const MY_DIR = "cgd103-g4-backend/public/img/News"; //路徑  
-const MY_DIR = "../img/News"; //路徑  //專案裡
+// const MY_DIR = "../img/News"; //路徑  //專案裡
+const MY_DIR = "../../front/img/News"; //路徑  //for打包後的環境
 
 
 
