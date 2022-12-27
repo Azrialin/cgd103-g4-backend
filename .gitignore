@@ -3,8 +3,9 @@ node_modules
 /dist
 
 #php
-#phpfiles
+# phpfiles
 connect_cgd103g4.php
+
 /public/php
 
 # local env files

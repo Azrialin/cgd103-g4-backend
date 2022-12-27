@@ -8,42 +8,42 @@
         <!-- 商品編號 -->
         <template #product_no="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
-          <span v-else>{{ row.product_no }}</span>
+          <span v-else>{{ row.prod_id }}</span>
         </template>
         <!-- 商品圖片 -->
-        <template #product_pic="{ row, index }">
+        <!-- <template #product_pic="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
-          <span v-else>{{ row.product_pic }}</span>
-        </template>
+          <span v-else>{{ row.prod_pic_main }}</span>
+        </template> -->
         <!-- 商品名稱 -->
         <template #product_name="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
-          <span v-else>{{ row.product_name }}</span>
+          <span v-else>{{ row.prod_name }}</span>
         </template>
         <!-- 主類別 -->
         <template #product_series="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
-          <span v-else>{{ row.product_series }}</span>
+          <span v-else>{{ row.prod_series_idx }}</span>
         </template>
         <!-- 子類別 -->
         <template #product_type="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
-          <span v-else>{{ row.product_type }}</span>
+          <span v-else>{{ row.prod_type_id }}</span>
         </template>
         <!-- 商品價格 -->
         <template #product_price="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
-          <span v-else>{{ row.product_price }}</span>
+          <span v-else>{{ row.prod_price }}</span>
         </template>
         <!-- 商品狀態 -->
         <template #product_status="{ row, index }">
           <Input type="text" v-if="editIndex === index" />
-          <span v-else>{{ row.product_status }}</span>
+          <span v-else>{{ row.prod_status }}</span>
         </template>
         <!-- 按鈕 -->
-        <template #product_action="{ row }">
+        <template #product_action="{ index }">
           <div class="btn-box">
-            <button class="btn-success" @click="editOnData(row.product_no)">
+            <button class="btn-success" @click="editOnData(index)">
               編輯
             </button>
           </div>
@@ -54,125 +54,158 @@
     <!-- style="display:none" -->
     <!--新增商品 -->
     <keep-alive>
-      <div class="popup" v-show="seenNew">
-        <div class="popup-head font-20">商品資訊</div>
-        <div class="popup-content font-18">
-          <div class="input-txt">
-            <div class="input-title">
-              <label for=""
-                >商品編號：
-                <Input
-                  placeholder="預設"
-                  clearable
-                  style="width: 300px"
-                  disabled
-                />
-              </label>
+      
+        <div class="popup" v-show="seenNew" :model="addItem">
+          <div class="popup-head font-20">商品資訊</div>
+          <div class="popup-content font-18">
+            <div class="input-txt">
+              <div class="input-title">
+                <label for=""
+                  >商品編號：
+                  <Input
+                    placeholder="預設"
+                    clearable
+                    style="width: 300px"
+                    disabled
+                    v-model="addItem.prod_id"
+                  />
+                </label>
+              </div>
+              <div class="input-title">
+                <label for=""
+                  >主類別:
+                  <select
+                    name=""
+                    id=""
+                    style="width: 300px"
+                    v-model="addItem.prod_series_idx"
+                  >
+                    <option value="紀念品系列">紀念品系列</option>
+                    <option value="特產系列">特產系列</option>
+                  </select>
+                </label>
+              </div>
+              <div class="input-title">
+                <label for=""
+                  >子類別:
+                  <select
+                    name=""
+                    id=""
+                    style="width: 300px"
+                    v-model="addItem.prod_type_id"
+                  >
+                    <option value="水壺">水壺</option>
+                    <option value="便當盒">便當盒</option>
+                    <option value="零食">零食</option>
+                    <option value="調味料">調味料</option>
+                  </select>
+                </label>
+              </div>
+              <div class="input-title">
+                <label for=""
+                  >商品名稱：
+                  <Input
+                    placeholder="請輸入商品名稱"
+                    clearable
+                    style="width: 300px"
+                    v-model="addItem.prod_name"
+                  />
+                </label>
+              </div>
+              <div class="input-title">
+                <label for=""
+                  >商品價格：
+                  <Input
+                    type="number"
+                    number="true"
+                    placeholder="請輸入商品價格"
+                    style="width: 300px"
+                    v-model="addItem.prod_price"
+                  />
+                </label>
+              </div>
+              <div class="input-title">
+                <label for=""
+                  >商品介紹：
+                  <Input
+                    clearable
+                    type="textarea"
+                    :rows="4"
+                    placeholder="請輸入商品介紹"
+                    style="width: 300px"
+                    v-model="addItem.prod_intro"
+                  />
+                </label>
+              </div>
+              <div class="input-title">
+                <label for=""
+                  >商品狀態:
+                  <select
+                    name=""
+                    id=""
+                    style="width: 300px"
+                    v-model="addItem.prod_status"
+                  >
+                    <option value="上架">上架</option>
+                    <option value="下架">下架</option>
+                  </select>
+                </label>
+              </div>
             </div>
-            <div class="input-title">
-              <label for=""
-                >主類別:
-                <select name="" id="" style="width: 300px">
-                  <option value="gift">紀念品系列</option>
-                  <option value="food">特產系列</option>
-                </select>
-              </label>
-            </div>
-            <div class="input-title">
-              <label for=""
-                >子類別:
-                <select name="" id="" style="width: 300px">
-                  <option value="bottles">水壺</option>
-                  <option value="boxes">便當盒</option>
-                  <option value="snacks">零食</option>
-                  <option value="sauce">調味料</option>
-                </select>
-              </label>
-            </div>
-            <div class="input-title">
-              <label for=""
-                >商品名稱：
-                <Input
-                  placeholder="請輸入商品名稱"
-                  clearable
-                  style="width: 300px"
-                />
-              </label>
-            </div>
-            <div class="input-title">
-              <label for=""
-                >商品價格：
-                <Input
-                  type="number"
-                  number="true"
-                  placeholder="請輸入商品價格"
-                  style="width: 300px"
-                />
-              </label>
-            </div>
-            <div class="input-title">
-              <label for=""
-                >商品介紹：
-                <Input
-                  clearable
-                  type="textarea"
-                  :rows="4"
-                  placeholder="請輸入商品介紹"
-                  style="width: 300px"
-                />
-              </label>
-            </div>
-            <div class="input-title">
-              <label for=""
-                >商品狀態:
-                <select name="" id="" style="width: 300px">
-                  <option value="on">上架</option>
-                  <option value="off">下架</option>
-                </select>
-              </label>
+            <div class="pro-pic">
+              <div class="input-title-pic">
+                <label class="picpic" for=""
+                  >商品主圖：
+                  <input
+                    type="file"
+                    @change="previewImage"
+                    class="pic-input"
+                  />
+                  <div v-if="preview" class="pro-pic-preview">
+                    <img :src="preview" />
+                  </div>
+                </label>
+              </div>
+
+              <div class="input-title-pic">
+                <label class="picpic" for=""
+                  >商品副圖：
+                  <input
+                    type="file"
+                    @change="previewImage1"
+                    class="pic-input"
+                  />
+                  <div v-if="preview1" class="pro-pic-preview">
+                    <img :src="preview1" />
+                  </div>
+                </label>
+              </div>
+              <div class="input-title-pic">
+                <label class="picpic" for=""
+                  >商品副圖：
+                  <input
+                    type="file"
+                    @change="previewImage2"
+                    class="pic-input"
+                  />
+                  <div v-if="preview2" class="pro-pic-preview">
+                    <img :src="preview2" />
+                  </div>
+                </label>
+              </div>
             </div>
           </div>
-          <div class="pro-pic">
-            <div class="input-title-pic">
-              <label class="picpic" for=""
-                >商品主圖：
-                <input type="file" @change="previewImage" class="pic-input"/>
-                <div v-if="preview" class="pro-pic-preview">
-                  <img :src="preview"/>
-                </div>
-              </label>
-            </div>
-            
-            <div class="input-title-pic">
-              <label class="picpic" for=""
-                >商品副圖：
-                <input type="file" @change="previewImage1" class="pic-input"/>
-                <div v-if="preview1" class="pro-pic-preview">
-                  <img :src="preview1"/>
-                </div>
-              </label>
-            </div>
-            <div class="input-title-pic">
-              <label class="picpic" for=""
-                >商品副圖：
-                <input type="file" @change="previewImage2" class="pic-input"/>
-                <div v-if="preview2" class="pro-pic-preview">
-                  <img :src="preview2"/>
-                </div>
-              </label>
-            </div>
+          <div class="popup-btn">
+            <button class="btn-blue_2nd" @click="addCancel">取消</button>
+            <button class="btn-blue" @click="addOk">確認</button>
+            <!-- 確認鍵功能待補，暫放toggle -->
           </div>
         </div>
-        <div class="popup-btn">
-          <button class="btn-blue_2nd" @click="newToggle">取消</button>
-          <button class="btn-blue" @click="newToggle">確認</button>
-          <!-- 確認鍵功能待補，暫放toggle -->
-        </div>
-      </div>
+
     </keep-alive>
 
     <!-- 編輯商品 -->
-    <div class="popup on" v-show="seeOnData">
+    <div class="popup on" v-show="seeOnData" :model='addItem[index]'>
       <div class="popup-head font-20">商品資訊</div>
       <div class="popup-content font-18">
         <div class="input-txt">
@@ -180,8 +213,7 @@
             <label for=""
               >商品編號：
               <Input
-                v-model="activeData.product_no"
-                clearable
+                v-model="addItem.prod_id"
                 style="width: 300px"
                 disabled
               />
@@ -190,20 +222,30 @@
           <div class="input-title">
             <label for=""
               >主類別:
-              <select name="" id="" style="width: 300px">
-                <option value="gift">紀念品系列</option>
-                <option value="food">特產系列</option>
+              <select
+                name=""
+                id=""
+                style="width: 300px"
+                v-model="addItem.prod_series_id"
+              >
+                <option value="紀念品系列">紀念品系列</option>
+                <option value="特產系列">特產系列</option>
               </select>
             </label>
           </div>
           <div class="input-title">
             <label for=""
               >子類別:
-              <select name="" id="" style="width: 300px">
-                <option value="bottles">水壺</option>
-                <option value="boxes">便當盒</option>
-                <option value="snacks">零食</option>
-                <option value="sauce">調味料</option>
+              <select
+                name=""
+                id=""
+                style="width: 300px"
+                v-model="addItem.prod_type_id"
+              >
+                <option value="水壺">水壺</option>
+                <option value="便當盒">便當盒</option>
+                <option value="零食">零食</option>
+                <option value="調味料">調味料</option>
               </select>
             </label>
           </div>
@@ -211,7 +253,7 @@
             <label for=""
               >商品名稱：
               <Input
-                v-model="activeData.product_name"
+                v-model="addItem.prod_name"
                 clearable
                 style="width: 300px"
               />
@@ -223,7 +265,7 @@
               <Input
                 type="number"
                 number="true"
-                v-model="activeData.product_price"
+                v-model="addItem.prod_price"
                 style="width: 300px"
               />
             </label>
@@ -235,7 +277,7 @@
                 clearable
                 type="textarea"
                 :rows="4"
-                v-model="activeData.product_intro"
+                v-model="addItem.prod_intro"
                 style="width: 300px"
               />
             </label>
@@ -243,9 +285,14 @@
           <div class="input-title">
             <label for=""
               >商品狀態:
-              <select name="" id="" style="width: 300px">
-                <option value="on">上架</option>
-                <option value="off">下架</option>
+              <select
+                name=""
+                id=""
+                style="width: 300px"
+                v-model="addItem.prod_status"
+              >
+                <option value="上架">上架</option>
+                <option value="下架">下架</option>
               </select>
             </label>
           </div>
@@ -272,8 +319,8 @@
         </div>
       </div>
       <div class="popup-btn">
-        <button class="btn-blue_2nd" @click="editOnData">取消</button>
-        <button class="btn-blue" @click="editOnData">確認</button>
+        <button class="btn-blue_2nd" @click="editCancel">取消</button>
+        <button class="btn-blue" @click="editOk">確認</button>
         <!-- 確認鍵功能待補，暫放toggle -->
       </div>
     </div>
@@ -296,17 +343,17 @@
 </template>
 
 <script>
+import {BASE_URL} from '@/assets/js/common.js';
 export default {
   name: "ProductManage",
-  props: {
-    
-  },
+  props: {},
   components: {},
   data() {
     return {
-      preview: null,  //預覽主圖片
-      preview1: null,  //預覽圖片a
-      preview2: null,  //預覽圖片b
+      file:null,
+      preview: null, //預覽主圖片
+      preview1: null, //預覽圖片a
+      preview2: null, //預覽圖片b
 
       seenNew: false, //新表格彈窗，綁新表單v-show、按鈕@click="newToggle"
       seeOnData: false, //上架資料彈窗，綁上架資料v-show、編輯按鈕@click="editOnData"
@@ -320,11 +367,11 @@ export default {
           width: 120,
           align: "center",
         },
-        {
-          title: "商品圖片",
-          slot: "product_pic",
-          align: "center",
-        },
+        // {
+        //   title: "商品圖片",
+        //   slot: "product_pic",
+        //   align: "center",
+        // },
         {
           title: "商品名稱",
           slot: "product_name",
@@ -410,173 +457,307 @@ export default {
         },
       ],
       dataOn: [
-        {
-          product_no: "001",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"特產",
-          product_type:"零食",
-          product_name: "九州福砂屋長崎蛋糕",
-          product_price: "460",
-          product_intro:
-            "採用精選雞蛋、砂糖、糖漿和小麥粉的簡單材料，全程不用攪拌機，完全靠師傅手感攪拌，製作出口味道地且香甜綿潤的蛋糕點心。長崎蛋糕底砂糖結晶顆粒的粗糖，是攪拌蛋糕材料時留下來的，也是福砂屋長崎蛋糕的特徵。作為長崎蛋糕的傑作，特製五三燒長崎蛋糕的風味更濃，且香氣更濃郁。它由技術熟練的糕點師傅以高超技術製成，生量數量少，是福砂屋的特製長崎蛋糕，廣受長崎 蛋糕饕客們喜愛。",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
-        {
-          product_no: "002",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"特產",
-          product_type:"零食",
-          product_name: "JS怪奇薯條",
-          product_price: "290",
-          product_intro:
-            "怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
-        {
-          product_no: "003",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"特產",
-          product_type:"調味料",
-          product_name: "透明醬油",
-          product_price: "320",
-          product_intro:
-            "透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
-        {
-          product_no: "004",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"特產",
-          product_type:"零食",
-          product_name: "七彩洋芋片",
-          product_price: "250",
-          product_intro:
-            "七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
-        {
-          product_no: "005",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"紀念品",
-          product_type:"水壺",
-          product_name: "九州切子",
-          product_price: "850",
-          product_intro:
-            "九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
-        {
-          product_no: "006",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"紀念品",
-          product_type:"便當盒",
-          product_name: "火車便當盒",
-          product_price: "480",
-          product_intro:
-            "火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
-        {
-          product_no: "007",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"特產",
-          product_type:"調味料",
-          product_name: "九州昆布湯包",
-          product_price: "320",
-          product_intro:
-            "九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
-        {
-          product_no: "008",
-          product_pic: require(`@/assets/img/products/pro4.jpg`),
-          product_series:"特產",
-          product_type:"調味料",
-          product_name: "九州黑醋",
-          product_price: "220",
-          product_intro:
-            "九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋",
-          product_status: "上架",
-          product_pica: require(`@/assets/img/products/pro5.jpg`),
-          product_picb: require(`@/assets/img/products/pro6.jpg`),
-        },
+        // {
+        //   product_no: "001",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "特產",
+        //   product_type: "零食",
+        //   product_name: "九州福砂屋長崎蛋糕",
+        //   product_price: "460",
+        //   product_intro:
+        //     "採用精選雞蛋、砂糖、糖漿和小麥粉的簡單材料，全程不用攪拌機，完全靠師傅手感攪拌，製作出口味道地且香甜綿潤的蛋糕點心。長崎蛋糕底砂糖結晶顆粒的粗糖，是攪拌蛋糕材料時留下來的，也是福砂屋長崎蛋糕的特徵。作為長崎蛋糕的傑作，特製五三燒長崎蛋糕的風味更濃，且香氣更濃郁。它由技術熟練的糕點師傅以高超技術製成，生量數量少，是福砂屋的特製長崎蛋糕，廣受長崎 蛋糕饕客們喜愛。",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
+        // {
+        //   product_no: "002",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "特產",
+        //   product_type: "零食",
+        //   product_name: "JS怪奇薯條",
+        //   product_price: "290",
+        //   product_intro:
+        //     "怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃怪奇薯條好好吃哦怎麼這麼好吃",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
+        // {
+        //   product_no: "003",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "特產",
+        //   product_type: "調味料",
+        //   product_name: "透明醬油",
+        //   product_price: "320",
+        //   product_intro:
+        //     "透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃透明醬油好好吃哦怎麼這麼好吃",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
+        // {
+        //   product_no: "004",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "特產",
+        //   product_type: "零食",
+        //   product_name: "七彩洋芋片",
+        //   product_price: "250",
+        //   product_intro:
+        //     "七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片七彩洋芋片",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
+        // {
+        //   product_no: "005",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "紀念品",
+        //   product_type: "水壺",
+        //   product_name: "九州切子",
+        //   product_price: "850",
+        //   product_intro:
+        //     "九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子九州切子",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
+        // {
+        //   product_no: "006",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "紀念品",
+        //   product_type: "便當盒",
+        //   product_name: "火車便當盒",
+        //   product_price: "480",
+        //   product_intro:
+        //     "火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒火車便當盒",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
+        // {
+        //   product_no: "007",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "特產",
+        //   product_type: "調味料",
+        //   product_name: "九州昆布湯包",
+        //   product_price: "320",
+        //   product_intro:
+        //     "九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包九州昆布湯包",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
+        // {
+        //   product_no: "008",
+        //   product_pic: require(`@/assets/img/products/pro4.jpg`),
+        //   product_series: "特產",
+        //   product_type: "調味料",
+        //   product_name: "九州黑醋",
+        //   product_price: "220",
+        //   product_intro:
+        //     "九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋九州黑醋",
+        //   product_status: "上架",
+        //   product_pica: require(`@/assets/img/products/pro5.jpg`),
+        //   product_picb: require(`@/assets/img/products/pro6.jpg`),
+        // },
       ],
+      // 新增表單insert
+      // prodid: "",
+      // prodseriesidx: "",
+      // prodtypeid: "",
+      // prodname: "",
+      // prodprice: "",
+      // prodintro: "",
+      // prodstatus: "",
+      // prodpicmain: "",
+      // prodpicintro1: "",
+      // prodpicintro2: "",
+
+      addItem:{
+        prod_id: "",
+        prod_pic_main: "",
+        prod_series_idx: "",
+        prod_type_id: "",
+        prod_name: "",
+        prod_price: "",
+        prod_intro:"",
+        prod_status: "",
+        prod_pic_intro_1: "",
+        prod_pic_intro_2: "",
+      },
+      resetItem: {
+        prod_id: "",
+        prod_pic_main: "",
+        prod_series_idx: "",
+        prod_type_id: "",
+        prod_name: "",
+        prod_price: "",
+        prod_intro: "",
+        prod_status: "",
+        prod_pic_intro_1: "",
+        prod_pic_intro_2: "",
+      },
       editIndex: -1,
-      activeIndex: null,
+      // activeIndex: NaN,
     };
+  },
+  created() {
+    this.getData();
   },
   methods: {
     //預覽主圖片
-    previewImage: function(event) {
+    previewImage: function (event) {
+      this.file - event.target.file[0]
       var input = event.target;
       if (input.files) {
         var reader = new FileReader();
         reader.onload = (e) => {
           this.preview = e.target.result;
-        }
-        this.image=input.files[0];
+        };
+        this.image = input.files[0];
         reader.readAsDataURL(input.files[0]);
       }
     },
     //預覽圖片a
-    previewImage1: function(event) {
+    previewImage1: function (event) {
+      this.file - event.target.file[0]
       var input = event.target;
       if (input.files) {
         var reader = new FileReader();
         reader.onload = (e) => {
           this.preview1 = e.target.result;
-        }
-        this.image=input.files[0];
+        };
+        this.image = input.files[0];
         reader.readAsDataURL(input.files[0]);
       }
     },
     //預覽圖片b
-    previewImage2: function(event) {
+    previewImage2: function (event) {
+      this.file - event.target.file[0]
       var input = event.target;
       if (input.files) {
         var reader = new FileReader();
         reader.onload = (e) => {
           this.preview2 = e.target.result;
-        }
-        this.image=input.files[0];
+        };
+        this.image = input.files[0];
         reader.readAsDataURL(input.files[0]);
       }
     },
+    getData() {
+      fetch(`${BASE_URL}/getProducts.php`)
+        .then((res) => res.json())
+        .then((json) => {
+          this.dataOn = json;
+          // console.log(this.dataOn);
+        });
+    },
+    saveData() {
+      console.log(this.dataOn);
+    },
+    // insertData() {
+    //   const formData = new FormData();
+    //   const formDataKey = Object.keys(this.addItem);
+    //   formDataKey.forEach((key) => {
+    //     formData.append(`${key}`, this.addItem[key]);
+    //   });
+
+    //   formData.set("pro_img", document.getElementById("pro_img_id").files[0]);
+
+    //   console.log(formData.get("pro_img"));
+
+    //   fetch(`${BASE_URL}/insert_pro_data.php`, {
+    //     method: "POST",
+    //     body: formData,
+    //   })
+    //     .then((res) => res.json())
+    //     .then((result) => {
+    //       console.log(result);
+    //     });
+    // },
+
+
+    // addProductData() {
+    //   const myURL = new URL(
+    //     "http://localhost/g4-backend/public/phpfiles/insertProducts.php"
+    //   );
+    //   fetch(myURL, {
+    //     method: "POST",
+    //     body: new URLSearchParams({
+    //       // prod_id:"",
+    //       prod_series_idx: this.prodseriesidx,
+    //       prod_type_id: this.prodtypeid,
+    //       prod_name: this.prodname,
+    //       prod_price: this.prodprice,
+    //       prod_intro: this.prodintro,
+    //       prod_status: this.prodstatus,
+    //       prod_pic_main: this.prodpicmain,
+    //       prod_pic_intro_1: this.prodpicintro1,
+    //       prod_pic_intro_2: this.prodpicintro2,
+
+    //     }),
+    //   })
+    //     .then((res) => res.json())
+    //     .then((result) => {
+    //       console.log(result);
+    //     });
+    // },
     newToggle() {
       //新表單
       this.seenNew = !this.seenNew;
     },
-    editOnData(no) {
+    addCancel(){
+      this.addItem={...this.resetItem};
+      this.seenNew = !this.seenNew;
+    },
+    addOk(){
+      this.dataOn.push({...this.addItem});
+      this.addItem={...this.resetItem};
+      this.seenNew = !this.seenNew;
+    },
+    editOnData(index) {
       //上架編輯表單彈窗
+      this.seeOnData = true ;
+      this.addItem={...this.dataOn[index]}
+      
+      // this.dataOn = prod_id;
+      // this.addItem={...this.activeData};
+      // console.log(this.activeData);
+    },
+    editOk(){
+      const index = this.dataOn.findIndex((item) => item.prod_id === this.addItem.prod_id);
       this.seeOnData = !this.seeOnData;
-      this.activeIndex = no;
+      this.dataOn[index]=this.addItem;
+      this.addItem={...this.resetItem};
+    },
+    editCancel(){
+      this.seeOnData = !this.seeOnData;
     },
     okToggle() {
       //確認彈窗
       this.seeCheck = !this.seeCheck;
     },
+    // confirm() {
+    //   this.dataOn.push({ ...this.activeData });
+    //   this.activeData = { ...this.restItem };
+    //   this.seenNew = !this.seenNew;
+    // },
+    // cancelEdit() {
+    //   // this.activeData = {...this.resetItem};
+    //   this.seeOnData = !this.seeOnData;
+    //   console.log(this.resetItem);
+    //   this.activeIndex = no;
+    // },
   },
-  computed: {
-    activeData() {
-      return this.dataOn.find((v) => v.product_no === this.activeIndex) ?? {};
-    },
-  },
+  // computed: {
+  //   activeData() {
+  //     return this.dataOn.find((v) => v.prod_id === this.activeIndex) ?? {};
+  //   },
+  // },
 };
 </script>
+
 
 <style scoped lang="scss">
 @import "@/assets/Scss/base/color.scss";
@@ -602,12 +783,12 @@ export default {
 /* -------------------彈窗 ------------------------*/
 .popup {
   position: absolute;
-  top: 100px;
-  left: 150px;
+  top: 90px;
+  left: 80px;
   margin: auto;
   z-index: 20;
-  width: 80%;
-  height: 80%;
+  width: 90%;
+  // height: 0%;
   background-color: #4f6573;
 }
 
@@ -631,28 +812,28 @@ export default {
 .input-title-pic {
   margin-bottom: 20px;
 }
-.input-txt{
+.input-txt {
   width: 45%;
   margin: 20px;
   text-align: end;
 }
-.pro-pic{
+.pro-pic {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   width: 60%;
   margin: 20px;
 }
-.picpic{
+.picpic {
   display: flex;
   align-items: center;
 }
-.pic-input{
+.pic-input {
   width: 40%;
 }
-.pro-pic-preview{
+.pro-pic-preview {
   width: 30%;
-  img{
+  img {
     width: 70%;
   }
 }
