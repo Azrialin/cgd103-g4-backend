@@ -52,7 +52,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 const result = [];
 export default {
   data() {
@@ -94,7 +93,7 @@ export default {
     this.getData();
   },
   methods: {
-    rowClassName(row, index) {
+    rowClassName(index) {
       if (index % 2 === 0) {
         return "demo-table-info-row";
       } else if (!index % 2 === 0) {
@@ -109,7 +108,7 @@ export default {
     getData() {
       this.result = result;
       fetch(
-        "http://localhost/CGD103-G4-BACKEND/public/phpfiles/getProducts.php"
+        "http://localhost/CGD103-G4-BACKEND/public/phpfiles/getContact.php"
       )
         .then((res) => res.json())
         .then((json) => {
