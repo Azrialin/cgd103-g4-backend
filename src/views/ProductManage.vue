@@ -679,10 +679,13 @@ export default {
 
       this.seenNew = !this.seenNew;
 
-      setTimeout(() => {
-        this.dataOn.push({ ...this.addItem });
-        this.addItem = { ...this.resetItem };
-      }, 5);
+     
+
+
+      // setTimeout(() => {
+      //   this.dataOn.push({ ...this.addItem });
+      //   this.addItem = { ...this.resetItem };
+      // }, 5);
 
       // console.log(this.addItem);
       // console.log(this.dataOn);
@@ -732,31 +735,15 @@ export default {
         // this.addItem.prod_pic_main = result.prod_pic_main;
         // console.log(result.prod_pic_main);
         // console.log(this.addItem);
+        this.dataOn.push({ ...this.addItem });
+        this.addItem = { ...this.resetItem };
       })
       .catch((error) => {
         console.log(error);
       });
     },
 
-    // fetch('http://localhost/g4-backend/public/phpfiles/insertProducts.php', {
-    //   method: "POST",
-    //   body: new URLSearchParams({
-    //     prod_name: this.prod_name,
-    //     prod_intro: this.prod_intro,
-    //     prod_price: this.prod_price,
-    //     prod_pic_main: this.prod_pic_main,
-    //     prod_pic_intro_1: this.prod_pic_intro_1,
-    //     prod_pic_intro_2: this.prod_pic_intro_2,
-    //     prod_status: this.prod_status,
-    //     prod_series_idx: this.prod_series_idx,
-    //     prod_type_id: this.prod_type_id,
-    //   }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     console.log(result);
-    //   });
-
+    
     editOnData(index) {
       //上架編輯表單彈窗
       this.seeOnData = true;
