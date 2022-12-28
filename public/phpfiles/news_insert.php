@@ -3,7 +3,6 @@ header('Access-Control-Allow-Origin:*');
 header("Content-Type:application/json;charset=utf-8");
 
 
-// const MY_DIR = "cgd103-g4-backend/public/img/News"; //路徑  
 // const MY_DIR = "../img/News"; //路徑  //專案裡
 const MY_DIR = "../../front/img/News"; //路徑  //for打包後的環境
 
@@ -17,7 +16,7 @@ switch($_FILES["news_img"]["error"] ){
 		}
 		$from = $_FILES["news_img"]["tmp_name"];
 
-		//$_FILES["news_img"]["name"]; //smile.gif,  sara.smile.gif, a313feexrer.gif
+		// $_FILES["news_img"]["name"]; //smile.gif,  sara.smile.gif, a313feexrer.gif
 		$fileExt = pathinfo($_FILES["news_img"]["name"],PATHINFO_EXTENSION); //取得副檔名
 		$fileName = uniqid() . ".". $fileExt; //決定檔案名稱, 如a313feexrer.gif
 		$to = MY_DIR . "/". $fileName; //決定路徑名稱
