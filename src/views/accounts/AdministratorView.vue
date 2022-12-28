@@ -2,8 +2,12 @@
     <div class="backstage-administrator" >
         <div class="backstage-content">
             <div class="btn-add">
-                <Button type="button" class="ivu-btn-primary"
-                @click="addToggle">新增帳號</Button>
+                <!-- 要給 type="button"，但是 type 屬性被 iVew 佔用了，不能設定
+                    所以我把 iVew 的 Button 改成原生的 button，
+                    這樣就可以設定 type="button"
+                    然後再給 class btn-blue 設定樣式-->
+                <Button type="button" class="ivu-btn-primary btn-blue"
+                @click="seenAdd = true">新增帳號</Button>
             </div>
         </div>
         <!------- 列表內容 ------->
@@ -54,20 +58,13 @@
                     </div>
                 </template>
                 <!-- 刪除 -->
-                <template #delete="{ row, index }">
-                    <span v-if="selectList.length > 1"
-                        class="icon material-symbols-outlined"
-                        style="font-size:26px; margin-top: 5px;"
-                        @click="delCheck"
-                    >delete
-                    </span>
-                    <span v-else
-                        class="icon material-symbols-outlined"
+                <!-- <template #delete="{ row, index }">
+                    <span class="icon material-symbols-outlined"
                         style="font-size:26px; margin-top: 5px;"
                         @click="delCheck(row, index)"
                     >delete
                     </span>
-                </template>
+                </template> -->
                 <!-- 彈窗：帳號狀態變更確認 -->
                 <div class="modal-mask" :style="modalStyle">
                     <div class="modal-container" @click="toggleModal">
@@ -77,27 +74,40 @@
                                 <span>Edit confirmation</span>
                             </p>
                             <p class="font-16-15em">確定要變更嗎？</p>
-                            <Button type="button" class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                            <Button type="button" class="btn-danger_2nd" long :loading="modal_loading" @click="show_delCheck = false">取消</Button>
                             <Button  type="button" class="btn-danger" long :loading="modal_loading" @click="del(index)">確認</Button>
                         </div>
                     </div>
                 </div>
                 <!-- 刪除帳號 -->
-                <template #action_error>
-                    <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow = true">delete</span>
+                <template #delete="{ row, index }">
+                    <span class="icon material-symbols-outlined"
+                        style="font-size:26px; margin-top: 5px; cursor: pointer;"
+                        @click="delCheck(row, index)"
+                    >delete
+                    </span>
                 </template>
+                <!-- <template #action_error>
+                    <span 
+                    class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow = true">delete</span>
+                </template> -->
             </Table>
             <!-- 彈窗：刪除確認 -->
-            <div class="modal-mask" :style="modalStyle">
-                <div class="modal-container" @click.self="toggleModal">
+            <!-- <div class="modal-mask" :style="modalStyle"> -->
+            <div class="modal-mask" v-show="show_delCheck">
+                <div class="modal-container">
+                <!-- <div class="modal-container" @click.self="toggleModal"> -->
+                    <!-- <div class="ad-check"> -->
                     <div class="modal-body">
                         <p class="font-16-15em">
                             <span class="icon material-symbols-outlined">error</span>
                             <span>Delete confirmation</span>
                         </p>
-                        <p class="font-16-15em">確定要刪除嗎？</p>
-                        <Button  type="button" class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
-                        <Button  type="button" class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
+                        <p
+                        class="font-16-15em">確定要刪除嗎？</p>
+                        <Button  type="button" class="btn-danger_2nd" long :loading="modal_loading" @click="show_delCheck = false">取消</Button>
+                        <Button  type="button" class="btn-danger" long :loading="modal_loading" @click="delAdData(index)">刪除</Button>
+                        <!-- <Button  type="button" class="btn-danger" long :loading="modal_loading" @click="delAdData(row.emp_no)">刪除</Button> -->
                     </div>
                 </div>
             </div>
@@ -244,7 +254,7 @@ export default {
 },
     data () {
         return {
-            
+            editIndex : -1,
             // ----- 彈窗 -----
             show_statusCheck: false,
             // show_cancelCheck: false,
@@ -252,6 +262,8 @@ export default {
             show_NewForm:     false,
             alert_Loading:    false,
             
+            deleteNo: '',
+
             isShow: false,
             isShow_list: false,
             modal_loading: false,
@@ -294,7 +306,7 @@ export default {
                 },
                 {
                     title: '刪除帳號',
-                    slot: 'action_error',
+                    slot: 'delete',
                     width: 120,
                     align: 'center'
                 }
@@ -370,9 +382,9 @@ export default {
             this.AdList.splice(index, 1);
         },
 // ------- 新增表單 -------
-        addToggle(){ 
-            this.seenAdd = !this.seenAdd
-        },
+        // addToggle(){ 
+        //     this.seenAdd = !this.seenAdd
+        // },
         editForm(edit){
             console.log(this.show_EditForm);
             this.editingNo = edit;
@@ -382,20 +394,20 @@ export default {
         },
 
 // ----- 關閉彈窗(取消) ------
-        // cancel(){
-        //     this.alert_Loading = true;
-        //     setTimeout(() => {
-        //         this.show_statusCheck = false;
-        //         this.show_cancelCheck = false;
-        //         this.show_NewForm = false;
-        //         this.show_EditForm = false;
-        //         this.alert_Loading = false;
-        //         this.newForm_name = '';
-        //         this.newForm_email = '';
-        //         document.getElementById("newForm_name").classList.remove('error');
-        //         document.getElementById("newForm_email").classList.remove('error');
-        //     }, 200);
-        // },
+        cancel(){
+            this.alert_Loading = true;
+            setTimeout(() => {
+                this.show_statusCheck = false;
+                // this.show_cancelCheck = false;
+                this.show_NewForm = false;
+                this.show_EditForm = false;
+                this.alert_Loading = false;
+                this.newForm_name = '';
+                this.newForm_email = '';
+                document.getElementById("newForm_name").classList.remove('error');
+                document.getElementById("newForm_email").classList.remove('error');
+            }, 200);
+        },
         
 // ----- 新增帳號資料 ------ fetch
         addAdData(){
@@ -470,7 +482,7 @@ export default {
         },
 // ----- 編輯帳號資料 ------ fetch
         editAdData(){
-            // console.log(this.editingAd.emp_no);
+            console.log(this.editingAd.emp_no);
             let editAd_name = document.getElementById("editAd_name");
             let editAd_email = document.getElementById("editAd_email");
             
@@ -489,7 +501,9 @@ export default {
                 editingAd_email.classList.add('error');
                 return;
             }
-            fetch("http://localhost/CGD103_G4_back/public/phpfiles/Ad_editdata.php",{
+            fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_updata.php",{
+                // php 檔名打錯了Ad_updata / Ad_editdata
+            // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_editdata.php",{
             // fetch(`${BASE_URL}/Ad_editdata.php`,{
                 method:'POST', body:new URLSearchParams({
                 emp_no:this.editingAd.emp_no,
@@ -508,9 +522,37 @@ export default {
             })
         },
 // ------- 關閉新增編輯表單(取消) -------
-        cancel(){
-            this.modal_loading = true;
+        // cancel(){
+        //     this.modal_loading = true;
 
+        // },
+// ----- 彈窗：刪除確認 ------
+        delCheck(row, index){
+            // console.log(row.emp_no);
+            this.deleteNo = row.emp_no;
+            this.rowCount = index;
+            this.show_delCheck = true;
+        },
+// ----- 刪除資料 ------ fetch
+        delAdData(){
+            // let deleteNo = deleteAdno;
+            console.log(this.deleteNo);
+
+            fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_delete.php",{
+            // fetch(`${BASE_URL}/Ad_delete.php`,{
+                method:'POST', body:new URLSearchParams({
+                emp_no:this.deleteNo,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.AdList.splice(this.rowCount, 1);
+                    this.alert_Loading = false;
+                    this.show_delCheck = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+            })
         },
 // ------ 刪除帳號彈窗 -------
         del(index){
@@ -724,7 +766,7 @@ export default {
     justify-content: right;
 
 }
-.popup-btn Button{
+.popup-btn button{
     margin: 0 20px;
 }
 
@@ -775,7 +817,7 @@ export default {
             }
         }
     }
-    Button+Button{
+    button+button{
         margin-left: 30px;
     }
 }
@@ -831,7 +873,7 @@ export default {
 
     }
 
-    .popup-btn Button{
+    .popup-btn button{
         margin: 0 20px;
     }
 }

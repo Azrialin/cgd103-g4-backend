@@ -473,6 +473,7 @@
                 .then((resultb)=>{
                     console.log(resultb);
                     this.seenAdd = false;
+                    location.reload()
                 })
             },
             handleEdit (row, index) {
