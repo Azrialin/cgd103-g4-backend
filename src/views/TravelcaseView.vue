@@ -7,39 +7,39 @@
             <div class="input-txt">
                 <div class="input-info">
                     <label for="">前台區塊：
-                        <Input type="text" name="package_name" v-model="data.package_name" clearable style="width: 200px" />
                     </label>
+                        <Input type="text" name="package_name" v-model="data.package_name" clearable style="width: 300px" />
                 </div>
                 <div class="input-info">
                     <label for="">活動標籤：
-                        <Input type="text" name="package_tag" v-model="data.package_tag" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="text" name="package_tag" v-model="data.package_tag" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">價格：
-                        <Input type="" name="package_price" v-model="data.package_price" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="" name="package_price" v-model="data.package_price" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">標題：
-                        <Input type="email" name="package_title" v-model="data.package_title" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="email" name="package_title" v-model="data.package_title" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">推薦商品：
-                        <Input type="tel" name="package_buy" v-model="data.package_buy" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="tel" name="package_buy" v-model="data.package_buy" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">狀態：
-                        <!-- <Input type="tel" name="package_status" v-model="data.package_status" clearable  style="width: 200px"/> -->
-                        <select class="choosein" name="package_status" v-model="data.package_status">
+                    </label>
+                        <!-- <Input type="tel" name="package_status" v-model="data.package_status" clearable  style="width: 300px"/> -->
+                        <select class="choosein" name="package_status" v-model="data.package_status" style="width: 300px;text-align:center">
                             <option value="" disabled>-請選擇-</option>
                             <option value="上架">上架</option>
                             <option value="草稿">草稿</option>
                             <option value="下架">下架</option>
                         </select>
-                    </label>
                 </div>
             </div>
             </div> 
@@ -419,7 +419,7 @@
                 let xhr = new XMLHttpRequest();
                 xhr.onload = function(){
                 let result = JSON.parse(xhr.responseText);
-                alert("新增成功");
+                // alert("新增成功");
                     
                 }
                 // xhr.open("post", "http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php", true); //專案裡的檔案 
@@ -427,6 +427,7 @@
 
                 xhr.send(new FormData(document.getElementById("addNewsForm")));
                 this.addnew=false
+                alert("新增成功");
                 location.reload();
             },
             // addData(){
@@ -527,8 +528,12 @@
     .popup-content{
     text-align: center;
         .input-txt{
+            width: 50%;
+            margin: auto;
             .input-info{
-                padding: 20px;
+                display: flex;
+                justify-content: space-between;
+                padding: 20px 0px;
             }
         }
     }
