@@ -107,14 +107,15 @@ export default {
       this.activeIndex = no;
     },
     getData() {
-      this.result = result;
       fetch(`${BASE_URL}/getContact.php`)
         .then((res) => res.json())
         .then((json) => {
           this.result = json;
+          console.log(this.result);
         });
     },
     saveData() {
+      console.log(this.result);
     },
   },
   computed: {
