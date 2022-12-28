@@ -43,9 +43,7 @@
         <!-- 按鈕 -->
         <template #product_action="{ index }">
           <div class="btn-box">
-            <button class="btn-success" @click="editOnData(index)">
-              編輯
-            </button>
+            <button class="btn-success" @click="editOnData(index)">編輯</button>
           </div>
         </template>
       </Table>
@@ -54,7 +52,7 @@
     <!-- style="display:none" -->
     <!--新增商品 -->
     <keep-alive>
-      
+      <form ref="test" id="myForm" enctype="multipart/form-data">
         <div class="popup" v-show="seenNew" :model="addItem">
           <div class="popup-head font-20">商品資訊</div>
           <div class="popup-content font-18">
@@ -68,6 +66,7 @@
                     style="width: 300px"
                     disabled
                     v-model="addItem.prod_id"
+                    name="prod_id"
                   />
                 </label>
               </div>
@@ -75,13 +74,14 @@
                 <label for=""
                   >主類別:
                   <select
-                    name=""
+                    
                     id=""
                     style="width: 300px"
                     v-model="addItem.prod_series_idx"
+                    name="prod_series_idx"
                   >
-                    <option value="紀念品系列">紀念品系列</option>
-                    <option value="特產系列">特產系列</option>
+                    <option value="p001">紀念品系列p001</option>
+                    <option value="p002">特產系列p002</option>
                   </select>
                 </label>
               </div>
@@ -89,15 +89,15 @@
                 <label for=""
                   >子類別:
                   <select
-                    name=""
+                    name="prod_type_id"
                     id=""
                     style="width: 300px"
                     v-model="addItem.prod_type_id"
                   >
-                    <option value="水壺">水壺</option>
-                    <option value="便當盒">便當盒</option>
-                    <option value="零食">零食</option>
-                    <option value="調味料">調味料</option>
+                    <option value="s001">水壺s001</option>
+                    <option value="s002">便當盒s002</option>
+                    <option value="s003">零食s003</option>
+                    <option value="s004">調味料s004</option>
                   </select>
                 </label>
               </div>
@@ -109,6 +109,7 @@
                     clearable
                     style="width: 300px"
                     v-model="addItem.prod_name"
+                    name="prod_name"
                   />
                 </label>
               </div>
@@ -121,6 +122,7 @@
                     placeholder="請輸入商品價格"
                     style="width: 300px"
                     v-model="addItem.prod_price"
+                    name="prod_price"
                   />
                 </label>
               </div>
@@ -134,6 +136,7 @@
                     placeholder="請輸入商品介紹"
                     style="width: 300px"
                     v-model="addItem.prod_intro"
+                    name="prod_intro"
                   />
                 </label>
               </div>
@@ -141,13 +144,13 @@
                 <label for=""
                   >商品狀態:
                   <select
-                    name=""
+                    name="prod_status"
                     id=""
                     style="width: 300px"
                     v-model="addItem.prod_status"
                   >
-                    <option value="上架">上架</option>
-                    <option value="下架">下架</option>
+                    <option value="1">上架1</option>
+                    <option value="0">下架0</option>
                   </select>
                 </label>
               </div>
@@ -160,6 +163,8 @@
                     type="file"
                     @change="previewImage"
                     class="pic-input"
+                    id="prod_pic_intro_0"
+                    name="prod_pic_intro_0"
                   />
                   <div v-if="preview" class="pro-pic-preview">
                     <img :src="preview" />
@@ -174,6 +179,8 @@
                     type="file"
                     @change="previewImage1"
                     class="pic-input"
+                    id="prod_pic_intro_1"
+                    name="prod_pic_intro_1"
                   />
                   <div v-if="preview1" class="pro-pic-preview">
                     <img :src="preview1" />
@@ -187,6 +194,8 @@
                     type="file"
                     @change="previewImage2"
                     class="pic-input"
+                    id="prod_pic_intro_2"
+                    name="prod_pic_intro_2"
                   />
                   <div v-if="preview2" class="pro-pic-preview">
                     <img :src="preview2" />
@@ -197,26 +206,22 @@
           </div>
           <div class="popup-btn">
             <button class="btn-blue_2nd" @click="addCancel">取消</button>
-            <button class="btn-blue" @click="addOk">確認</button>
+            <div class="btn-blue" @click="addOk">確認</div>
             <!-- 確認鍵功能待補，暫放toggle -->
           </div>
         </div>
-
+      </form>
     </keep-alive>
 
     <!-- 編輯商品 -->
-    <div class="popup on" v-show="seeOnData" :model='addItem[index]'>
+    <div class="popup on" v-show="seeOnData" :model="addItem[index]">
       <div class="popup-head font-20">商品資訊</div>
       <div class="popup-content font-18">
         <div class="input-txt">
           <div class="input-title">
             <label for=""
               >商品編號：
-              <Input
-                v-model="addItem.prod_id"
-                style="width: 300px"
-                disabled
-              />
+              <Input v-model="addItem.prod_id" style="width: 300px" disabled />
             </label>
           </div>
           <div class="input-title">
@@ -343,14 +348,14 @@
 </template>
 
 <script>
-import {BASE_URL} from '@/assets/js/common.js';
+import { BASE_URL } from "@/assets/js/common.js";
 export default {
   name: "ProductManage",
   props: {},
   components: {},
   data() {
     return {
-      file:null,
+      file: null,
       preview: null, //預覽主圖片
       preview1: null, //預覽圖片a
       preview2: null, //預覽圖片b
@@ -574,21 +579,21 @@ export default {
       // prodpicintro1: "",
       // prodpicintro2: "",
 
-      addItem:{
+      addItem: {
         prod_id: "",
-        prod_pic_main: "",
+        prod_pic_intro_0: "",
         prod_series_idx: "",
         prod_type_id: "",
         prod_name: "",
         prod_price: "",
-        prod_intro:"",
+        prod_intro: "",
         prod_status: "",
         prod_pic_intro_1: "",
         prod_pic_intro_2: "",
       },
       resetItem: {
         prod_id: "",
-        prod_pic_main: "",
+        prod_pic_intro_0: "",
         prod_series_idx: "",
         prod_type_id: "",
         prod_name: "",
@@ -608,7 +613,7 @@ export default {
   methods: {
     //預覽主圖片
     previewImage: function (event) {
-      this.file - event.target.file[0]
+      this.file - event.target.file[0];
       var input = event.target;
       if (input.files) {
         var reader = new FileReader();
@@ -621,7 +626,7 @@ export default {
     },
     //預覽圖片a
     previewImage1: function (event) {
-      this.file - event.target.file[0]
+      this.file - event.target.file[0];
       var input = event.target;
       if (input.files) {
         var reader = new FileReader();
@@ -634,7 +639,7 @@ export default {
     },
     //預覽圖片b
     previewImage2: function (event) {
-      this.file - event.target.file[0]
+      this.file - event.target.file[0];
       var input = event.target;
       if (input.files) {
         var reader = new FileReader();
@@ -646,7 +651,8 @@ export default {
       }
     },
     getData() {
-      fetch(`${BASE_URL}/getProducts.php`)
+      // fetch("http://localhost/g4-backend/public/phpfiles/getProducts.php")
+        fetch(`${BASE_URL}/getProducts.php`)
         .then((res) => res.json())
         .then((json) => {
           this.dataOn = json;
@@ -656,82 +662,106 @@ export default {
     saveData() {
       console.log(this.dataOn);
     },
-    // insertData() {
-    //   const formData = new FormData();
-    //   const formDataKey = Object.keys(this.addItem);
-    //   formDataKey.forEach((key) => {
-    //     formData.append(`${key}`, this.addItem[key]);
-    //   });
 
-    //   formData.set("pro_img", document.getElementById("pro_img_id").files[0]);
-
-    //   console.log(formData.get("pro_img"));
-
-    //   fetch(`${BASE_URL}/insert_pro_data.php`, {
-    //     method: "POST",
-    //     body: formData,
-    //   })
-    //     .then((res) => res.json())
-    //     .then((result) => {
-    //       console.log(result);
-    //     });
-    // },
-
-
-    // addProductData() {
-    //   const myURL = new URL(
-    //     "http://localhost/g4-backend/public/phpfiles/insertProducts.php"
-    //   );
-    //   fetch(myURL, {
-    //     method: "POST",
-    //     body: new URLSearchParams({
-    //       // prod_id:"",
-    //       prod_series_idx: this.prodseriesidx,
-    //       prod_type_id: this.prodtypeid,
-    //       prod_name: this.prodname,
-    //       prod_price: this.prodprice,
-    //       prod_intro: this.prodintro,
-    //       prod_status: this.prodstatus,
-    //       prod_pic_main: this.prodpicmain,
-    //       prod_pic_intro_1: this.prodpicintro1,
-    //       prod_pic_intro_2: this.prodpicintro2,
-
-    //     }),
-    //   })
-    //     .then((res) => res.json())
-    //     .then((result) => {
-    //       console.log(result);
-    //     });
-    // },
     newToggle() {
       //新表單
       this.seenNew = !this.seenNew;
     },
-    addCancel(){
-      this.addItem={...this.resetItem};
+    addCancel() {
+      this.addItem = { ...this.resetItem };
       this.seenNew = !this.seenNew;
     },
-    addOk(){
-      this.dataOn.push({...this.addItem});
-      this.addItem={...this.resetItem};
+    addOk() {
+      this.insertData(this.addItem);
+
+      // this.dataOn.push({ ...this.addItem });
+      // this.addItem = { ...this.resetItem };
+
       this.seenNew = !this.seenNew;
+
+     
+
+
+      // setTimeout(() => {
+      //   this.dataOn.push({ ...this.addItem });
+      //   this.addItem = { ...this.resetItem };
+      // }, 5);
+
+      // console.log(this.addItem);
+      // console.log(this.dataOn);
     },
+
+    // const url = "http://localhost/cgd103-g4/public/phpfiles/ContactInsert.php";
+    //       formData.append("opinion_name", this.opinionname);
+    //       formData.append("opinionmail", this.opinionmail);
+    //       formData.append("opiniontel", this.opiniontel);
+    //       formData.append("opiniondetail", this.opiniondetail);
+    //       formData.append("opinionselecttopic", this.opinionselecttopic);
+    //       fetch( url , {
+    //         method: "POST",
+    //         body: formData,
+    //       })
+    //         .then((res) => res.json())
+    //         .then((result) => {
+    //           console.log(result);
+    //         })
+    //         /* .catch((error) => {
+    //           // console.log(error);
+    //         }); */
+    //     },
+    insertData() {
+      const formData = new FormData(document.getElementById('myForm'));
+      
+      // const formDataKey = Object.slots(this.addItem);
+      // formDataKey.forEach((slot) => {
+      //   formData.append(`${slot}`, this.addItem[slot]);
+      // });
+
+      // const imgName = document.getElementById("prod_pic_main").files[0];
+
+      // formData.set("prod_pic_main", imgName);
+
+      // console.log(formData.get("prod_pic_main"));
+
+      // fetch("http://localhost/g4-backend/public/phpfiles/insertProducts.php", {
+      fetch(`${BASE_URL}/insertProducts.php`, {
+        method: "POST",
+        body: formData,
+      })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        // const result = res;
+        // this.addItem.prod_pic_main = result.prod_pic_main;
+        // console.log(result.prod_pic_main);
+        // console.log(this.addItem);
+        this.dataOn.push({ ...this.addItem });
+        this.addItem = { ...this.resetItem };
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    },
+
+    
     editOnData(index) {
       //上架編輯表單彈窗
-      this.seeOnData = true ;
-      this.addItem={...this.dataOn[index]}
-      
+      this.seeOnData = true;
+      this.addItem = { ...this.dataOn[index] };
+
       // this.dataOn = prod_id;
       // this.addItem={...this.activeData};
       // console.log(this.activeData);
     },
-    editOk(){
-      const index = this.dataOn.findIndex((item) => item.prod_id === this.addItem.prod_id);
+    editOk() {
+      const index = this.dataOn.findIndex(
+        (item) => item.prod_id === this.addItem.prod_id
+      );
       this.seeOnData = !this.seeOnData;
-      this.dataOn[index]=this.addItem;
-      this.addItem={...this.resetItem};
+      this.dataOn[index] = this.addItem;
+      this.addItem = { ...this.resetItem };
     },
-    editCancel(){
+    editCancel() {
       this.seeOnData = !this.seeOnData;
     },
     okToggle() {

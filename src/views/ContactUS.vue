@@ -52,6 +52,7 @@
   </div>
 </template>
 <script>
+import {BASE_URL} from '@/assets/js/common.js'
 const result = [];
 export default {
   data() {
@@ -107,13 +108,10 @@ export default {
     },
     getData() {
       this.result = result;
-      fetch(
-        "http://localhost/CGD103-G4-BACKEND/public/phpfiles/getContact.php"
-      )
+      fetch(`${BASE_URL}/getContact.php`)
         .then((res) => res.json())
         .then((json) => {
           this.result = json;
-          console.log(this.result);
         });
     },
     saveData() {

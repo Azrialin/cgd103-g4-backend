@@ -2,7 +2,7 @@
     <div class="backstage-administrator" >
         <div class="backstage-content">
             <div class="btn-add">
-                <Button type="primary"
+                <Button type="button" class="ivu-btn-primary"
                 @click="addToggle">新增帳號</Button>
             </div>
         </div>
@@ -31,11 +31,8 @@
                 </template>
                 <!-- 帳號狀態 -->
                 <template #emp_status="{ row }">
-                    <!-- <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow_list = true"> -->
                     <span v-if="row.emp_status == 1">啟用</span>
                     <span v-else-if="row.emp_status == 0">停用</span>
-                        <!-- <Switch :before-change="handleBeforeChange" true-color="#13ce66" false-color="#E6E6E6" /> -->
-                    <!-- </span> -->
                 </template>
                 <!-- <template #emp_states="{ row }" >
                     <Switch size="large"
@@ -53,8 +50,23 @@
                 <template #emp_edit="{ row }">
                     <div class="btn-box">
                         <span class="icon material-symbols-outlined" style="cursor: pointer;" 
-                        @click="editToggle(row.emp_no)">edit_square</span>
+                        @click="editForm(row.emp_no)">edit_square</span>
                     </div>
+                </template>
+                <!-- 刪除 -->
+                <template #delete="{ row, index }">
+                    <span v-if="selectList.length > 1"
+                        class="icon material-symbols-outlined"
+                        style="font-size:26px; margin-top: 5px;"
+                        @click="delCheck"
+                    >delete
+                    </span>
+                    <span v-else
+                        class="icon material-symbols-outlined"
+                        style="font-size:26px; margin-top: 5px;"
+                        @click="delCheck(row, index)"
+                    >delete
+                    </span>
                 </template>
                 <!-- 彈窗：帳號狀態變更確認 -->
                 <div class="modal-mask" :style="modalStyle">
@@ -65,8 +77,8 @@
                                 <span>Edit confirmation</span>
                             </p>
                             <p class="font-16-15em">確定要變更嗎？</p>
-                            <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
-                            <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">確認</Button>
+                            <Button type="button" class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                            <Button  type="button" class="btn-danger" long :loading="modal_loading" @click="del(index)">確認</Button>
                         </div>
                     </div>
                 </div>
@@ -84,8 +96,8 @@
                             <span>Delete confirmation</span>
                         </p>
                         <p class="font-16-15em">確定要刪除嗎？</p>
-                        <Button class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
-                        <Button class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
+                        <Button  type="button" class="btn-danger_2nd" long :loading="modal_loading" @click="toggleModal">取消</Button>
+                        <Button  type="button" class="btn-danger" long :loading="modal_loading" @click="del(index)">刪除</Button>
                     </div>
                 </div>
             </div>
@@ -95,40 +107,59 @@
                     <div class="modal-body">
                         <p class="font-16-15em">
                             <span class="icon material-symbols-outlined">error</span>
-                            <span>Delete confirmation</span>
+                            <!-- <span>Delete confirmation</span> -->
                         </p>
                         <p class="font-16-15em">確定要修改狀態嗎？</p>
                         <Button class="btn-blue_2nd" long :loading="modal_loading" @click="toggleModal_list">取消</Button>
-                        <Button class="btn-blue" long :loading="modal_loading" @click="list(index)">確定</Button>
+                        <Button  type="button" class="btn-blue" long :loading="modal_loading" @click="list(index)">確定</Button>
                     </div>
                 </div>
             </div>
             <!-- 彈窗：編輯帳號 -->
             <form id="Ad_editForm" method="post" enctype="multipart/form-data">
-                <div class="popup-edit " v-show="Ad_editForm" >
+                <div class="popup-edit " v-show="show_EditForm" >
                     <div class="popup-content font-18">
                         <div class="popup-head font-20">編輯帳號</div>
                         <div class="input-txt">
+                            <p class="input-info" name="emp_no">編號：{{editingAd.emp_no}}</p>
                             <div class="input-info">
                                 <label for="">員工姓名：
-                                    <Input type="text" name="emp_name" placeholder="請輸入姓名" clearable  style="width: 200px"/>
+                                    <Input type="text" name="emp_name" id="editingAd_name" 
+                                    v-model="editingAd.emp_name"
+                                    maxlength="5"
+                                    show-word-limit
+                                    placeholder="請輸入姓名(最多5個字)" 
+                                    required  
+                                    style="width: 200px"/>
                                 </label>
                             </div>
                             <div class="input-info">
                                 <label for="">員工信箱：
-                                    <Input type="email"  name="emp_email" placeholder="請輸入Email" clearable  style="width: 200px"/>
+                                    <Input type="email"  name="emp_email" 
+                                    id="editingAd_email" 
+                                    v-model="editingAd.emp_email"
+                                    maxlength="100"
+                                    show-word-limit
+                                    placeholder="請輸入Email" 
+                                    required  
+                                    style="width: 200px"/>
                                 </label>
                             </div>
                         </div>
                         <div class="input-switchs">
-                            <label class="state" for="">帳號狀態：
-                                <Switch true-color="#13ce66" false-color="#E6E6E6" />
-                                <!-- <input type="text" name="emp_status"> -->
+                            <label class="state">帳號狀態：
+                                <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow_list = true">
+                                    <Switch name="emp_status"
+                                        v-model="editingAd.emp_status"
+                                        true-color="#13ce66" false-color="#E6E6E6" 
+                                        :true-value = 1
+                                        :false-value = 0 />
+                                </span>
                             </label>
                         </div>
                         <div class="popup-btn">
-                            <Button type="primary" class="btn-blue" @click="addAdData">儲存</Button>
-                            <Button class="btn-blue_2nd" @click="editToggle">取消</Button>
+                            <Button type="button" class="btn-blue" @click="editAdData">儲存</Button>
+                            <Button  type="button" class="btn-blue_2nd" @click="show_EditForm = false;">取消</Button>
                         </div>
                     </div>
                 </div>
@@ -144,14 +175,14 @@
             <div class="popup-content font-18">
                 <div class="popup-head font-20">新增員工帳號</div>
                 <div class="input-txt">
-                    <div class="input-info">
+                    <div class="input-info-add">
                         <label for="">員工編號：
                             <Input type="text" placeholder="新增後產生"
                             disabled="disabled"
                             clearable style="width: 200px" />
                         </label>
                     </div>
-                    <div class="input-info">
+                    <div class="input-info-add">
                         <label for="">員工帳號：
                             <Input type="text" name="emp_id"  id="newForm_id" v-model="newForm_id" 
                             maxlength="10"
@@ -159,21 +190,23 @@
                             style="width: 200px"/>
                         </label>
                     </div>
-                    <div class="input-info">
+                    <div class="input-info-add">
                         <label for="">員工密碼：
                             <Input type="password" name="emp_psw" id="newForm_psw" v-model="newForm_psw" 
                             maxlength="10"
-                            placeholder="半形英數共10碼"  style="width: 200px"/>
+                            placeholder="半形英數最多10碼"  style="width: 200px"/>
                         </label>
                     </div>
-                    <div class="input-info">
+                    <div class="input-info-add">
                         <label for="">員工姓名：
                             <Input type="text" name="emp_name" id="newForm_name" v-model="newForm_name" 
                             maxlength="5"
-                            placeholder="請輸入姓名(最多五個字)" clearable  style="width: 200px"/>
+                            placeholder="請輸入姓名(最多五個字)" 
+                            clearable  
+                            style="width: 200px"/>
                         </label>
                     </div>
-                    <div class="input-info">
+                    <div class="input-info-add">
                         <label for="">員工信箱：
                             <Input type="email"  name="emp_email" id="newForm_email" v-model="newForm_email" 
                             maxlength="100"
@@ -192,8 +225,8 @@
                     </label>
                 </div>
                 <div class="popup-btn">
-                    <Button type="primary" class="btn-blue" @click="addAdData">新增帳號</Button>
-                    <Button class="btn-blue_2nd" @click="addToggle">取消</Button>
+                    <Button type="button" class="btn-blue" @click="addAdData">新增帳號</Button>
+                    <Button class="btn-blue_2nd" @click="seenAdd = false;">取消</Button>
                 </div>
             </div>
         </div>
@@ -211,11 +244,20 @@ export default {
 },
     data () {
         return {
+            
+            // ----- 彈窗 -----
+            show_statusCheck: false,
+            // show_cancelCheck: false,
+            show_delCheck:    false,
+            show_NewForm:     false,
+            alert_Loading:    false,
+            
             isShow: false,
             isShow_list: false,
             modal_loading: false,
             seenAdd:false, //新表格彈窗，綁新表單v-show、按鈕@click="seenAdd"
-            Ad_editForm:false, //編輯帳號彈窗
+            show_EditForm:false, //編輯帳號彈窗
+            // Ad_editForm:false, //編輯帳號彈窗
             size:'default', //按鈕間距，搭配Space，預設small(無間距)， 可自行調整距離px，詳情請看 https://run.iviewui.com/
             columns: [
                 {
@@ -293,13 +335,16 @@ export default {
                 ],
             },
 // ------- 儲存資料 ---------
-            // AdList: [],
+            AdList: [],
 // ------- 編輯帳號 ---------
             newForm_id: '',
             newForm_psw: '',
             newForm_name: '',
             newForm_email: '',
             newForm_status: 1,
+ 
+            editingNo: '', 
+            editingAd: [],
         }
     },
     computed: {
@@ -324,12 +369,37 @@ export default {
         remove (index) {
             this.AdList.splice(index, 1);
         },
-// ------- 新增編輯表單 -------
+// ------- 新增表單 -------
         addToggle(){ 
             this.seenAdd = !this.seenAdd
         },
+        editForm(edit){
+            console.log(this.show_EditForm);
+            this.editingNo = edit;
+            // this.Ad_editForm = true;
+            this.show_EditForm = true;
+            this.editingAd = this.AdList.find(v=> v.emp_no === this.editingNo) ?? [];
+        },
+
+// ----- 關閉彈窗(取消) ------
+        // cancel(){
+        //     this.alert_Loading = true;
+        //     setTimeout(() => {
+        //         this.show_statusCheck = false;
+        //         this.show_cancelCheck = false;
+        //         this.show_NewForm = false;
+        //         this.show_EditForm = false;
+        //         this.alert_Loading = false;
+        //         this.newForm_name = '';
+        //         this.newForm_email = '';
+        //         document.getElementById("newForm_name").classList.remove('error');
+        //         document.getElementById("newForm_email").classList.remove('error');
+        //     }, 200);
+        // },
+        
 // ----- 新增帳號資料 ------ fetch
         addAdData(){
+            console.log(this);
             let newForm_id = document.getElementById("newForm_id");
             let newForm_psw = document.getElementById("newForm_psw");
             let newForm_name = document.getElementById("newForm_name");
@@ -361,8 +431,8 @@ export default {
                 return;
             }
 
-            // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_Insert.php",{
-            fetch(`${BASE_URL}/Ad_insert.php`,{
+            fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_Insert.php",{
+            // fetch(`${BASE_URL}/Ad_insert.php`,{
                 method:'POST', body:new URLSearchParams({
                 emp_id:this.newForm_id,
                 emp_psw:this.newForm_psw,
@@ -398,6 +468,45 @@ export default {
                 }
             })
         },
+// ----- 編輯帳號資料 ------ fetch
+        editAdData(){
+            // console.log(this.editingAd.emp_no);
+            let editAd_name = document.getElementById("editAd_name");
+            let editAd_email = document.getElementById("editAd_email");
+            
+            if(this.editingAd.emp_name == '' || this.editingAd.emp_name == undefined || this.editingAd.emp_name == null){
+                this.$Message.warning('請填寫姓名');
+                editAd_name.classList.add('error');
+                return;
+            }
+            else if(this.editingAd.emp_email == '' || this.editingAd.emp_email == undefined || this.editingAd.emp_email == null){
+                this.$Message.warning('請填寫Email');
+                editAd_email.classList.add('error');
+                return;
+            }
+            else if(this.editingAd.emp_email.indexOf("@") === -1){
+                this.$Message.warning('Email格式錯誤');
+                editingAd_email.classList.add('error');
+                return;
+            }
+            fetch("http://localhost/CGD103_G4_back/public/phpfiles/Ad_editdata.php",{
+            // fetch(`${BASE_URL}/Ad_editdata.php`,{
+                method:'POST', body:new URLSearchParams({
+                emp_no:this.editingAd.emp_no,
+                emp_name:this.editingAd.emp_name,
+                emp_email:this.editingAd.emp_email,                
+                emp_status:this.editingAd.emp_status,
+            })})
+            .then((res) => res.json())
+            .then((result)=> {
+                this.alert_Loading = true;
+                setTimeout(() => {
+                    this.alert_Loading = false;
+                    this.show_EditForm = false;
+                    this.$Message.success(result.msg);
+                }, 600);
+            })
+        },
 // ------- 關閉新增編輯表單(取消) -------
         cancel(){
             this.modal_loading = true;
@@ -414,10 +523,10 @@ export default {
             }, 200);
         },
 // ------- 編輯帳號彈窗 -------
-        editToggle(){ 
-            this.Ad_editForm = !this.Ad_editForm;
-            // console.log(this);
-        },
+        // editToggle(){ 
+        //     this.Ad_editForm = !this.Ad_editForm;
+        //     console.log(this);
+        // },
 // ------- 變更帳號狀態彈窗 -------
         list(index){
             this.modal_loading = true;
@@ -436,9 +545,9 @@ export default {
             // console.log(this);
         },
 // ------- 抓後端資料 --------
-        getFaqData_Fetch(){
-            // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/Ad_getData.php')
-            fetch(`${BASE_URL}/Ad_getData.php`)
+        getAdData_Fetch(){
+            fetch('http://localhost/cgd103-g4-backend/public/phpfiles/Ad_getData.php')
+            // fetch(`${BASE_URL}/Ad_getData.php`)
             .then(res=>res.json())
             .then(json=>{
                 this.AdList = json;
@@ -486,8 +595,7 @@ export default {
 
     },
     created(){
-        this.getFaqData_Fetch();
-		// this.getAdData_Fetch();
+		this.getAdData_Fetch();
 
 	},
     mounted(){
@@ -516,6 +624,10 @@ export default {
     display: inline-block;
     cursor: pointer;
     margin: 0 20px;
+}
+/* 更改狀態確認彈窗 */
+.modal-container{
+    z-index: 10;
 }
 
 /* 帳號管理 */
@@ -584,17 +696,24 @@ export default {
     margin-bottom: 40px;
 }
 
-.input-info{
+.input-info-add{
     margin-bottom: 40px;
     padding-left: 85px;
-    &:deep(.ivu-input[disabled]){
-        background-color: rgb(84, 84, 84);
-        color: #fff
+    &:nth-of-type(1){
+        &:deep(.ivu-input::placeholder){
+            color: #fff;    
+        }
+        &:deep(.ivu-input[disabled]){
+            background-color: #bcbaba
+        }
     }
+    
+}
+    
     // &:deep(.ivu-input){
     //     color: red;
     // }
-}
+
 .input-switchs{
     margin-bottom: 15px;
     padding-left: 85px;
@@ -608,7 +727,6 @@ export default {
 .popup-btn Button{
     margin: 0 20px;
 }
-
 
 /* 彈窗字顏色 */
 .popup label{
@@ -665,7 +783,7 @@ export default {
 // ------------------- 編輯帳號彈窗 -------------------
 .popup-edit{
     position: absolute;
-    z-index: 10;
+    z-index: 6;
     top: 0;
     left: 0;
     width: 100%;
@@ -686,7 +804,7 @@ export default {
         top: 100px;
         left: 300px;
         margin: auto;
-        z-index: 10;
+        z-index: 5;
         width: 40%;
         background-color: #4F6573;
     }

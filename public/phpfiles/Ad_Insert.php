@@ -7,19 +7,27 @@ try{
 	require_once("./connect_cgd103g4.php");
 	// sql 指令
 	// 跟資料庫表格的欄位數目必須相同
-	$id = $_POST['emp_id'];
+	// $id = $_POST['emp_id'];
 	$sql = "select * from `emp` where emp_id = :emp_id";
-	$sql = "insert into emp values (null, :emp_id, :emp_psw, :emp_name, :emp_email, :emp_status)";
-	// 編譯, 執行
-	$faq = $pdo->prepare($sql);
-	$faq->bindValue(":emp_id", $_POST["emp_id"]);
-	$faq->bindValue(":emp_psw", $_POST["emp_psw"]);
-	$faq->bindValue(":emp_name", $_POST["emp_name"]);
-	$faq->bindValue(":emp_email", $_POST["emp_email"]);
-	$faq->bindValue(":emp_status", $_POST["emp_status"]);
-	$faq->execute();
+	$Ad = $pdo->prepare($sql);
+	$Ad->bindValue(":emp_id", $_POST["emp_id"]);
+	$Ad->execute();
+	
+	if($Ad->rowCount() > 0){
+		$msg = "此帳號已存在";
+	}else{
+		$sql = "insert into emp values (null, :emp_id, :emp_psw, :emp_name, :emp_email, :emp_status)";
+		// 編譯, 執行
+		$Ad = $pdo->prepare($sql);
+		$Ad->bindValue(":emp_id", $_POST["emp_id"]);
+		$Ad->bindValue(":emp_psw", $_POST["emp_psw"]);
+		$Ad->bindValue(":emp_name", $_POST["emp_name"]);
+		$Ad->bindValue(":emp_email", $_POST["emp_email"]);
+		$Ad->bindValue(":emp_status", $_POST["emp_status"]);
+		$Ad->execute();
 
-	$msg = "新增成功";
+		$msg = "新增成功";
+	}	
 }
 // 成功連上後，如果有錯會跳訊息
 catch (PDOException $e) {

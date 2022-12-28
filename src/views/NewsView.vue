@@ -136,18 +136,18 @@
 
     <!--全新表單 -->
     <keep-alive>
-        <form method="post" id="addNewsForm" enctype="multipart/form-data">
+        <Form method="post" id="addNewsForm" enctype="multipart/form-data" ref="formValidate" :model="formValidate" :rules="ruleValidate">
             <div class="popup " v-show="seenNew" >
                 <div class="popup-head font-20">
                     <div class="news-no">
                         <span>公告編號</span>
                         <span name=""></span>
                     </div>
-                    <div class="on-date">
+                    <!-- <div class="on-date">
                         <span class="date">發布時間</span>
                         <span class="date"></span>
-                        <input type="hidden" name="news_time" ><!-- 為了傳送資料，設立一個隱藏的input -->
-                    </div>
+                        <input type="hidden" name="news_time" >
+                    </div> -->
                     <div class="last-edit-date">
                         <span class="date">最後更新</span>
                         <span class="date"></span>
@@ -156,9 +156,9 @@
                 <div class="popup-content font-18">
                     <div class="popup-data">
                         <label for="">狀態
-                            <select name="news_status" v-model="selectedOnStatus">
+                            <select name="news_status" v-model="selectedOnStatus" @click="requiredCheck">
                                 <option value="草稿" selected>草稿</option>
-                                <option value="上架">上架</option>
+                                <option value="上架" >上架</option>
                             </select>
                             <span class="type_on" v-show="selectedOnStatus === '上架'"> *必填</span>
                         </label>
@@ -175,46 +175,60 @@
                         <div class="input-title">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">標題：
-                                <Input name="news_title" placeholder="請輸入標題" clearable style="width: 500px" required/>
+                                <FormItem prop="NewTitle">
+                                    <Input v-model="formValidate.NewTitle" name="news_title" placeholder="請輸入標題" clearable style="width: 650px"/>
+                                </FormItem>
                             </label>
                         </div>
                         <div class="input-des">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">引文：
-                                <Input name="news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                                <FormItem prop="NewStart">
+                                    <Input v-model="formValidate.NewStart" name="news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 650px"/>
+                                </FormItem>
                             </label>
                         </div>
                         <div class="input-des">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">內文：
-                                <Input name="news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                                <FormItem prop="NewMiddle">
+                                    <Input v-model="formValidate.NewMiddle" name="news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 650px"/>
+                                </FormItem>
                             </label>
                         </div>
                         <div class="input-des">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">內文：
-                                <Input name="news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                                <FormItem prop="NewTrans">
+                                    <Input v-model="formValidate.NewTrans" name="news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 650px"/>
+                                </FormItem>
                             </label>
                         </div>
                         <div class="input-des">
                             <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                             <label for="">結尾：
-                                <Input name="news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                                <FormItem prop="NewEnd">
+                                    <Input v-model="formValidate.NewEnd" name="news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 650px"/>
+                                </FormItem>
                             </label>
                         </div>
                     </div>
                     <div class="input-pic">
-                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
+                        <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                         <label class="test" for="">插入圖片(必填)：
-                            <input type="file" name="news_img">
+                            <FormItem prop="NewImg">
+                                <input type="file" name="news_img">
+                            </FormItem>
                         </label>
                         <!-- <img src="" alt="" id="showImg" style="width:80px;height:80px">  -->
                         <!-- 圖片預覽 -->
                     </div>
                     <div class="input-pic-des">
-                            <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
+                        <span class="type_on" v-show="selectedOnStatus === '上架'">*</span>
                         <label for="">圖片敘述：
-                            <Input name="news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                            <FormItem prop="NewImgDes">
+                                <Input v-model="formValidate.NewImgDes" name="news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 650px" />
+                            </FormItem>
                         </label>
                     </div>
                     <div class="popup-btn">
@@ -223,93 +237,109 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </Form>
     </keep-alive>
 
-    <!--表單-草稿  -->
-    <div class="popup on" v-show="seeOnData">
-        <div class="popup-head font-20">
-            <div class="news-no">
-                <span>公告編號</span>
-                <span >{{activeData.news_no}}</span>
+    <!--表單-編輯  -->
+    <Form ref="formValidate" :model="activeData" :rules="ruleValidate">
+        <div class="popup on" v-show="seeOnData">
+            <div class="popup-head font-20">
+                <div class="news-no">
+                    <span>公告編號</span>
+                    <span >{{activeData.news_no}}</span>
+                </div>
+                <!-- <div class="on-date">
+                    <span class="date">發布時間</span>
+                    <span class="date">{{activeData.news_time}}</span>
+                </div> -->
+                <div class="last-edit-date">
+                    <span class="date">最後更新</span>
+                    <span class="date">{{activeData.news_last_edit}}</span>
+                </div>
             </div>
-            <div class="on-date">
-                <span class="date">發布時間</span>
-                <span class="date">{{activeData.news_time}}</span>
-            </div>
-            <div class="last-edit-date">
-                <span class="date">最後更新</span>
-                <span class="date">{{activeData.news_last_edit}}</span>
+            <div class="popup-content font-18">
+                <div class="popup-data">
+                    <label for="">狀態
+                        <select class="draftStatus" v-model="editingNews.news_status">
+                            <option value="上架" >上架</option>
+                            <option value="下架" >下架</option>
+                        </select>
+                        <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> * 必填</span>
+                    </label>
+                    <label >分類
+                        <select v-model="editingNews.news_type">
+                            <option value="重要">重要</option>
+                            <option value="活動">活動</option>
+                            <option value="其他">其他</option>
+                        </select>
+                        <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *請確認</span>
+                    </label>
+                </div>
+                <div class="input-txt">
+                    <div class="input-title">
+                        <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
+                        <label for="">標題：
+                            <FormItem prop="news_title">
+                                <Input v-model="activeData.news_title" clearable style="width: 650px" />
+                            </FormItem>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
+                        <label for="">引文：
+                            <FormItem prop="news_text_start">
+                                <Input v-model="activeData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 650px"/>
+                            </FormItem>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
+                        <label for="">內文：
+                            <FormItem prop="news_text_middle">
+                                <Input v-model="activeData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 650px"/>
+                            </FormItem>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
+                        <label for="">內文：
+                            <FormItem prop="news_text_trans">
+                                <Input v-model="activeData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 650px"/>
+                            </FormItem>
+                        </label>
+                    </div>
+                    <div class="input-des">
+                        <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
+                        <label for="">結尾：
+                            <FormItem prop="news_text_end">
+                                <Input v-model="activeData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 650px"/>
+                            </FormItem>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-pic">
+                    <!-- <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span> -->
+                    <!-- <label class="test" for=""> -->
+                        <!-- 插入圖片： -->
+                        <!-- <input type="file"> -->
+                        <span style="color:#fff;"> 使用圖片 : {{editingNews.news_img}}</span> <!-- 此筆資圖片名稱 -->
+                    <!-- </label> -->
+                </div>
+                <div class="input-pic-des">
+                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
+                    <label for="">圖片敘述：
+                        <FormItem prop="news_img_des">
+                            <Input v-model="activeData.news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 650px" />
+                        </FormItem>
+                    </label>
+                </div>
+                <div class="popup-btn">
+                    <button class="btn-blue_2nd" @click="editOnData">取消</button>
+                    <button class="btn-blue" @click="editNewsData()">確認</button>
+                </div>
             </div>
         </div>
-        <div class="popup-content font-18">
-            <div class="popup-data">
-                <label for="">狀態
-                    <select class="draftStatus" name="" id="" v-model="editingNews.news_status" >
-                        <option value="上架" >上架</option>
-                        <option value="下架" >下架</option>
-                    </select>
-                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> * 必填</span>
-                </label>
-                <label for="">分類
-                    <select name="" id="" v-model="editingNews.news_type">
-                        <option value="重要">重要</option>
-                        <option value="活動">活動</option>
-                        <option value="其他">其他</option>
-                    </select>
-                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *請確認</span>
-                </label>
-            </div>
-            <div class="input-txt">
-                <div class="input-title">
-                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
-                    <label for="">標題：
-                        <Input v-model="activeData.news_title" clearable style="width: 500px" />
-                    </label>
-                </div>
-                <div class="input-des">
-                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
-                    <label for="">引文：
-                        <Input v-model="activeData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
-                    <label for="">內文：
-                        <Input v-model="activeData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
-                    <label for="">內文：
-                        <Input v-model="activeData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
-                    </label>
-                </div>
-                <div class="input-des">
-                    <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
-                    <label for="">結尾：
-                        <Input v-model="activeData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
-                    </label>
-                </div>
-            </div>
-            <div class="input-pic">
-                <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
-                <label class="test" for="">插入圖片：
-                    <input type="file">
-                </label>
-            </div>
-            <div class="input-pic-des">
-                <span class="type_on" :class="{ type_on : editingNews.news_status==='上架'}"> *</span>
-                <label for="">圖片敘述：
-                    <Input v-model="activeData.news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
-                </label>
-            </div>
-            <div class="popup-btn">
-                <button class="btn-blue_2nd" @click="editOnData">取消</button>
-                <button class="btn-blue" @click="editNewsData()">確認</button>
-            </div>
-        </div>
-    </div>
+    </Form>
 
     <!--表單-下架 -->
     <keep-alive>
@@ -319,13 +349,13 @@
                     <span>公告編號</span>
                     <span>{{activeDraftData.news_no}}</span>
                 </div>
-                <div class="on-date">
+                <!-- <div class="on-date">
                     <span class="date">發布時間</span>
-                    <span class="date">{{activeDraftData.news_time}}</span>
-                </div>
+                    <span class="date" >{{activeDraftData.news_time}}</span>
+                </div> -->
                 <div class="last-edit-date">
                     <span class="date">最後更新</span>
-                    <span class="date">{{activeDraftData.news_last_edit}}</span>
+                    <span class="date" >{{activeDraftData.news_last_edit}}</span>
                 </div>
             </div>
             <div class="popup-content font-18">
@@ -342,43 +372,53 @@
                             <option value="活動">活動</option>
                             <option value="其他">其他</option>
                         </select>
+                        <span class="type_on" v-show="editingNews.news_status === '上架'"> *請確認</span>
                     </label>
                 </div>
                 <div class="input-txt">
                     <div class="input-title">
+                        <span class="type_on" v-show="editingNews.news_status === '上架'">*</span>
                         <label for="">標題：
-                            <Input v-model="activeDraftData.news_title" placeholder="請輸入標題" clearable style="width: 500px" />
+                            <Input v-model="activeDraftData.news_title" placeholder="請輸入標題" clearable style="width: 650px" />
                         </label>
                     </div>
                     <div class="input-des">
+                        <span class="type_on" v-show="editingNews.news_status === '上架'">*</span>
                         <label for="">引文：
-                            <Input v-model="activeDraftData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 650px"/>
                         </label>
                     </div>
                     <div class="input-des">
+                        <span class="type_on" v-show="editingNews.news_status === '上架'">*</span>
                         <label for="">內文：
-                            <Input v-model="activeDraftData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 650px"/>
                         </label>
                     </div>
                     <div class="input-des">
+                        <span class="type_on" v-show="editingNews.news_status === '上架'">*</span>
                         <label for="">內文：
-                            <Input v-model="activeDraftData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 650px"/>
                         </label>
                     </div>
                     <div class="input-des">
+                        <span class="type_on" v-show="editingNews.news_status === '上架'">*</span>
                         <label for="">結尾：
-                            <Input v-model="activeDraftData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                            <Input v-model="activeDraftData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 650px"/>
                         </label>
                     </div>
                 </div>
                 <div class="input-pic">
-                    <label class="test" for="">插入圖片：
-                        <input type="file">
-                    </label>
+                    <span class="type_on" v-show="editingNews.news_status === '上架'">*</span>
+                    <!-- <label class="test" for=""> -->
+                        <!-- 插入圖片： -->
+                        <!-- <input type="file"> -->
+                        <span style="color:#fff;"> 使用圖片 : {{activeDraftData.news_img}}</span> <!-- 此筆資圖片名稱 -->
+                    <!-- </label> -->
                 </div>
                 <div class="input-pic-des">
+                    <span class="type_on" v-show="editingNews.news_status === '上架'">*</span>
                     <label for="">圖片敘述：
-                        <Input v-model="activeDraftData.news_img_des"  placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                        <Input v-model="activeDraftData.news_img_des"  placeholder="請輸入圖片敘述" clearable style="width: 650px" />
                     </label>
                 </div>
                 <div class="popup-btn">
@@ -396,10 +436,10 @@
                     <span>公告編號</span>
                     <span >{{activeOffData.news_no}}</span>
                 </div>
-                <div class="on-date">
+                <!-- <div class="on-date">
                     <span class="date">發布時間</span>
                     <span class="date">{{activeOffData.news_time}}</span>
-                </div>
+                </div> -->
                 <div class="last-edit-date">
                     <span class="date">修改日期</span><!-- 最後更新 -->
                     <span class="date">{{activeOffData.news_last_edit}}</span>
@@ -423,38 +463,40 @@
                 <div class="input-txt">
                     <div class="input-title">
                         <label for="">標題：
-                            <Input disabled v-model="activeOffData.news_title" clearable style="width: 500px" />
+                            <Input disabled v-model="activeOffData.news_title" clearable style="width: 650px" />
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">引文：
-                            <Input disabled v-model="activeOffData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_start" clearable type="textarea" :rows="2" placeholder="前台標題敘述" style="width: 650px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input disabled v-model="activeOffData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_middle" clearable type="textarea" :rows="4" placeholder="詳細內文(承)" style="width: 650px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">內文：
-                            <Input disabled v-model="activeOffData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_trans" clearable type="textarea" :rows="4" placeholder="詳細內文(轉)" style="width: 650px"/>
                         </label>
                     </div>
                     <div class="input-des">
                         <label for="">結尾：
-                            <Input disabled v-model="activeOffData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 500px"/>
+                            <Input disabled v-model="activeOffData.news_text_end" clearable type="textarea" :rows="2" placeholder="請輸入內容" style="width: 650px"/>
                         </label>
                     </div>
                 </div>
                 <div class="input-pic">
-                    <label class="test" for="">插入圖片：
-                        <input disabled type="file">
-                    </label>
+                    <!-- <label class="test" for=""> -->
+                        <!-- 插入圖片： -->
+                        <!-- <input disabled type="file"> -->
+                        <span style="color:#fff;"> 使用圖片 : {{activeDraftData.news_img}}</span> <!-- 此筆資圖片名稱 -->
+                    <!-- </label> -->
                 </div>
                 <div class="input-pic-des">
                     <label for="">圖片敘述：
-                        <Input disabled v-model="activeOffData.news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 500px" />
+                        <Input disabled v-model="activeOffData.news_img_des" placeholder="請輸入圖片敘述" clearable style="width: 620px; " />
                     </label>
                 </div>
                 <div class="popup-btn">
@@ -493,7 +535,58 @@
                 seeOffData:false, //下架資料彈窗，綁下架資料v-show、編輯按鈕@click="checkOffData"
                 seeCheck:false, //確認彈窗、v-show="seeCheck" 按鈕@click="okToggle"
                 selectedOnStatus:'草稿',// 如果表單選擇上架，顯示 *
-                // 表單相關
+                // 表單驗證 
+                formValidate: {
+                    // -新增表單
+                    NewTitle: '',
+                    NewStart: '',
+                    NewMiddle: '',
+                    NewTrans: '',
+                    NewEnd: '',
+                    NewImg: '',
+                    NewImgDes: '',
+                    // 編輯表單
+                    news_title:'',
+                    news_text_start:'',
+                    news_text_middle:'',
+                    news_text_trans:'',
+                    news_text_end:'',
+                    news_img:'',
+                    news_img_des:''
+                },
+                ruleValidate: {
+                    // -新增表單
+                    NewTitle: [
+                        { required: false, message: '請輸入標題', trigger: 'blur' }], 
+                    NewStart: [
+                        { required: false, message: '請輸入引文', trigger: 'blur' }], 
+                    NewMiddle: [
+                        { required: false, message: '請輸入內文', trigger: 'blur' }],  
+                    NewTrans: [
+                        { required: false, message: '請輸入內文', trigger: 'blur' }],   
+                    NewEnd: [
+                        { required: false, message: '請輸入結尾', trigger: 'blur' }], 
+                    NewImg: [
+                        { required: false, message: '請插入圖片', trigger: 'blur' }],
+                    NewImgDes: [
+                        { required: false, message: '請輸入圖片敘述', trigger: 'blur' }],                  
+                    // -編輯表單 -上架 (可以放一起)  
+                    news_title: [
+                        { required: true, message: '請輸入標題', trigger: 'blur' }], 
+                    news_text_start: [
+                        { required: true, message: '請輸入引文', trigger: 'blur' }],
+                    news_text_middle: [
+                        { required: true, message: '請輸入內文', trigger: 'blur' }], 
+                    news_text_trans: [
+                        { required: true, message: '請輸入內文', trigger: 'blur' }],
+                    news_text_end: [
+                        { required: true, message: '請輸入結尾', trigger: 'blur' }], 
+                    news_img: [
+                        { required: true, message: '請插入圖片', trigger: 'blur' }],
+                    news_img_des: [
+                        { required: true, message: '請輸入圖片敘述', trigger: 'blur' }],  
+                },
+                
                 columns: [
             {
                 title: '公告編號',
@@ -572,10 +665,24 @@
                 editingNews:[]
                 }
             },
-        methods: {  // 測試本地資料庫 fetch
+        methods: {  
+            // 表單測試
+            handleSubmit (name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
+            },
+            handleReset (name) {
+                this.$refs[name].resetFields();
+            },
+            // 測試本地資料庫 fetch
             getNews(){
-                // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/list.php') //本地端
-                fetch(`${BASE_URL}/list.php`) //線上版
+                // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/getNews.php') //本地端
+                fetch(`${BASE_URL}/getNews.php`) //線上版
                 .then(res=>res.json())
                 .then(json=>{
                     // 抓回所有資料
@@ -602,7 +709,7 @@
             // 		    data.dataOn = JSON.parse(xhr.responseText);
             // 	    }
             //     }
-            //     xhr.open("get",'http://localhost/list.php', true);
+            //     xhr.open("get",'http://localhost/getNews.php', true);
             //     xhr.send(null);
             // },
         // 新增資料 xhr
@@ -617,7 +724,7 @@
 
                 xhr.send(new FormData(document.getElementById("addNewsForm")));
 
-                // 確認談窗
+                // 確認彈窗
                 this.$Notice.success({
                     title: '資料狀態',
                     desc: 'The desc will hide when you set render.',
@@ -772,6 +879,52 @@
             },
             showImg(){ //表單預覽圖片 id="showImg"
 
+            },
+            // 表單確認上架的時候要驗證
+            requiredCheck(){
+                if(this.selectedOnStatus==="上架"){
+                    // 新增表單
+                    this.ruleValidate.NewTitle[0].required = true;
+                    this.ruleValidate.NewStart[0].required = true;
+                    this.ruleValidate.NewMiddle[0].required = true;
+                    this.ruleValidate.NewTrans[0].required = true;
+                    this.ruleValidate.NewEnd[0].required = true;
+                    this.ruleValidate.NewImg[0].required = true;
+                    this.ruleValidate.NewImgDes[0].required = true;
+                    // 編輯表單-上架
+                    // 編輯表單-草稿
+                }else{
+                    // 新增表單
+                    this.ruleValidate.NewTitle[0].required = false;
+                    this.ruleValidate.NewStart[0].required = false;
+                    this.ruleValidate.NewMiddle[0].required = false;
+                    this.ruleValidate.NewTrans[0].required = false;
+                    this.ruleValidate.NewEnd[0].required = false;
+                    this.ruleValidate.NewImg[0].required = false;
+                    this.ruleValidate.NewImgDes[0].required = false;
+                    // 編輯表單-上架
+                    // 編輯表單-草稿
+                }
+            },
+            requiredCheckEdit(){
+                if(this.editingNews.news_status==="上架" || this.editingNews.news_status==="下架"){
+                    // 編輯表單-上架
+                    this.ruleValidate.news_title[0].required = true;
+                    this.ruleValidate.news_text_start[0].required = true;
+                    this.ruleValidate.news_text_middle[0].required = true;
+                    this.ruleValidate.news_text_trans[0].required = true;
+                    this.ruleValidate.news_text_end[0].required = true;
+                    this.ruleValidate.news_img[0].required = true;
+                    this.ruleValidate.news_img_des[0].required = true;
+                }else{
+                    this.ruleValidate.news_title[0].required = false;
+                    this.ruleValidate.news_text_start[0].required = false;
+                    this.ruleValidate.news_text_middle[0].required = false;
+                    this.ruleValidate.news_text_trans[0].required = false;
+                    this.ruleValidate.news_text_end[0].required = false;
+                    this.ruleValidate.news_img[0].required = false;
+                    this.ruleValidate.news_img_des[0].required = false;
+                }
             }
         },
         computed:{
@@ -795,6 +948,17 @@
 
 <style scoped lang="scss">
 @import "../assets/Scss/components/scrollBar.scss";
+
+/* -------------------表單 ------------------------*/
+
+.ivu-form{ 
+    &:deep(.ivu-form-item-label){
+        color:#fff;
+        display: none;
+    }
+}
+
+
 
 /* -------------------是否上架 ------------------------*/
 .type_on{
