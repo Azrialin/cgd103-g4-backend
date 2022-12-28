@@ -35,10 +35,15 @@ export default {
             }
         },
         logout(){
-            console.log();
+            console.log(this.$store.state.emp_no);
             // this.$store.dispatch("setMember", null);
             // location.reload();
-        }
+        },
+        // logout(){
+        //     console.log(this.$store.state.emp_no);
+        //     // this.$store.dispatch("setMember", null);
+        //     // location.reload();
+        // }
     },
     computed:{
         emp_no(){
