@@ -115,7 +115,6 @@ export default {
         });
     },
     saveData() {
-      console.log(this.result);
     },
   },
   computed: {
