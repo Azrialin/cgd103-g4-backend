@@ -7,7 +7,10 @@
         </div>
         <div>
             <span class="font-18">管理員名稱</span>
-            <span class="font-18">登出</span>
+            <span class="font-18" @click="logout">登出
+                <div v-show="$store.state.emp_no" class="logout" @click="logout"></div>
+            </span>
+            
         </div>
     </header>
 </template>
@@ -17,6 +20,31 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 export default {
     name: 'Header',
+    data(){
+        return{
+            out:false,
+        }
+    },
+    mounted(){
+        this.see();
+    },
+    methods: {
+        see(){
+            if(this.emp_no){
+                this.out = true
+            }
+        },
+        logout(){
+            console.log();
+            // this.$store.dispatch("setMember", null);
+            // location.reload();
+        }
+    },
+    computed:{
+        emp_no(){
+            return this.$store.state.emp_no
+        }
+    },
     setup(){
         const route = useRoute()
         const breadcrumbList = ref([])

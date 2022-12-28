@@ -444,7 +444,7 @@ export default {
             }
 
             // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_Insert.php",{
-            fetch(`${BASE_URL}/Ad_insert.php`,{
+            fetch(`${BASE_URL}/Ad_Insert.php`,{
                 method:'POST', body:new URLSearchParams({
                 emp_id:this.newForm_id,
                 emp_psw:this.newForm_psw,
@@ -502,7 +502,7 @@ export default {
                 return;
             }
             // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_updata.php",{
-            fetch(`${BASE_URL}/Ad_editdata.php`,{
+            fetch(`${BASE_URL}/Ad_updata.php`,{
                 method:'POST', body:new URLSearchParams({
                 emp_no:this.editingAd.emp_no,
                 emp_name:this.editingAd.emp_name,
