@@ -52,7 +52,7 @@
     </div>
 
     <div class="backstage-newss" v-show="addnew" >
-        <form method="post" enctype="multipart/form-data">
+        <form id="addNewsForm" method="post" enctype="multipart/form-data">
         <div class="container" @click.self="dbcheck">
             <div class="content">
                 <div class="type opencode">
@@ -100,22 +100,22 @@
                 </div>
                 <div class="type travelcode">
                     <p class="nname">介紹頁內文(必填) :</p>
-                    <Form :model="formItem">
-                        <FormItem label="Text">
-                            <Input name="package_indes" v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
-                        </FormItem>
-                    </Form>
+                    <!-- <Form :model="formItem">
+                        <FormItem label="Text"> -->
+                            <Input name="package_indes" v-model="textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
+                        <!-- </FormItem>
+                    </Form> -->
                 </div>
                 <div class="type travelcode">
                     <p class="nname">詳情頁內文(必填) :</p>
-                    <Form :model="formItem2">
-                        <FormItem label="Text">
-                            <Input name="package_des" v-model="formItem2.textarea2" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
-                        </FormItem>
-                    </Form>
+                    <!-- <Form :model="formItem2">
+                        <FormItem label="Text"> -->
+                            <Input name="package_des" v-model="textarea2" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..." style="width: 300px"></Input>
+                        <!-- </FormItem>
+                    </Form> -->
                 </div>
                 <div class="type travelcode">
-                    <p class="nname">價格 :</p>
+                    <p class="nname">價格 (請輸入數字):</p>
                     <Input class="succe" type="text" name="package_price" v-model="value6" style="width: 300px" />
                 </div>
                 <div class="type travelcode">
@@ -124,7 +124,7 @@
                 </div>
                 <div class="type travelcode">
                     <p class="nname">插入圖片 :</p>
-                    <Input class="succe" type="file" name="package_price" v-model="valuex" style="width: 300px" />
+                    <Input class="succe" type="file" name="package_pic" style="width: 300px" />
                     <!-- v-model="valuex" -->
                     <!-- v-model="value3" -->
                     <!-- <Upload class="succe" action="//jsonplaceholder.typicode.com/posts/">
@@ -133,7 +133,7 @@
                 </div>
                 <div class="delcan">
                     <div class="shure" @click="addnew=false">取消</div>
-                    <div class="shure" @click="onChange();addData()">確認</div>
+                    <div class="shure" @click="addData()">確認</div>
                 </div>
             </div>
         </div>
@@ -286,12 +286,14 @@
                 value6:"",
                 valuex:"",
                 tager:"",
-                formItem: {
-                    textarea: '',
-                },
-                formItem2: {
-                    textarea2: '',
-                },
+                textarea: '',
+                textarea2: '',
+                // formItem: {
+                //     textarea: '',
+                // },
+                // formItem2: {
+                //     textarea2: '',
+                // },
                 addnew: false,
                 columns: [ 
                 {
@@ -390,10 +392,10 @@
             this.getData();
         },
         methods: {
-            onChange() {
-                this.value3 = this.valuex.split(':').pop().split('\\').pop();
-                return this.value3;
-            },
+            // onChange() {
+            //     this.value3 = this.valuex.split(':').pop().split('\\').pop();
+            //     return this.value3;
+            // },
             getData(){
                 // const gege = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/getTravelcase.php');
                 fetch(`${BASE_URL}/getTravelcase.php`)
@@ -412,31 +414,47 @@
                     })
                 })
             },
+
             addData(){
-                // this.value3 = this.valuex.split(':').pop().split('\\').pop();
-                // return this.value3;
-                // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
-                fetch(`${BASE_URL}/setTravelcase.php`,{ method:'post',body: new URLSearchParams({
-                // fetch(addURL,{ method:'post',body: new URLSearchParams({
-                   
-                    package_status:this.selected,
-                    package_name:this.selected2,
-                    package_buy:this.value1,
-                    package_pic:this.value3,
-                    package_title:this.value4,
-                    package_subtitle:this.value5,
-                    package_price:this.value6,
-                    package_tag:this.tager,
-                    package_indes:this.formItem.textarea,
-                    package_des:this.formItem2.textarea2,
-                })})
-                .then((rt)=>rt.json())
-                .then((result)=>{
-                    console.log(result);
-                    this.addnew=false
-                    location.reload()
-                })
+                let xhr = new XMLHttpRequest();
+                xhr.onload = function(){
+                let result = JSON.parse(xhr.responseText);
+                alert("新增成功");
+                    
+                }
+                // xhr.open("post", "http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php", true); //專案裡的檔案 
+                xhr.open("post", `${BASE_URL}/setTravelcase.php`, true); //線上版 
+
+                xhr.send(new FormData(document.getElementById("addNewsForm")));
+                this.addnew=false
+                location.reload();
             },
+            // addData(){
+            //     const input = document.querySelector('input[type="file"]');
+            //     // this.value3 = this.valuex.split(':').pop().split('\\').pop();
+            //     // return this.value3;
+            //     const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
+            //     // fetch(`${BASE_URL}/setTravelcase.php`,{ method:'post',body: new URLSearchParams({
+            //     fetch(addURL,{ method:'post',body: new URLSearchParams({
+                   
+            //         package_status:this.selected,
+            //         package_name:this.selected2,
+            //         package_buy:this.value1,
+            //         package_pic:input.files[0],
+            //         package_title:this.value4,
+            //         package_subtitle:this.value5,
+            //         package_price:this.value6,
+            //         package_tag:this.tager,
+            //         package_indes:this.formItem.textarea,
+            //         package_des:this.formItem2.textarea2,
+            //     })})
+            //     .then((rt)=>rt.json())
+            //     .then((result)=>{
+            //         console.log(result);
+            //         this.addnew=false
+            //         location.reload()
+            //     })
+            // },
             editData(){
                 // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelcase.php');
                 fetch(`${BASE_URL}/updateTravelcase.php`,{ method:'post',body: new URLSearchParams({
