@@ -56,6 +56,7 @@
                                 thisvue.$router.push("/");
                                 // sessionStorage.setItem("mem_no", json.mem_no);
                                 this.$store.dispatch("setMember", json.emp_no);
+                                console.log(this.$store.state.mem_no);
                                 // this.$store.state.mem_no
                                 alert("登入成功");
                             }
