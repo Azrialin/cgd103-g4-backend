@@ -415,47 +415,35 @@
                 })
             },
 
-            addData(){
-                let xhr = new XMLHttpRequest();
-                xhr.onload = function(){
-                let result = JSON.parse(xhr.responseText);
-                // alert("新增成功");
-                    
-                }
-                // xhr.open("post", "http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php", true); //專案裡的檔案 
-                xhr.open("post", `${BASE_URL}/setTravelcase.php`, true); //線上版 
-
-                xhr.send(new FormData(document.getElementById("addNewsForm")));
-                this.addnew=false
-                alert("新增成功");
-                location.reload();
-            },
             // addData(){
-            //     const input = document.querySelector('input[type="file"]');
-            //     // this.value3 = this.valuex.split(':').pop().split('\\').pop();
-            //     // return this.value3;
-            //     const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
-            //     // fetch(`${BASE_URL}/setTravelcase.php`,{ method:'post',body: new URLSearchParams({
-            //     fetch(addURL,{ method:'post',body: new URLSearchParams({
-                   
-            //         package_status:this.selected,
-            //         package_name:this.selected2,
-            //         package_buy:this.value1,
-            //         package_pic:input.files[0],
-            //         package_title:this.value4,
-            //         package_subtitle:this.value5,
-            //         package_price:this.value6,
-            //         package_tag:this.tager,
-            //         package_indes:this.formItem.textarea,
-            //         package_des:this.formItem2.textarea2,
-            //     })})
-            //     .then((rt)=>rt.json())
-            //     .then((result)=>{
-            //         console.log(result);
-            //         this.addnew=false
-            //         location.reload()
-            //     })
+            //     let xhr = new XMLHttpRequest();
+            //     xhr.onload = function(){
+            //     let result = JSON.parse(xhr.responseText);
+            //     // alert("新增成功");
+                    
+            //     }
+            //     xhr.open("post", "http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php", true); //專案裡的檔案 
+            //     // xhr.open("post", `${BASE_URL}/setTravelcase.php`, true); //線上版 
+
+            //     xhr.send(new FormData(document.getElementById("addNewsForm")));
+            //     this.addnew=false
+            //     alert("新增成功");
+            //     location.reload();
             // },
+            addData(){
+                const formData = new FormData(document.getElementById('addNewsForm'));
+                // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
+                fetch(`${BASE_URL}/setTravelcase.php`,{ method:'post',body: formData
+                // fetch(addURL,{ method:'post',body: formData
+                })
+                .then((rt)=>rt.json())
+                .then((result)=>{
+                    console.log(result);
+                    this.addnew=false;
+                    alert("新增成功");
+                    location.reload();
+                })
+            },
             editData(){
                 // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelcase.php');
                 fetch(`${BASE_URL}/updateTravelcase.php`,{ method:'post',body: new URLSearchParams({
@@ -474,6 +462,7 @@
                 .then((resultb)=>{
                     console.log(resultb);
                     this.seenAdd = false;
+                    alert("編輯成功");
                     location.reload()
                 })
             },
