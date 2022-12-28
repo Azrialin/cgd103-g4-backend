@@ -2,8 +2,8 @@
     header('Access-Control-Allow-Origin:*');
     header("Content-Type:application/json;charset=utf-8");
 
-	// const MY_DIR = "../../front/img/Scape"; //路徑  //for打包後的環境
-	const MY_DIR = "../img/abc"; //路徑  //for打包前的環境
+	const MY_DIR = "../../front/img/Scape"; //路徑  //for打包後的環境
+	// const MY_DIR = "../img/abc"; //路徑  //for打包前的環境
 
 
 
