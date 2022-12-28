@@ -576,8 +576,8 @@ export default {
         // },
 // ----- 撈資料 ------ fetch
         getFaqData_Fetch(){
-            fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
-            // fetch(`${BASE_URL}/Faq_getData.php`)
+            // fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
+            fetch(`${BASE_URL}/Faq_getData.php`)
             .then(res=>res.json())
             .then(json=>{
                 this.faqList = json;
@@ -715,6 +715,7 @@ export default {
         },
 // ----- 多筆狀態切換 ------
         massChangeStatus(){
+            console.log(this.selectList,);
             let faqVue = this;
             // fetch("http://localhost/CGD103_G4_back/public/phpfiles/Faq_massChangeState.php",{
             fetch(`${BASE_URL}/Faq_massChangeState.php`,{
