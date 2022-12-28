@@ -10,38 +10,38 @@
                         <div class="input-txt">
                             <div class="input-title">
                                 <label for="">開團編號：
-                                    <Input name="package_no" v-model="databang.package_no" clearable style="width: 300px" disabled/>
                                 </label>
+                                    <Input name="package_no" v-model="databang.package_no" clearable style="width: 300px;" disabled/>
                             </div>
                             <div class="input-title">
                                 <label for="">方案編號:
-                                    <Input name="package_name" v-model="databang.package_no" clearable style="width: 300px" disabled/>
                                 </label>
+                                    <Input name="package_name" v-model="databang.package_no" clearable style="width: 300px" disabled/>
                             </div>
                             <div class="input-title">
                                 <label for="">出發日期:
-                                    <Input type="date" name="departure_date" v-model="databang.departure_date" placeholder="Edit date" style="width: 300px" />
                                 </label>
+                                    <Input type="date" name="departure_date" v-model="databang.departure_date" placeholder="Edit date" style="width: 300px" />
                             </div>
                             <div class="input-title">
                                 <label for="">行程價格：
-                                <Input name="package_price" v-model="databang.package_price" clearable style="width: 300px"/>
                                 </label>
+                                <Input name="package_price" v-model="databang.package_price" clearable style="width: 300px"/>
                             </div>
                             <div class="input-title">
                                 <label for="">人數上限：
-                                <Input type="number" name="max_attendees" v-model="databang.max_attendees" style="width: 300px"/>
                                 </label>
+                                <Input type="number" name="max_attendees" v-model="databang.max_attendees" style="width: 300px"/>
                             </div>
                             <div class="input-title">
                                 <label for="">開放報名時間：
-                                    <Input type="date" name="registration_date" v-model="databang.registration_date" placeholder="Edit date" style="width: 300px" />
                                 </label>
+                                    <Input type="date" name="registration_date" v-model="databang.registration_date" placeholder="Edit date" style="width: 300px" />
                             </div>
                             <div class="input-title">
                                 <label for="">截止報名時間:
-                                    <Input type="date" name="closing_date" v-model="databang.closing_date" placeholder="Edit date" style="width: 300px" />
                                 </label>
+                                    <Input type="date" name="closing_date" v-model="databang.closing_date" placeholder="Edit date" style="width: 300px" />
                             </div>
                         </div>
                     </div>
@@ -599,8 +599,12 @@
     justify-content: space-around;
 }
 .input-title{
+    margin: auto;
+    width: 50%;
     margin-bottom: 40px;
-    padding-left: 85px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
 }
 .input-des,
 .input-pic,
@@ -610,6 +614,7 @@
 
 }
 .input-txt{
+    width: 100%;
     margin-bottom: 40px;
 }
 .popup-btn{

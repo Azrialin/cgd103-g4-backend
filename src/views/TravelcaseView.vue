@@ -7,39 +7,39 @@
             <div class="input-txt">
                 <div class="input-info">
                     <label for="">前台區塊：
-                        <Input type="text" name="package_name" v-model="data.package_name" clearable style="width: 200px" />
                     </label>
+                        <Input type="text" name="package_name" v-model="data.package_name" clearable style="width: 300px" />
                 </div>
                 <div class="input-info">
                     <label for="">活動標籤：
-                        <Input type="text" name="package_tag" v-model="data.package_tag" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="text" name="package_tag" v-model="data.package_tag" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">價格：
-                        <Input type="" name="package_price" v-model="data.package_price" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="" name="package_price" v-model="data.package_price" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">標題：
-                        <Input type="email" name="package_title" v-model="data.package_title" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="email" name="package_title" v-model="data.package_title" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">推薦商品：
-                        <Input type="tel" name="package_buy" v-model="data.package_buy" clearable  style="width: 200px"/>
                     </label>
+                        <Input type="tel" name="package_buy" v-model="data.package_buy" clearable  style="width: 300px"/>
                 </div>
                 <div class="input-info">
                     <label for="">狀態：
-                        <!-- <Input type="tel" name="package_status" v-model="data.package_status" clearable  style="width: 200px"/> -->
-                        <select class="choosein" name="package_status" v-model="data.package_status">
+                    </label>
+                        <!-- <Input type="tel" name="package_status" v-model="data.package_status" clearable  style="width: 300px"/> -->
+                        <select class="choosein" name="package_status" v-model="data.package_status" style="width: 300px;text-align:center">
                             <option value="" disabled>-請選擇-</option>
                             <option value="上架">上架</option>
                             <option value="草稿">草稿</option>
                             <option value="下架">下架</option>
                         </select>
-                    </label>
                 </div>
             </div>
             </div> 
@@ -415,46 +415,35 @@
                 })
             },
 
-            addData(){
-                let xhr = new XMLHttpRequest();
-                xhr.onload = function(){
-                let result = JSON.parse(xhr.responseText);
-                alert("新增成功");
-                    
-                }
-                // xhr.open("post", "http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php", true); //專案裡的檔案 
-                xhr.open("post", `${BASE_URL}/setTravelcase.php`, true); //線上版 
-
-                xhr.send(new FormData(document.getElementById("addNewsForm")));
-                this.addnew=false
-                location.reload();
-            },
             // addData(){
-            //     const input = document.querySelector('input[type="file"]');
-            //     // this.value3 = this.valuex.split(':').pop().split('\\').pop();
-            //     // return this.value3;
-            //     const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
-            //     // fetch(`${BASE_URL}/setTravelcase.php`,{ method:'post',body: new URLSearchParams({
-            //     fetch(addURL,{ method:'post',body: new URLSearchParams({
-                   
-            //         package_status:this.selected,
-            //         package_name:this.selected2,
-            //         package_buy:this.value1,
-            //         package_pic:input.files[0],
-            //         package_title:this.value4,
-            //         package_subtitle:this.value5,
-            //         package_price:this.value6,
-            //         package_tag:this.tager,
-            //         package_indes:this.formItem.textarea,
-            //         package_des:this.formItem2.textarea2,
-            //     })})
-            //     .then((rt)=>rt.json())
-            //     .then((result)=>{
-            //         console.log(result);
-            //         this.addnew=false
-            //         location.reload()
-            //     })
+            //     let xhr = new XMLHttpRequest();
+            //     xhr.onload = function(){
+            //     let result = JSON.parse(xhr.responseText);
+            //     // alert("新增成功");
+                    
+            //     }
+            //     xhr.open("post", "http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php", true); //專案裡的檔案 
+            //     // xhr.open("post", `${BASE_URL}/setTravelcase.php`, true); //線上版 
+
+            //     xhr.send(new FormData(document.getElementById("addNewsForm")));
+            //     this.addnew=false
+            //     alert("新增成功");
+            //     location.reload();
             // },
+            addData(){
+                const formData = new FormData(document.getElementById('addNewsForm'));
+                // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/setTravelcase.php');
+                fetch(`${BASE_URL}/setTravelcase.php`,{ method:'post',body: formData
+                // fetch(addURL,{ method:'post',body: formData
+                })
+                .then((rt)=>rt.json())
+                .then((result)=>{
+                    console.log(result);
+                    this.addnew=false;
+                    alert("新增成功");
+                    location.reload();
+                })
+            },
             editData(){
                 // const addURL = new URL('http://localhost/cgd103-g4-backend/public/phpfiles/updateTravelcase.php');
                 fetch(`${BASE_URL}/updateTravelcase.php`,{ method:'post',body: new URLSearchParams({
@@ -473,6 +462,7 @@
                 .then((resultb)=>{
                     console.log(resultb);
                     this.seenAdd = false;
+                    alert("編輯成功");
                     location.reload()
                 })
             },
@@ -527,8 +517,12 @@
     .popup-content{
     text-align: center;
         .input-txt{
+            width: 50%;
+            margin: auto;
             .input-info{
-                padding: 20px;
+                display: flex;
+                justify-content: space-between;
+                padding: 20px 0px;
             }
         }
     }
