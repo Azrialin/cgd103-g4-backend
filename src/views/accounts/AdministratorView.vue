@@ -158,7 +158,8 @@
                         </div>
                         <div class="input-switchs">
                             <label class="state">帳號狀態：
-                                <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow_list = true">
+                                <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;">
+                                <!-- <span class="icon material-symbols-outlined" style="font-size:26px; margin-top: 5px; cursor: pointer;" @click="isShow_list = true"></span> -->
                                     <Switch name="emp_status"
                                         v-model="editingAd.emp_status"
                                         true-color="#13ce66" false-color="#E6E6E6" 
