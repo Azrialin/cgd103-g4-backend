@@ -31,7 +31,7 @@ header("Content-Type:application/json;charset=utf-8");      // cors请求时,谷
             // session_unset();
             $_SESSION = $resArray;
             // echo $resArray["mem_psw"];
-            $result_array = ["code"=>"1", "msg"=>"登陸成功", "account" =>"{$login_account}", "emp_no" =>"{$resArray["emp_no"]}"];//, "token"=>$token
+            $result_array = ["code"=>"1", "msg"=>"登陸成功", "account" =>"{$login_account}", "emp_no" =>"{$resArray["emp_no"]}", "emp_name" =>"{$resArray["emp_name"]}",];//, "token"=>$token
             echo json_encode($result_array);
         }
         else {

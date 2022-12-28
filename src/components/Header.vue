@@ -6,7 +6,7 @@
             </h2>
         </div>
         <div>
-            <span class="font-18">管理員名稱</span>
+            <span class="font-18">{{$store.state.emp_name}}</span>
             <span class="font-18" @click="logout">登出
                 <div v-show="$store.state.emp_no" class="logout" @click="logout"></div>
             </span>
@@ -23,31 +23,43 @@ export default {
     data(){
         return{
             out:false,
+            result:[],
         }
+    },
+    created(){
+        // this.getAdminName();
     },
     mounted(){
         this.see();
     },
     methods: {
+        getAdminName(){
+          if(!this.emp_no){
+            return 
+          }
+            this.result = result;
+            // fetch(`http://localhost/CGD103_G4_back/public/phpfiles/getEmpInfo.php?empId=${this.emp_no}`)
+            fetch(`${BASE_URL}/getEmpInfo.php?empId=${this.emp_no}`)
+            .then((res) => res.json())
+            .then((json) =>{
+                this.result = json[0];
+            })
+        },
         see(){
             if(this.emp_no){
                 this.out = true
             }
         },
         logout(){
-            console.log(this.$store.state.emp_no);
-            // this.$store.dispatch("setMember", null);
-            // location.reload();
+            // console.log("編號",this.$store.state.emp_no);
+            // console.log("名字",this.$store.state.emp_name);
+            this.$router.push("/Login_back");
         },
-        // logout(){
-        //     console.log(this.$store.state.emp_no);
-        //     // this.$store.dispatch("setMember", null);
-        //     // location.reload();
-        // }
     },
     computed:{
+        // ...mapGetters(['emp_no']),
         emp_no(){
-            return this.$store.state.emp_no
+            return this.$store.state.emp_no;
         }
     },
     setup(){

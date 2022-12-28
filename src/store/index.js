@@ -3,19 +3,26 @@ import createPersistedState from 'vuex-persistedstate'
 
 export default createStore({
   state: {
-    mem_no: null,
+    emp_no: null,
+    emp_name: null,
   },
   getters: {
   },
   mutations: {
-    setMember(state,number){
-      state.mem_no = number
+    setEmpNo(state,number,){
+      state.emp_no = number
+    },
+    setEmpName(state,name,){
+      state.emp_name = name
     },
   },
   plugins:[createPersistedState()],
   actions: {
-    setMember({commit},number){
-      commit("setMember",number)
+    setEmpNo({commit},number){
+      commit("setEmpNo",number)
+    },
+    setEmpName({commit},name){
+      commit("setEmpName",name)
     },
   },
   modules: {

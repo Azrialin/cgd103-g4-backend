@@ -39,7 +39,7 @@
                         // thisvue.errorMsg = "請輸入帳號和密碼";
                         // thisvue.errorFlag = true;
                     }else {
-                        // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/login_back.php",
+                        // fetch("http://localhost/CGD103_G4_back/public/phpfiles/login_back.php",
                         fetch(`${BASE_URL}/login_back.php`,
                             {
                                 method: "post",
@@ -54,10 +54,8 @@
                         .then((json) => {
                             if (json.code == 1) {
                                 thisvue.$router.push("/");
-                                // sessionStorage.setItem("mem_no", json.mem_no);
-                                this.$store.dispatch("setMember", json.emp_no);
-                                console.log(this.$store.state.mem_no);
-                                // this.$store.state.mem_no
+                                this.$store.dispatch("setEmpNo", json.emp_no);
+                                this.$store.dispatch("setEmpName", json.emp_name);
                                 alert("登入成功");
                             }
                             else if (json.code == 0) {
