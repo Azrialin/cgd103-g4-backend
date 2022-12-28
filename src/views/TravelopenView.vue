@@ -21,7 +21,7 @@
                 
                 <div class="type travelcode">
                     <p class="nname">出發日期 :</p>
-                    <Input type="date" name="departure_date" style="width: 300px" v-model="departuredate"/>
+                    <Input type="date" name="departure_date" style="width: 300px" v-model="departuredate" class="choose"/>
                     <!-- <Space size="large" wrap>
                         <DatePicker type="date" placeholder="Select date" style="width: 300px" />
                     </Space> -->
@@ -29,7 +29,7 @@
                 
                 <div class="type travelcode">
                     <p class="nname">開放報名日期 :</p>
-                    <Input type="date" name="registration_date" style="width: 300px" v-model="registrationdate"/>
+                    <Input type="date" name="registration_date" style="width: 300px" v-model="registrationdate" class="choose"/>
                     <!-- <Space size="large" wrap>
                         <DatePicker type="date" placeholder="Select date" style="width: 300px" />
                     </Space> -->
@@ -37,7 +37,7 @@
                 
                 <div class="type travelcode">
                     <p class="nname">截止日期 :</p>
-                    <Input type="date" name="closing_date" style="width: 300px" v-model="closingdate"/>
+                    <Input type="date" name="closing_date" style="width: 300px" v-model="closingdate" class="succe"/>
                     <!-- <Space size="large" wrap>
                         <DatePicker type="date" placeholder="Select date" style="width: 300px" />
                     </Space> -->
@@ -45,7 +45,7 @@
                 
                 <div class="type travelcode">
                     <p class="nname">人數上限 :</p>
-                    <Input class="succe" type="text" name="max_attendees" style="width: 300px" v-model="maxattendees" />
+                    <Input class="succe" type="text" name="max_attendees" style="width: 300px" v-model="maxattendees"  />
                 </div>
                 
                 <div class="type travelcode">
