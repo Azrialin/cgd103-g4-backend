@@ -443,8 +443,8 @@ export default {
                 return;
             }
 
-            fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_Insert.php",{
-            // fetch(`${BASE_URL}/Ad_insert.php`,{
+            // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_Insert.php",{
+            fetch(`${BASE_URL}/Ad_insert.php`,{
                 method:'POST', body:new URLSearchParams({
                 emp_id:this.newForm_id,
                 emp_psw:this.newForm_psw,
@@ -501,10 +501,8 @@ export default {
                 editingAd_email.classList.add('error');
                 return;
             }
-            fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_updata.php",{
-                // php 檔名打錯了Ad_updata / Ad_editdata
-            // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_editdata.php",{
-            // fetch(`${BASE_URL}/Ad_editdata.php`,{
+            // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_updata.php",{
+            fetch(`${BASE_URL}/Ad_editdata.php`,{
                 method:'POST', body:new URLSearchParams({
                 emp_no:this.editingAd.emp_no,
                 emp_name:this.editingAd.emp_name,
@@ -538,8 +536,8 @@ export default {
             // let deleteNo = deleteAdno;
             console.log(this.deleteNo);
 
-            fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_delete.php",{
-            // fetch(`${BASE_URL}/Ad_delete.php`,{
+            // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/Ad_delete.php",{
+            fetch(`${BASE_URL}/Ad_delete.php`,{
                 method:'POST', body:new URLSearchParams({
                 emp_no:this.deleteNo,
             })})
@@ -588,8 +586,8 @@ export default {
         },
 // ------- 抓後端資料 --------
         getAdData_Fetch(){
-            fetch('http://localhost/cgd103-g4-backend/public/phpfiles/Ad_getData.php')
-            // fetch(`${BASE_URL}/Ad_getData.php`)
+            // fetch('http://localhost/cgd103-g4-backend/public/phpfiles/Ad_getData.php')
+            fetch(`${BASE_URL}/Ad_getData.php`)
             .then(res=>res.json())
             .then(json=>{
                 this.AdList = json;

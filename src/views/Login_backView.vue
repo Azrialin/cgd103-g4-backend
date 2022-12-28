@@ -39,8 +39,8 @@
                         // thisvue.errorMsg = "請輸入帳號和密碼";
                         // thisvue.errorFlag = true;
                     }else {
-                        fetch("http://localhost/cgd103-g4-backend/public/phpfiles/login_back.php",
-                        // fetch(`${BASE_URL}/login_back.php`,
+                        // fetch("http://localhost/cgd103-g4-backend/public/phpfiles/login_back.php",
+                        fetch(`${BASE_URL}/login_back.php`,
                             {
                                 method: "post",
                                 credentials: "include",
