@@ -42,7 +42,7 @@
           <p>填寫人名字：{{ activeData.opinion_name }}</p>
           <p>填寫人電話：{{ activeData.opinion_tel }}</p>
           <p>填寫人信箱：{{ activeData.opinion_mail }}</p>
-          <p>填寫內容：{{}}</p>
+          <p>填寫內容：{{activeData.opinion_datail}}</p>
         </div>
         <div class="closebtn">
           <Button @click="editOnData()">關閉</Button>
