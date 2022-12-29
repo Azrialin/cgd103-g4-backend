@@ -12,7 +12,7 @@ header("Content-Type:application/json;charset=utf-8");      // cors请求时,谷
  * $_SESSION 參考網站:https://ithelp.ithome.com.tw/articles/10207241
  * CORS 參考網站:https://blog.huli.tw/2021/02/19/cors-guide-3/
 */
-  try{
+try{
   require_once("./connect_cgd103g4.php");
   $login_account = empty( $_GET["emp_id"] ) ? ( $_POST["emp_id"] ?? "" ) : $_GET["emp_id"];
   $login_psw = empty( $_GET["emp_psw"] ) ? ( $_POST["emp_psw"] ?? "" ) : $_GET["emp_psw"];
