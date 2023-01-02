@@ -11,11 +11,12 @@ try{
 
     // sql 指令
 	$sql = "update faq
-			set faq_status = $status
+			set faq_status = :status
 			where faq_no = :faq_no";
 	$faq = $pdo->prepare($sql);
     foreach ($items as $item) {
-        $faq->bindParam(":faq_no", $item);
+		$faq->bindParam(":faq_no", $item);
+		$faq->bindParam(":status", $status);
         $faq->execute();
     }
 	$msg = "已成功修改多筆常見問題";

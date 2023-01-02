@@ -8,16 +8,16 @@
     //6. 多選
     7. 各個彈窗寫成 component
     //8. 進入頁面預設打開"全部"
-    9. 新增/編輯資料時，若欄位為空則不能送出>>>的彈窗
+    //9. 新增/編輯資料時，若欄位為空則不能送出>>>的彈窗
     10.分頁優化寫法
-    11.輸入框剩餘字數
+    //11.輸入框剩餘字數
     //12.iVue的全選第二下沒有動作
     //13.表單：編輯的 ?? []
     14.massChangeState 寫成同一支
     15.分頁
     16.宣傳頁
     17.忘記密碼/重設密碼
-    18.狀態變成沒綁到了?
+    //18.狀態變成沒綁到了?
     
     ?小抄
     摺疊快速鍵 Ctrl K 012345
@@ -34,24 +34,52 @@
 <template>
     <div class="FAQ">
 		<main>
+            <div class="tools">
+<!-- 搜尋吧 -->
+                <label class="search">
+                    <input
+                        class="input-blue"
+                        type="text"
+                        list="previousSearches"
+                        v-model="keyword"
+                        @input="faqSearch"
+                        @keydown.enter="addToList"
+                        placeholder="請輸入您想尋找的內容"/>
+                        <!-- 以前的搜尋季紀錄 -->
+                        <!-- bug > 要 enter 兩次才有效果 -->
+                        <datalist id="previousSearches">
+                            <option v-for="keyword in previousSearches" :value="keyword"></option>
+                        </datalist>
+                        <!-- 叉叉 -->
+                        <span class="material-symbols-outlined"
+                            v-show="keyword!=''"
+                            @click="clearInput"
+                            >close
+                        </span>
+                        <!-- 放大鏡 -->
+                        <button type="submit" @click="faqSearch">
+                            <i class="material-symbols-outlined">&#xe8b6;</i>
+                        </button>
+                </label>
 <!-- 按鈕 -->
-            <div class="btns">
-                <button
-                    v-show="selectList.length > 1"
-                    value="1"
-                    class="btn-blue_2nd"
-                    @click="massChangeState_1"
-                >批量顯示
-                </button>
-                <button
-                    v-show="selectList.length > 1"
-                    value="0"
-                    class="btn-blue_2nd"
-                    @click="massChangeState_0"
-                >批量隱藏
-                </button>
-                <button class="btn-blue" @click="show_NewForm = true">新增</button>
-                <button class="btn-blue" @click="delCheck">刪除</button>
+                <div class="btns">
+                    <button
+                        v-show="selectList.length > 1"
+                        value="1"
+                        class="btn-blue_2nd"
+                        @click="massChangeState_1"
+                    >批量顯示
+                    </button>
+                    <button
+                        v-show="selectList.length > 1"
+                        value="0"
+                        class="btn-blue_2nd"
+                        @click="massChangeState_0"
+                    >批量隱藏
+                    </button>
+                    <button class="btn-blue" @click="show_NewForm = true">新增</button>
+                    <button class="btn-blue" @click="delCheck">刪除</button>
+                </div>
             </div>
 <!-- 分頁標籤 -->
             <ul class="tabs">
@@ -85,14 +113,12 @@
                     <span v-else>{{ (row.faq_type) }}</span>
                 </template>
                 <!-- 問題 -->
-                <template #faq_q="{ row, index }" >
-                    <Input type="text"  v-if="editIndex === index"/>
-                    <span v-else >{{ row.faq_q }}</span>
+                <template #faq_q="{ row }" >
+                    <span class="font-14" v-html="renderHtml(row.faq_q)" id="q-{{ row.faq_no }}"></span>
                 </template>
                 <!-- 回答 -->
-                <template #faq_a="{ row, index }" >
-                    <Input type="text"  v-if="editIndex === index"/>
-                    <span v-else >{{ row.faq_a }}</span>
+                <template #faq_a="{ row }" >
+                    <span class="font-14" v-html="renderHtml(row.faq_a)" id="q-{{ row.faq_no }}"></span>
                 </template>
                 <!-- 狀態 -->
                 <template #faq_state="{ row }" >
@@ -373,6 +399,8 @@ export default {
     },
     data(){
         return {
+            // loading: true,
+            keyword:'', // 搜尋的關鍵字
 // ----- 表格：選取 ------
             status: '',     // 要批量修改的狀態(0/1)
             deleteNo: '',   // 要刪除的資料編號(單筆)
@@ -412,12 +440,10 @@ export default {
                 {
                     title: '問題',
                     slot: 'faq_q',
-                    align: 'center'
                 },
                 {
                     title: '回答',
                     slot: 'faq_a',
-                    align: 'center'
                 },
                 {
                     title: '狀態',
@@ -466,6 +492,19 @@ export default {
     computed: {
     },
     methods: {
+        faqSearch(){
+                this.activeList = this.faqList.filter(item =>
+                    item.faq_q.includes(this.keyword) || 
+                    item.faq_a.includes(this.keyword)
+                );
+            },
+            renderHtml(text){
+                return text.replace(new RegExp(this.keyword, 'gi'), `<mark class="keyword">${this.keyword}</mark>`);
+            },
+            clearInput(){
+                this.activeList = this.faqList;
+                this.keyword = '';
+            },
 // ----- 分頁切換 ------
         clickAll(e){
             this.activeList = this.faqList;
@@ -487,8 +526,9 @@ export default {
             this.selectList=[];
             for(let i=0; i<index.length; i++){
                 if( this.selectList.includes(index[i].faq_no) == 0 )
-                    this.selectList.push(index[i].faq_no);
+                this.selectList.push(index[i].faq_no);
             }
+            console.log(this.selectList);
         },
         onSelectCancel(index){
             if(index.length < 2){
@@ -576,7 +616,7 @@ export default {
         // },
 // ----- 撈資料 ------ fetch
         getFaqData_Fetch(){
-            // fetch('http://localhost/CGD103_G4_back/public/php/Faq_getData.php')
+            // fetch('http://localhost/CGD103_G4_back/public/phpfiles/Faq_getData.php')
             fetch(`${BASE_URL}/Faq_getData.php`)
             .then(res=>res.json())
             .then(json=>{
@@ -726,6 +766,7 @@ export default {
             .then((res) => res.json())
             .then((result)=> {
                 this.alert_Loading = true;
+                // alert(result.msg)
 
                 setTimeout(() => {
                     let arr = this.activeList;
@@ -803,4 +844,8 @@ export default {
 <style scoped lang="scss">
 @import "../assets/Scss/pages/faq.scss";
 @import "../assets/Scss/components/scrollBar.scss";
+:deep(mark){
+    // background: $clr_gold_L2;
+    background: yellow;
+}
 </style>
