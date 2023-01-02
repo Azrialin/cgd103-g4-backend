@@ -164,9 +164,6 @@ export default {
                 content: `Name：${this.result[index].name}<br>Age：${this.result[index].age}<br>Address：${this.result[index].address}`
             })
         },
-        remove (index) {
-            this.result.splice(index, 1);
-        },
         addToggle(event){ //新表單
         console.log(this);
             this.seenAdd = !this.seenAdd;
@@ -174,25 +171,11 @@ export default {
             this.selectArray = this.result.find(v=>v.mem_no === this.selectNumber) ?? [];
 
         },
-        del(index){
-            this.result.splice(index, 1);
-            this.modal_loading = true;
-            setTimeout(() => {
-                this.modal_loading = false;
-                this.isShow = false;
-                this.$Message.success('已刪除一筆管理者帳號');
-            }, 200);
-        },
-        toggleModal(){
-            this.isShow = !this.isShow;
-            console.log(this);
-        },
         getData(){
             fetch(`${BASE_URL}/getMemberInfo.php`)
                   .then((res) => res.json())
                   .then((json) =>{
                     this.result = json;
-                    console.log(this.result);
                   })
         },
     },
