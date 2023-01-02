@@ -307,8 +307,8 @@ $btn-type:
     vertical-align: top;
     appearance: none;
     outline: none;
-    @include btnPadding(10, 20);
-    @include btnFont(600, 16){
+    @include btnPadding(6, 15);
+    @include btnFont(400, 16){
         font-family: 'Noto Serif TC';
         letter-spacing: 0.1em;
         color: $clr_gray_L1;
@@ -342,7 +342,7 @@ $input-type: 'blue', 'gold', 'danger';
 }
 
 .input-blue{
-    @include inputClr($clr_blue_L2, $clr_blue_L1);
+    @include inputClr($clr_blue_L3, $clr_blue_L2);
 }
 .input-gold{
     @include inputClr($clr_gold_L2, $clr_gold_L0);

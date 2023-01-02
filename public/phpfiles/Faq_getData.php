@@ -13,7 +13,7 @@
     // }
     foreach($faqs as $i=> $page){
         $data[]=[
-            'faq_no' => intval($page['faq_no']),
+            'faq_no' => strval($page['faq_no']),
             'faq_type' => $page['faq_type'],
             'faq_q' => $page['faq_q'],
             'faq_a' => $page['faq_a'],

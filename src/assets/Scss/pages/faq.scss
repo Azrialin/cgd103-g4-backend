@@ -12,12 +12,62 @@
                 color: $clr_blue_L3;
             }
         }
-        // 按鈕
-        .btns{
-            text-align: end;
-            button{
-                &:not(:last-child){
-                    margin-right: 10px;
+        // 搜尋吧、按鈕
+        .tools{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            // 搜尋吧
+            .search{
+                display: flex;
+                align-items: center;
+                position: relative;
+                .input-blue{
+                    width: 700px;
+                }
+                button{
+                    border: none;
+                    background: none;
+                    color: $clr_blue_L2;
+                    &:hover{
+                        color: $clr_blue_L3;
+                        transition: $trs;
+                    }
+                    &:active{
+                        color: $clr_blue_L1;
+                    }
+                    &:focus-visible{
+                        outline: none;
+                        color: $clr_blue_L1;
+                    }
+                    &:focus:not(:focus-visible){
+                        outline: none;
+                    }
+                    i{
+                        font-size: 30px;
+                        cursor: pointer;
+                        margin: 10px 10px;
+                    }
+                }
+                span{
+                    cursor: pointer;
+                    color: $clr_blue_L2;
+                    position: absolute;
+                    left: 665px;
+                    &:hover{
+                        color: $clr_blue_L3;
+                        transition: $trs;
+                    }
+                }
+            }
+            // 按鈕
+            .btns{
+                text-align: end;
+                button{
+                    &:not(:last-child){
+                        margin-right: 10px;
+                    }
                 }
             }
         }
@@ -37,12 +87,11 @@
                 top: 1px;
                 display: inline-block;
                 margin-left: 4px;
-                height: 31px;
                 background: $inactiveClr;
                 color: $clr_gray_L1;
                 border: 1px solid $lineClr;
                 border-radius: 5px 5px 0px 0px;
-                padding: 5px 14px;
+                padding: 6px 14px;
                 transition: 0.3s;
                 &:hover{
                     color: $hvrClr;
@@ -64,6 +113,13 @@
                 border-bottom: 1px solid #fff;
                 color: $hvrClr;
             }
+        }
+        .font-14{
+            display: inline-block;
+            font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微軟雅黑",Arial,sans-serif;
+            text-align: start;
+            line-height: 1.6em;
+            margin: 10px 0;
         }
     }
     // 彈窗
